@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+<head>
+  <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js'></script>
+  <script>
+
+  Array.prototype.sum = function() {
+    return (! this.length) ? 0 : this.slice(1).sum() +
+      ((typeof this[0] == 'number') ? this[0] : 0);
+  };
+
+  function shiftCanvas(x, y) {
+    var canvasData = context.getImageData(x, y, canvas.width, canvas.height);
+    context.putImageData(canvasData, 0, 0);
+  }
+
+  function addLogPath(percent) {
+    avg.push(percent);
+    if(avg.length > 20) { avg.shift(); }
+    var avgPercent = avg.sum() / avg.length;
+    var height = Math.max(avgPercent * 400, 1);
+    var endingPoint = 400 - height;
+
+    shiftCanvas(4, 0);
+    context.beginPath();
+    context.strokeStyle = '#FF1438';
+    context.moveTo(750, 400);
+    context.lineTo(750, endingPoint);
+    context.stroke();
+    context.closePath();
+
+    context.beginPath();
+    context.strokeStyle = '#C7F8FF';
+    context.moveTo(750, endingPoint);
+    context.lineTo(750, 0);
+    context.stroke();
+    context.closePath();
+  }
+
+  $(document).ready(function(){
+
+    canvas = $("#log").get(0);
+    context = canvas.getContext('2d');
+    context.lineWidth = 3;
+
+    avg = [];
+
+    if(!("WebSocket" in window)) {
+      alert("Sorry, the build of your browser does not support WebSockets. Please use latest Chrome or Webkit nightly");
+      return;
+    }
+
+    ws = new WebSocket("ws://localhost:8080/");
+    ws.onmessage = function(evt) {
+      addLogPath(evt.data * 20 / 4000.0);
+    };
+    ws.onclose = function() {
+      alert("socket closed");
+    };
+    ws.onopen = function() {
+      //alert("connected...");
+    };
+  });
+  </script>
+
+  <style>
+    body {
+      background-color: #2F2C2B;
+      color: #C7F8FF;
+      font-family: "Lucida Grande", Helvetica, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <canvas style="float: left; padding: 23px 0 20px 0;" id="log" width="760" height="400"></canvas>
+  <div style="float: left; padding: 0; line-height: 2em;">
+    <p>4000</p>
+    <p>3500</p>
+    <p>3000</p>
+    <p>2500</p>
+    <p>2000</p>
+    <p>1500</p>
+    <p>1000</p>
+    <p>500</p>
+    <p>0</p>
+  </div>
+
+</body>
+</html>

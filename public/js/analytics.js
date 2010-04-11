@@ -16,6 +16,9 @@ Hummingbird.Graph.prototype = {
   init: function() {
     this.setupContext();
 
+    this.lineColor = "#FFF";
+    this.bgLineColor = "#555";
+
     this.ws = new WebSocket(this.url);
     this.ws.onmessage = $.proxy(function(evt) {
       this.drawLogPath(evt.data * 20 / 4000.0);
@@ -61,14 +64,14 @@ Hummingbird.Graph.prototype = {
 
     this.shiftCanvas(6, 0);
     this.context.beginPath();
-    this.context.strokeStyle = '#FF1438';
+    this.context.strokeStyle = this.lineColor;
     this.context.moveTo(750, 400);
     this.context.lineTo(750, endingPoint);
     this.context.stroke();
     this.context.closePath();
 
     this.context.beginPath();
-    this.context.strokeStyle = '#C7F8FF';
+    this.context.strokeStyle = this.bgLineColor;
     this.context.moveTo(750, endingPoint);
     this.context.lineTo(750, 0);
     this.context.stroke();

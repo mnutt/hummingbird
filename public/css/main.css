@@ -1,0 +1,29 @@
+body {
+
+  background-color: #2F2C2B;
+  font-family: "Lucida Grande", Helvetica, sans-serif;
+}
+
+div.hummingbird_graph canvas {
+  float: left;
+  padding: 28px 0 20px 0;
+  color: #F00;
+}
+
+div.hummingbird_graph div.axis_left,
+div.hummingbird_graph div.axis_right {
+  float: left;
+  line-height: 2.9em;
+  color: #4F4C4B;
+  font-weight: bold;
+  font-size: 0.8em;
+}
+
+div.hummingbird_graph div.axis_left {
+  padding: 0 15px;
+  text-align: right;
+}
+
+div.hummingbird_graph div.axis_right {
+  padding: 0 10px;
+}

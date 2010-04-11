@@ -1,10 +1,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
   "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
+
 <head>
-  <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js'></script>
-  <script src="/helpers.js"></script>
-  <script src="/analytics.js"></script>
+  <link rel="stylesheet" media="all" href="/css/main.css" />
+
+  <script src="/js/jquery-1.4.2.min.js"></script>
+  <script src="/js/helpers.js"></script>
+  <script src="/js/analytics.js"></script>
 
   <script>
   $(document).ready(function(){
@@ -19,37 +22,37 @@
   });
   </script>
 
-  <style>
-    body {
-      background-color: #2F2C2B;
-      color: #C7F8FF;
-      font-family: "Lucida Grande", Helvetica, sans-serif;
-    }
-  </style>
 </head>
+
 <body>
-  <div style="float: left; padding: 0 15px; line-height: 2em; text-align: right;">
-    <p>4000</p>
-    <p>3500</p>
-    <p>3000</p>
-    <p>2500</p>
-    <p>2000</p>
-    <p>1500</p>
-    <p>1000</p>
-    <p>500</p>
-    <p>0</p>
-  </div>
-  <canvas style="float: left; padding: 23px 0 20px 0;" id="log" width="760" height="400"></canvas>
-  <div style="float: left; padding: 0 10px; line-height: 2em;">
-    <p>4000</p>
-    <p>3500</p>
-    <p>3000</p>
-    <p>2500</p>
-    <p>2000</p>
-    <p>1500</p>
-    <p>1000</p>
-    <p>500</p>
-    <p>0</p>
+  <div class="hummingbird_graph">
+
+    <div class="axis_left">
+      <p>4000</p>
+      <p>3500</p>
+      <p>3000</p>
+     <p>2500</p>
+      <p>2000</p>
+      <p>1500</p>
+      <p>1000</p>
+      <p>500</p>
+      <p>0</p>
+    </div>
+
+    <canvas id="log" width="760" height="400"></canvas>
+
+    <div class="axis_right">
+      <p>4000</p>
+      <p>3500</p>
+      <p>3000</p>
+      <p>2500</p>
+      <p>2000</p>
+      <p>1500</p>
+      <p>1000</p>
+      <p>500</p>
+      <p>0</p>
+    </div>
+
   </div>
 
 </body>

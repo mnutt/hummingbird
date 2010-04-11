@@ -1,11 +1,6 @@
-var Gilt;
-if (!Gilt) {
-  Gilt = {};
-}
+HummingbirdTracker = {};
 
-Gilt.Hummingbird = {};
-
-Gilt.Hummingbird.track = function(env) {
+HummingbirdTracker.track = function(env) {
   delete env.trackingServer;
   delete env.trackingServerSecure;
   env.u = document.location.href;

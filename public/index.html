@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+<head>
+  <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js'></script>
+  <script src="/helpers.js"></script>
+  <script src="/analytics.js"></script>
+
+  <script>
+  $(document).ready(function(){
+
+    if(!("WebSocket" in window)) {
+      alert("Sorry, the build of your browser does not support WebSockets. Please use latest Chrome or Webkit nightly");
+      return;
+    }
+
+    var canvas = $("#log").get(0);
+    var graph = new Hummingbird.Graph(canvas, "ws://" + document.location.host.replace(/8088/, '8080'));
+  });
+  </script>
+
+  <style>
+    body {
+      background-color: #2F2C2B;
+      color: #C7F8FF;
+      font-family: "Lucida Grande", Helvetica, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div style="float: left; padding: 0 15px; line-height: 2em; text-align: right;">
+    <p>4000</p>
+    <p>3500</p>
+    <p>3000</p>
+    <p>2500</p>
+    <p>2000</p>
+    <p>1500</p>
+    <p>1000</p>
+    <p>500</p>
+    <p>0</p>
+  </div>
+  <canvas style="float: left; padding: 23px 0 20px 0;" id="log" width="760" height="400"></canvas>
+  <div style="float: left; padding: 0 10px; line-height: 2em;">
+    <p>4000</p>
+    <p>3500</p>
+    <p>3000</p>
+    <p>2500</p>
+    <p>2000</p>
+    <p>1500</p>
+    <p>1000</p>
+    <p>500</p>
+    <p>0</p>
+  </div>
+
+</body>
+</html>

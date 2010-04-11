@@ -4,3 +4,6 @@
 [submodule "vendor/node-mongodb-native"]
 	path = vendor/node-mongodb-native
 	url = git://github.com/christkv/node-mongodb-native.git
+[submodule "vendor/node-paperboy"]
+	path = vendor/node-paperboy
+	url = git://github.com/felixge/node-paperboy

@@ -21,7 +21,8 @@ Hummingbird.Graph.prototype = {
 
     this.ws = new WebSocket(this.url);
     this.ws.onmessage = $.proxy(function(evt) {
-      this.drawLogPath(evt.data * 20 / 4000.0);
+      var data = JSON.parse(evt.data);
+      this.drawLogPath(data.total * 20 / 4000.0);
     }, this);
     this.ws.onclose = function() {
       alert("socket closed");

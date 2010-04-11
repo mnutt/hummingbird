@@ -24,7 +24,7 @@ setInterval(function() {
 
   clients.each(function(c) {
     try {
-      c.write(urls.total);
+      c.write(JSON.stringify({total: urls.total}));
     } catch(e) {
       sys.log(e.description);
     }
@@ -40,8 +40,8 @@ db.open(function(db) {
 
       var env = querystring.parse(req.url.split('?')[1]);
       env.timestamp = (new Date());
-      // collection.insert(env);
-     // sys.puts(JSON.stringify(env, null, 2));
+      collection.insert(env);
+      // sys.puts(JSON.stringify(env, null, 2));
 
       res.writeHead(200, {'Content-Type': 'image/gif', 'Content-Disposition': 'inline'});
       res.write(pixel, 'binary');
@@ -78,7 +78,7 @@ sys.puts('Web Socket server running at ws://localhost:' + WEB_SOCKET_PORT);
 
 http.createServer(function(req, res) {
   paperboy.deliver(WEBROOT, req, res)
-  .after(function(statCode) { sys.log([statCode, req.method, req.url, req.connection.remoteAddress].join(' ')); });
+    .after(function(statCode) { sys.log([statCode, req.method, req.url, req.connection.remoteAddress].join(' ')); });
 }).listen(MONITOR_PORT);
 
 sys.puts('Analytics server running at http://localhost:' + MONITOR_PORT + '/');

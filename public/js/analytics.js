@@ -18,11 +18,22 @@ Hummingbird.Graph.prototype = {
 
     this.lineColor = "#FFF";
     this.bgLineColor = "#555";
+    this.canvasHeight = $(this.canvas).height();
+    this.canvasWidth = $(this.canvas).width();
 
     this.ws = new WebSocket(this.url);
     this.ws.onmessage = $.proxy(function(evt) {
       var data = JSON.parse(evt.data);
-      this.drawLogPath(data.total * 20 / 4000.0);
+
+      if(typeof(data.total) != "undefined") {
+        $.each(data.sales, function(key) {
+          console.log(JSON.stringify(data.sales));
+          $("#sale_" + key).hide();
+        });
+        this.drawLogPath(data.total * 20 / 4000.0);
+      } else {
+        console.log(JSON.stringify(data));
+      }
     }, this);
     this.ws.onclose = function() {
       alert("socket closed");
@@ -60,21 +71,21 @@ Hummingbird.Graph.prototype = {
 
   drawLogPath: function(percent) {
     this.addValue(percent);
-    var height = Math.max(this.runningAverage() * 400, 1);
-    var endingPoint = 400 - height;
+    var height = Math.max(this.runningAverage() * this.canvasHeight, 1);
+    var endingPoint = this.canvasHeight - height;
 
     this.shiftCanvas(6, 0);
     this.context.beginPath();
     this.context.strokeStyle = this.lineColor;
-    this.context.moveTo(750, 400);
-    this.context.lineTo(750, endingPoint);
+    this.context.moveTo(this.canvasWidth - 10, this.canvasHeight);
+    this.context.lineTo(this.canvasWidth - 10, endingPoint);
     this.context.stroke();
     this.context.closePath();
 
     this.context.beginPath();
     this.context.strokeStyle = this.bgLineColor;
-    this.context.moveTo(750, endingPoint);
-    this.context.lineTo(750, 0);
+    this.context.moveTo(this.canvasWidth - 10, endingPoint);
+    this.context.lineTo(this.canvasWidth - 10, 0);
     this.context.stroke();
     this.context.closePath();
   }

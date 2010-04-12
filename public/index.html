@@ -3,8 +3,6 @@
 <html>
 
 <head>
-  <link rel="stylesheet" media="all" href="/css/main.css" />
-
   <script src="/js/jquery-1.4.2.min.js"></script>
   <script src="/js/helpers.js"></script>
   <script src="/js/analytics.js"></script>
@@ -13,18 +11,39 @@
   $(document).ready(function(){
 
     if(!("WebSocket" in window)) {
-      alert("Sorry, the build of your browser does not support WebSockets. Please use latest Chrome or Webkit nightly");
+      console.log("Sorry, the build of your browser does not support WebSockets. Please use latest Chrome or Webkit nightly");
       return;
     }
 
     var canvas = $("#log").get(0);
+    canvas.width = $(window).width() - 160;
     var graph = new Hummingbird.Graph(canvas, "ws://" + document.location.host.replace(/8088/, '8080'));
+
+  });
+
+  $(document).ready(function() {
+    $.getJSON("/sale_list", function(data) {
+      $.each(data.data.active_sales, function() {
+        var editorialImage = "http://www.gilt.com" + this.sale_editorial_image;
+        var name = this.name;
+        var url = "http://www.gilt.com/s/" + this.url_key;
+
+        var saleDiv = $("<div id='sale_" + this.url_key + "' class='sale'></div>");
+        saleDiv.append("<img class='editorial' src='" + editorialImage + "'/>");
+        saleDiv.append("<h2>" + name + "</h2>");
+        $("#sales").append(saleDiv);
+      });
+    });
+
   });
   </script>
 
+  <link rel="stylesheet" media="all" href="/css/main.css" />
 </head>
 
 <body>
+  <h1>Hummingbird</h1>
+
   <div class="hummingbird_graph">
 
     <div class="axis_left">
@@ -39,7 +58,7 @@
       <p>0</p>
     </div>
 
-    <canvas id="log" width="760" height="400"></canvas>
+    <canvas id="log" width="760" height="200"></canvas>
 
     <div class="axis_right">
       <p>4000</p>
@@ -54,6 +73,10 @@
     </div>
 
   </div>
+
+  <div style="clear: both;"></div>
+
+  <div id="sales"></div>
 
 </body>
 </html>

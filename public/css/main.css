@@ -42,14 +42,18 @@ div.hummingbird_graph div.axis_right {
 #sales div.sale {
   float: left;
   width: 180px;
-  height: 140px;
+  height: 180px;
   overflow: hidden;
   padding: 10px;
+}
+
+#sales div.sale canvas {
 }
 
 #sales div.sale h2 {
   color: #CCC;
   font-size: 0.7em;
+  height: 1.8em;
 }
 
 #sales div.sale img.editorial {

@@ -7,36 +7,8 @@
   <script src="/js/helpers.js"></script>
   <script src="/js/analytics.js"></script>
 
-  <script>
-  $(document).ready(function(){
-
-    if(!("WebSocket" in window)) {
-      console.log("Sorry, the build of your browser does not support WebSockets. Please use latest Chrome or Webkit nightly");
-      return;
-    }
-
-    var canvas = $("#log").get(0);
-    canvas.width = $(window).width() - 160;
-    var graph = new Hummingbird.Graph(canvas, "ws://" + document.location.host.replace(/8088/, '8080'));
-
-  });
-
-  $(document).ready(function() {
-    $.getJSON("/sale_list", function(data) {
-      $.each(data.data.active_sales, function() {
-        var editorialImage = "http://www.gilt.com" + this.sale_editorial_image;
-        var name = this.name;
-        var url = "http://www.gilt.com/s/" + this.url_key;
-
-        var saleDiv = $("<div id='sale_" + this.url_key + "' class='sale'></div>");
-        saleDiv.append("<img class='editorial' src='" + editorialImage + "'/>");
-        saleDiv.append("<h2>" + name + "</h2>");
-        $("#sales").append(saleDiv);
-      });
-    });
-
-  });
-  </script>
+  <script src="/js/sales.js"></script>
+  <script src="/js/websocket.js"></script>
 
   <link rel="stylesheet" media="all" href="/css/main.css" />
 </head>

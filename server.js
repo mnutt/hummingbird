@@ -23,6 +23,18 @@ var urls = { total: 0 };
 var sales = {};
 
 setInterval(function() {
+  clients.each(function(c) {
+    try {
+      c.write(JSON.stringify({total: urls.total}));
+    } catch(e) {
+      sys.log(e.description);
+    }
+  });
+
+  urls = { total: 0 };
+}, 50);
+
+setInterval(function() {
   // sys.puts("Writing to clients...");
 
   clients.each(function(c) {
@@ -33,9 +45,8 @@ setInterval(function() {
     }
   });
 
-  urls = { total: 0 };
   sales = {};
-}, 50);
+}, 500);
 
 var pixel = fs.readFileSync("images/tracking.gif", 'binary');
 db.open(function(db) {

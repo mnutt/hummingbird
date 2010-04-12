@@ -1,11 +1,10 @@
 if(!Hummingbird) { var Hummingbird = {}; }
 
-Hummingbird.Graph = function(canvas, url) {
+Hummingbird.Graph = function(canvas) {
   if ( !(this instanceof Hummingbird.Graph) ) {
-    return new Hummingbird.Graph(canvas, url);
+    return new Hummingbird.Graph(canvas);
   }
 
-  this.url = url;
   this.canvas = canvas;
   this.trafficLog = [];
 
@@ -20,27 +19,6 @@ Hummingbird.Graph.prototype = {
     this.bgLineColor = "#555";
     this.canvasHeight = $(this.canvas).height();
     this.canvasWidth = $(this.canvas).width();
-
-    this.ws = new WebSocket(this.url);
-    this.ws.onmessage = $.proxy(function(evt) {
-      var data = JSON.parse(evt.data);
-
-      if(typeof(data.total) != "undefined") {
-        $.each(data.sales, function(key) {
-          console.log(JSON.stringify(data.sales));
-          $("#sale_" + key).hide();
-        });
-        this.drawLogPath(data.total * 20 / 4000.0);
-      } else {
-        console.log(JSON.stringify(data));
-      }
-    }, this);
-    this.ws.onclose = function() {
-      alert("socket closed");
-    };
-    this.ws.onopen = function() {
-      //alert("connected...");
-    };
   },
 
   addValue: function(value) {

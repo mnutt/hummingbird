@@ -12,14 +12,11 @@ Hummingbird.WebSocket.start = function() {
   canvas.width = $(window).width() - 160;
   var totalGraph = new Hummingbird.Graph(canvas);
 
-
   var ws = new WebSocket("ws://" + document.location.host.replace(/8088/, '8080'));
   ws.onmessage = function(evt) {
     var data = JSON.parse(evt.data);
 
     if(typeof(data.sales) != "undefined") {
-      console.log(JSON.stringify(data.sales));
-      // console.log(JSON.stringify(data.sales));
       $.each(Hummingbird.saleGraphs, function(key) {
         if(data.sales[key]) {
           Hummingbird.saleGraphs[key].drawLogPath(data.sales[key] / 200.0);

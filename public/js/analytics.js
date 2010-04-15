@@ -15,7 +15,8 @@ Hummingbird.Graph.prototype = {
   init: function() {
     this.setupContext();
 
-    this.lineColor = "#FFF";
+    this.lineColors = [ "#FFFFFF", "#3BA496", "#65B88A",
+                        "#F1E29F", "#C44939", "#983839" ];
     this.bgLineColor = "#555";
     this.canvasHeight = $(this.canvas).height();
     this.canvasWidth = $(this.canvas).width();
@@ -49,12 +50,15 @@ Hummingbird.Graph.prototype = {
 
   drawLogPath: function(percent) {
     this.addValue(percent);
-    var height = Math.max(this.runningAverage() * this.canvasHeight, 1);
+    var average = this.runningAverage();
+    var height = Math.max(average * this.canvasHeight, 1);
+    var colorIndex = Math.min(Math.ceil((average / 2) * 10), 5);
+    var color = this.lineColors[colorIndex];
     var endingPoint = this.canvasHeight - height;
 
     this.shiftCanvas(6, 0);
     this.context.beginPath();
-    this.context.strokeStyle = this.lineColor;
+    this.context.strokeStyle = color;
     this.context.moveTo(this.canvasWidth - 10, this.canvasHeight);
     this.context.lineTo(this.canvasWidth - 10, endingPoint);
     this.context.stroke();

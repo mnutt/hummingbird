@@ -39,7 +39,7 @@ setInterval(function() {
 
   clients.each(function(c) {
     try {
-      c.write(JSON.stringify({total: urls.total, sales: sales}));
+      c.write(JSON.stringify({sales: sales}));
     } catch(e) {
       sys.log(e.description);
     }
@@ -97,7 +97,7 @@ sys.puts('Web Socket server running at ws://localhost:' + WEB_SOCKET_PORT);
 http.createServer(function(req, res) {
   if(req.url.match(/\/sale_list/)) {
     sys.log("YAY");
-    proxy.route("/sale_list", "http://localhost:6701/pagegen_service/sales/sale_list", req, res);
+    proxy.route("/sale_list", "http://www.gilt.com/pagegen_service/sales/sale_list", req, res);
   } else {
     paperboy.deliver(WEBROOT, req, res)
       .addHeader('Content-Type', "text/plain")

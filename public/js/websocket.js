@@ -12,7 +12,7 @@ Hummingbird.WebSocket.start = function() {
   canvas.width = $(window).width() - 160;
   var totalGraph = new Hummingbird.Graph(canvas);
 
-  var ws = new WebSocket("ws://" + document.location.host.replace(/8088/, '8080'));
+  var ws = new WebSocket("ws://" + document.location.hostname + ':8080');
   ws.onmessage = function(evt) {
     var data = JSON.parse(evt.data);
 

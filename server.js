@@ -108,7 +108,7 @@ try {
 
   sys.puts('Analytics server running at http://localhost:' + MONITOR_PORT + '/');
 } catch(e) {
-  if(e && e.errno == 48) {
+  if(e && e.message == "Address already in use") {
     sys.log('Detected port ' + MONITOR_PORT + ' in use; assuming it is being served by another webserver.');
-  }
+  } else { throw(e); }
 }

@@ -59,7 +59,7 @@ db.open(function(db) {
         var env = querystring.parse(req.url.split('?')[1]);
         env.timestamp = (new Date());
         collection.insert(env);
-        sys.puts(JSON.stringify(env, null, 2));
+        // sys.log(JSON.stringify(env, null, 2));
 
         res.writeHead(200, {'Content-Type': 'image/gif', 'Content-Disposition': 'inline'});
         res.write(pixel, 'binary');

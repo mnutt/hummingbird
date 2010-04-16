@@ -90,19 +90,25 @@ ws.createServer(function (websocket) {
     clients.remove(websocket);
     sys.log("ws close");
   });
-}).listen(8080);
+}).listen(WEB_SOCKET_PORT);
 
 sys.puts('Web Socket server running at ws://localhost:' + WEB_SOCKET_PORT);
 
-http.createServer(function(req, res) {
-  if(req.url.match(/\/sale_list/)) {
-    sys.log("YAY");
-    proxy.route("/sale_list", "http://www.gilt.com/pagegen_service/sales/sale_list", req, res);
-  } else {
-    paperboy.deliver(WEBROOT, req, res)
-      .addHeader('Content-Type', "text/plain")
-      .after(function(statCode) { sys.log([statCode, req.method, req.url, req.connection.remoteAddress].join(' ')); });
-  }
-}).listen(MONITOR_PORT);
+try {
+  http.createServer(function(req, res) {
+    if(req.url.match(/\/sale_list/)) {
+      sys.log("YAY");
+      proxy.route("/sale_list", "http://www.gilt.com/pagegen_service/sales/sale_list", req, res);
+    } else {
+      paperboy.deliver(WEBROOT, req, res)
+        .addHeader('Content-Type', "text/plain")
+        .after(function(statCode) { sys.log([statCode, req.method, req.url, req.connection.remoteAddress].join(' ')); });
+    }
+  }).listen(MONITOR_PORT);
 
-sys.puts('Analytics server running at http://localhost:' + MONITOR_PORT + '/');
+  sys.puts('Analytics server running at http://localhost:' + MONITOR_PORT + '/');
+} catch(e) {
+  if(e && e.errno == 48) {
+    sys.log('Detected port ' + MONITOR_PORT + ' in use; assuming it is being served by another webserver.');
+  }
+}

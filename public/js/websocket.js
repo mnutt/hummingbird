@@ -12,20 +12,21 @@ Hummingbird.WebSocket.start = function() {
   canvas.width = $(window).width() - 160;
   var totalGraph = new Hummingbird.Graph(canvas);
 
-  var ws = new WebSocket("ws://" + document.location.hostname + ':8080');
+  var wsServer = "ws://" + document.location.hostname + ":8080";
+  var ws = new WebSocket(wsServer);
   ws.onmessage = function(evt) {
     var data = JSON.parse(evt.data);
 
     if(typeof(data.sales) != "undefined") {
       $.each(Hummingbird.saleGraphs, function(key) {
         if(data.sales[key]) {
-          Hummingbird.saleGraphs[key].drawLogPath(data.sales[key] / 200.0);
+          Hummingbird.saleGraphs[key].drawLogPath(data.sales[key] * 2 / 200.0);
         } else {
           Hummingbird.saleGraphs[key].drawLogPath(0.0);
         }
       });
     } else if(typeof(data.total) != "undefined") {
-      totalGraph.drawLogPath(data.total * 20 / 4000.0);
+      totalGraph.drawLogPath(data.total * 20 / 400.0);
     }
   }
   ws.onclose = function() {

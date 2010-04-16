@@ -19,19 +19,22 @@ var db = new mongo.Db('hummingbird', new mongo.Server('localhost', 27017, {}), {
 
 var clients = [];
 
-var urls = { total: 0 };
+var totalPages = 0;
+var totalCartAdds = 0;
 var sales = {};
 
 setInterval(function() {
   clients.each(function(c) {
     try {
-      c.write(JSON.stringify({total: urls.total}));
+      c.write(JSON.stringify({total: totalPages, cartAdds: totalCartAdds}));
+      // sys.log(JSON.stringify({total: totalPages, cartAdds: totalCartAdds}));
     } catch(e) {
       sys.log(e.description);
     }
   });
 
-  urls = { total: 0 };
+  totalPages = 0;
+  totalCartAdds = 0;
 }, 50);
 
 setInterval(function() {
@@ -52,26 +55,31 @@ var pixel = fs.readFileSync("images/tracking.gif", 'binary');
 db.open(function(db) {
   db.collection('visits', function(err, collection) {
     http.createServer(function (req, res) {
+      try {
+        var env = querystring.parse(req.url.split('?')[1]);
+        env.timestamp = (new Date());
+        collection.insert(env);
+        sys.puts(JSON.stringify(env, null, 2));
 
-      var env = querystring.parse(req.url.split('?')[1]);
-      env.timestamp = (new Date());
-      collection.insert(env);
-      // sys.puts(JSON.stringify(env, null, 2));
+        res.writeHead(200, {'Content-Type': 'image/gif', 'Content-Disposition': 'inline'});
+        res.write(pixel, 'binary');
+        res.close();
 
-      res.writeHead(200, {'Content-Type': 'image/gif', 'Content-Disposition': 'inline'});
-      res.write(pixel, 'binary');
-      res.close();
-
-      var view = new pageview.View(env);
-      if(view.urlKey) {
-        if(sales[view.urlKey]) {
-          sales[view.urlKey] += 1;
-        } else {
-          sales[view.urlKey] = 1;
+        var view = new pageview.View(env);
+        if(view.urlKey()) {
+          if(sales[view.urlKey()]) {
+            sales[view.urlKey()] += 1;
+          } else {
+            sales[view.urlKey()] = 1;
+          }
         }
-      }
-      urls.total += 1
 
+        if(view.event() && view.event() === "cart_add") {
+          totalCartAdds += 1;
+        }
+
+        totalPages += 1;
+      } catch(e) { e.stack = e.stack.split('\n'); sys.log(JSON.stringify(e, null, 2)); }
     }).listen(TRACKING_PORT);
   });
 });
@@ -97,8 +105,7 @@ sys.puts('Web Socket server running at ws://localhost:' + WEB_SOCKET_PORT);
 try {
   http.createServer(function(req, res) {
     if(req.url.match(/\/sale_list/)) {
-      sys.log("YAY");
-      proxy.route("/sale_list", "http://www.gilt.com/pagegen_service/sales/sale_list", req, res);
+      proxy.route("/sale_list", "http://www.gilt.com/pagegen_service/sale/sale_list", req, res);
     } else {
       paperboy.deliver(WEBROOT, req, res)
         .addHeader('Content-Type', "text/plain")

@@ -12,6 +12,10 @@ Hummingbird.WebSocket.start = function() {
   canvas.width = $(window).width() - 160;
   var totalGraph = new Hummingbird.Graph(canvas);
 
+  var cartAdds = $("#cart_adds").get(0);
+  cartAdds.width = $(window).width() - 160;
+  var cartAddsGraph = new Hummingbird.Graph(cartAdds);
+
   var wsServer = "ws://" + document.location.hostname + ":8080";
   var ws = new WebSocket(wsServer);
   ws.onmessage = function(evt) {
@@ -27,6 +31,11 @@ Hummingbird.WebSocket.start = function() {
       });
     } else if(typeof(data.total) != "undefined") {
       totalGraph.drawLogPath(data.total * 20 / 400.0);
+      if(data.cartAdds) {
+        cartAddsGraph.drawLogPath(data.cartAdds * 20 / 200);
+      } else {
+        cartAddsGraph.drawLogPath(0.0);
+      }
     }
   }
   ws.onclose = function() {

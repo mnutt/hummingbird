@@ -12,6 +12,14 @@ h1 {
   font-family: 'TitilliumText14L800wt', sans-serif;
 }
 
+div.hummingbird_graph h2 {
+  color: #CCC;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  margin-bottom: 0.2em;
+  margin-left: 55px;
+}
+
 div.hummingbird_graph canvas {
   float: left;
   padding: 14px 0 20px 0;
@@ -34,6 +42,11 @@ div.hummingbird_graph div.axis_left {
 
 div.hummingbird_graph div.axis_right {
   padding: 0 10px;
+}
+
+#hummingbird_cart_adds div.axis_left,
+#hummingbird_cart_adds div.axis_right {
+  line-height: 0.3em;
 }
 
 #sales {

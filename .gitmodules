@@ -1,9 +1,9 @@
-[submodule "vendor/node-mongodb"]
-	path = vendor/node-mongodb
-	url = git://github.com/orlandov/node-mongodb.git
-[submodule "vendor/node-mongodb-native"]
-	path = vendor/node-mongodb-native
-	url = git://github.com/christkv/node-mongodb-native.git
-[submodule "vendor/node-paperboy"]
-	path = vendor/node-paperboy
+[submodule "deps/nodeunit"]
+	path = deps/nodeunit
+	url = git://github.com/caolan/nodeunit.git
+[submodule "deps/node-paperboy"]
+	path = deps/node-paperboy
 	url = git://github.com/felixge/node-paperboy
+[submodule "deps/node-mongodb-native"]
+	path = deps/node-mongodb-native
+	url = git://github.com/christkv/node-mongodb-native.git

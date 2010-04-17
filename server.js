@@ -2,13 +2,13 @@ var sys = require('sys'),
     http = require('http'),
     fs = require('fs'),
     path = require('path'),
-    ws = require('./vendor/ws'),
+    ws = require('./deps/ws'),
     proxy = require('./lib/proxy'),
     pageview = require('./lib/view'),
     querystring = require('querystring'),
-    arrays = require('./vendor/arrays'),
-    paperboy = require('./vendor/node-paperboy'),
-    mongo = require('./vendor/node-mongodb-native/lib/mongodb');
+    arrays = require('./deps/arrays'),
+    paperboy = require('./deps/node-paperboy'),
+    mongo = require('./deps/node-mongodb-native/lib/mongodb');
 
 var WEBROOT = path.join(path.dirname(__filename), 'public'),
     TRACKING_PORT = 8000,

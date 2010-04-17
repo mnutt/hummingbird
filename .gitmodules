@@ -3,7 +3,7 @@
 	url = git://github.com/caolan/nodeunit.git
 [submodule "deps/node-paperboy"]
 	path = deps/node-paperboy
-	url = git://github.com/felixge/node-paperboy
+	url = git://github.com/mnutt/node-paperboy
 [submodule "deps/node-mongodb-native"]
 	path = deps/node-mongodb-native
 	url = git://github.com/christkv/node-mongodb-native.git

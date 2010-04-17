@@ -5,6 +5,7 @@ var sys = require('sys'),
     ws = require('./deps/ws'),
     proxy = require('./lib/proxy'),
     pageview = require('./lib/view'),
+    metric = require('./lib/metric'),
     querystring = require('querystring'),
     arrays = require('./deps/arrays'),
     paperboy = require('./deps/node-paperboy'),
@@ -17,39 +18,11 @@ var WEBROOT = path.join(path.dirname(__filename), 'public'),
 
 var db = new mongo.Db('hummingbird', new mongo.Server('localhost', 27017, {}), {});
 
-var clients = [];
+var allViewsMetric = new metric.Metric({total: 0, cartAdds: 0}, 50);
+var salesMetric = new metric.Metric({sales: {}}, 500);
 
-var totalPages = 0;
-var totalCartAdds = 0;
-var sales = {};
-
-setInterval(function() {
-  clients.each(function(c) {
-    try {
-      c.write(JSON.stringify({total: totalPages, cartAdds: totalCartAdds}));
-      // sys.log(JSON.stringify({total: totalPages, cartAdds: totalCartAdds}));
-    } catch(e) {
-      sys.log(e.description);
-    }
-  });
-
-  totalPages = 0;
-  totalCartAdds = 0;
-}, 50);
-
-setInterval(function() {
-  // sys.puts("Writing to clients...");
-
-  clients.each(function(c) {
-    try {
-      c.write(JSON.stringify({sales: sales}));
-    } catch(e) {
-      sys.log(e.description);
-    }
-  });
-
-  sales = {};
-}, 500);
+allViewsMetric.run();
+salesMetric.run();
 
 var pixel = fs.readFileSync("images/tracking.gif", 'binary');
 db.open(function(p_db) {
@@ -68,18 +41,18 @@ db.open(function(p_db) {
 
           var view = new pageview.View(env);
           if(view.urlKey()) {
-            if(sales[view.urlKey()]) {
-              sales[view.urlKey()] += 1;
+            if(salesMetric.data.sales[view.urlKey()]) {
+              salesMetric.data.sales[view.urlKey()] += 1;
             } else {
-              sales[view.urlKey()] = 1;
+              salesMetric.data.sales[view.urlKey()] = 1;
             }
           }
 
           if(view.event() && view.event() === "cart_add") {
-            totalCartAdds += 1;
+            allViewsMetric.data.cartAdds += 1;
           }
 
-          totalPages += 1;
+          allViewsMetric.data.total += 1;
         } catch(e) { e.stack = e.stack.split('\n'); sys.log(JSON.stringify(e, null, 2)); }
       }).listen(TRACKING_PORT);
     });
@@ -90,14 +63,16 @@ sys.puts('Tracking server running at http://localhost:' + TRACKING_PORT + '/trac
 
 // Websocket TCP server
 ws.createServer(function (websocket) {
-  clients.push(websocket);
+  allViewsMetric.addClient(websocket);
+  salesMetric.addClient(websocket);
 
   websocket.addListener("connect", function (resource) {
     // emitted after handshake
     sys.log("ws connect: " + resource);
   }).addListener("close", function () {
     // emitted when server or client closes connection
-    clients.remove(websocket);
+    allViewsMetric.removeClient(websocket);
+    salesMetric.removeClient(websocket);
     sys.log("ws close");
   });
 }).listen(WEB_SOCKET_PORT);

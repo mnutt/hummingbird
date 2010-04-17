@@ -7,3 +7,6 @@
 [submodule "deps/node-mongodb-native"]
 	path = deps/node-mongodb-native
 	url = git://github.com/christkv/node-mongodb-native.git
+[submodule "deps/node-ws"]
+	path = deps/node-ws
+	url = git://github.com/mnutt/node.ws.js

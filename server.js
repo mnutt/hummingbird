@@ -35,7 +35,9 @@ db.open(function(p_db) {
           collection.insert(env);
           // sys.log(JSON.stringify(env, null, 2));
 
-          res.writeHead(200, {'Content-Type': 'image/gif', 'Content-Disposition': 'inline'});
+          res.writeHead(200, { 'Content-Type': 'image/gif',
+                               'Content-Disposition': 'inline',
+                               'Content-Length': '43' });
           res.write(pixel, 'binary');
           res.end();
 

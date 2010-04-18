@@ -53,20 +53,24 @@ ws.createServer(function (websocket) {
 
 sys.puts('Web Socket server running at ws://localhost:' + WEB_SOCKET_PORT);
 
-http.createServer(function(req, res) {
-  if(req.url.match(/\/sale_list/)) {
-    proxy.route("/sale_list",
-                "http://www.gilt.com/pagegen_service/sale/sale_list", req, res);
-  } else {
-    paperboy.deliver(WEBROOT, req, res)
-      .addHeader('Content-Type', "text/plain")
-      .after(function(statCode) {
-        sys.log([statCode,
-                 req.method,
-                 req.url,
-                 req.connection.remoteAddress].join(' '));
-      });
-  }
-}).listen(MONITOR_PORT);
+try {
+  http.createServer(function(req, res) {
+    if(req.url.match(/\/sale_list/)) {
+      proxy.route("/sale_list",
+                  "http://www.gilt.com/pagegen_service/sale/sale_list", req, res);
+    } else {
+      paperboy.deliver(WEBROOT, req, res)
+        .addHeader('Content-Type', "text/plain")
+        .after(function(statCode) {
+          sys.log([statCode,
+                   req.method,
+                   req.url,
+                   req.connection.remoteAddress].join(' '));
+        });
+    }
+  }).listen(MONITOR_PORT);
 
-sys.puts('Analytics server running at http://localhost:' + MONITOR_PORT + '/');
+  sys.puts('Analytics server running at http://localhost:' + MONITOR_PORT + '/');
+} catch(e) {
+  sys.puts('Detected webserver already running on http://localhost:' + MONITOR_PORT + '.');
+}

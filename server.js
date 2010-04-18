@@ -1,13 +1,13 @@
 require.paths.unshift(__dirname + '/lib');
+require.paths.unshift(__dirname);
 
 var sys = require('sys'),
   http = require('http'),
   path = require('path'),
-  ws = require('./deps/node-ws/ws'),
+  ws = require('deps/node-ws/ws'),
   proxy = require('proxy'),
-  arrays = require('./deps/arrays'),
-  paperboy = require('./deps/node-paperboy'),
-  mongo = require('./deps/node-mongodb-native/lib/mongodb'),
+  paperboy = require('deps/node-paperboy'),
+  mongo = require('deps/node-mongodb-native/lib/mongodb'),
   hb = require('hummingbird');
 
 var WEBROOT = path.join(path.dirname(__filename), 'public'),

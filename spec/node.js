@@ -8,6 +8,7 @@ require('unit/spec.helper')
 hb = require('hummingbird')
 http = require('http');
 v = require('view');
+sys = require('sys');
 
 MockRequest = function(url) {
   this.url = url;
@@ -31,10 +32,22 @@ MockResponse.prototype = {
     this.dataType = dataType;
   },
 
+  close: function() { this.end(); },
+
   end: function() {
     this.state = "closed";
   }
 };
+
+MockCollection = function() {
+  this.inserts = [];
+}
+
+MockCollection.prototype = {
+  insert: function(data) {
+    this.inserts.push(data)
+  }
+}
 
 JSpec
   .exec('spec/unit/hummingbird_spec.js')

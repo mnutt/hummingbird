@@ -20,6 +20,8 @@ Hummingbird.Graph.prototype = {
     this.bgLineColor = "#555";
     this.canvasHeight = $(this.canvas).height();
     this.canvasWidth = $(this.canvas).width();
+
+    this.drawEmptyGraph();
   },
 
   addValue: function(value) {
@@ -45,6 +47,13 @@ Hummingbird.Graph.prototype = {
 
   runningAverage: function() {
     return this.trafficLog.sum() / this.trafficLog.length;
+  },
+
+  drawEmptyGraph: function() {
+    var dataPoints = Math.ceil(this.canvasWidth / 6)
+    while(dataPoints--) {
+      this.drawLogPath(0);
+    }
   },
 
   drawLogPath: function(percent) {

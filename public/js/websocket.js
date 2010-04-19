@@ -10,7 +10,7 @@ Hummingbird.WebSocket.start = function() {
 
   var canvas = $("#log").get(0);
   canvas.width = $(window).width() - 160;
-  var totalGraph = new Hummingbird.Graph(canvas);
+  var totalGraph = new Hummingbird.Graph(canvas, {logDate: true});
 
   var cartAdds = $("#cart_adds").get(0);
   cartAdds.width = $(window).width() - 160;

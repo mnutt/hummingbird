@@ -1,9 +1,11 @@
 if(!Hummingbird) { var Hummingbird = {}; }
 
-Hummingbird.Graph = function(canvas) {
+Hummingbird.Graph = function(canvas, options) {
   if ( !(this instanceof Hummingbird.Graph) ) {
     return new Hummingbird.Graph(canvas);
   }
+
+  this.options = options || {};
 
   this.canvas = canvas;
   this.trafficLog = [];
@@ -18,10 +20,13 @@ Hummingbird.Graph.prototype = {
     this.lineColors = [ "#FFFFFF", "#3BA496", "#65B88A",
                         "#F1E29F", "#C44939", "#983839" ];
     this.bgLineColor = "#555";
-    this.canvasHeight = $(this.canvas).height();
+    this.canvasHeight = $(this.canvas).height() - 15;
     this.canvasWidth = $(this.canvas).width();
 
+    this.lineWidth = 3;
+
     this.drawEmptyGraph();
+    this.tick = 0;
   },
 
   addValue: function(value) {
@@ -42,7 +47,8 @@ Hummingbird.Graph.prototype = {
       alert("Sorry, this browser doesn't support canvas");
     }
 
-    this.context.lineWidth = 3;
+    this.context.font = "10px Lucida Grande";
+    this.context.textAlign = "right";
   },
 
   runningAverage: function() {
@@ -56,15 +62,44 @@ Hummingbird.Graph.prototype = {
     }
   },
 
+  logDate: function() {
+    // Draw text background
+    this.context.lineCap = "round";
+    this.context.lineWidth = 12;
+    this.context.beginPath();
+    this.context.moveTo(this.canvasWidth - 16, this.canvasHeight + 8);
+    this.context.strokeStyle = "#000";
+    this.context.lineTo(this.canvasWidth - 70, this.canvasHeight + 8);
+    this.context.stroke();
+    this.context.closePath();
+
+    // Draw date text
+    this.context.fillStyle = "#FFF";
+    var date = new Date();
+
+    this.context.fillText(date.formattedTime(), this.canvasWidth - 20, this.canvasHeight + 12);
+  },
+
   drawLogPath: function(percent) {
+    if(this.options.logDate) {
+      this.tick++;
+
+      if(this.tick % 100 == 0) {
+        this.logDate();
+        this.tick = 0;
+      }
+    }
+
     this.addValue(percent);
+
     var average = this.runningAverage();
     var height = Math.max(average * this.canvasHeight, 1);
     var colorIndex = Math.min(Math.ceil((average / 2) * 10), 5);
     var color = this.lineColors[colorIndex];
     var endingPoint = this.canvasHeight - height;
 
-    this.shiftCanvas(6, 0);
+    this.shiftCanvas(this.lineWidth * 2, 0);
+    this.context.lineWidth = this.lineWidth;
     this.context.beginPath();
     this.context.strokeStyle = color;
     this.context.moveTo(this.canvasWidth - 10, this.canvasHeight);

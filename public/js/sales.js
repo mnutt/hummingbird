@@ -16,7 +16,7 @@ Hummingbird.getSales = function() {
       var canvas = $("<canvas width='180' height='50'></canvas>");
       saleDiv.append(canvas);
       $("#sales").append(saleDiv);
-      var saleGraph = new Hummingbird.Graph(canvas.get(0));
+      var saleGraph = new Hummingbird.Graph(saleDiv, { ratePerSecond: 2 });
       Hummingbird.saleGraphs[this.url_key] = saleGraph;
     });
   });

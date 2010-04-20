@@ -1,13 +1,22 @@
 if(!Hummingbird) { var Hummingbird = {}; }
 
-Hummingbird.Graph = function(canvas, options) {
+Hummingbird.Graph = function(el, options) {
   if ( !(this instanceof Hummingbird.Graph) ) {
     return new Hummingbird.Graph(canvas);
   }
 
-  this.options = options || {};
+  var defaults = {
+    showLogDate: false,
+    showMarkers: true,
+    ratePerSecond: 10
+  }
 
-  this.canvas = canvas;
+  this.options = $.extend(defaults, options);
+
+  this.scale = 800;
+  this.el = $(el);
+  this.canvas = $(el).find('canvas').get(0);
+  this.valueElement = this.el.find('span.value');
   this.trafficLog = [];
 
   this.init();
@@ -17,11 +26,22 @@ Hummingbird.Graph.prototype = {
   init: function() {
     this.setupContext();
 
-    this.lineColors = [ "#FFFFFF", "#3BA496", "#65B88A",
-                        "#F1E29F", "#C44939", "#983839" ];
+    this.lineColors = {
+      25: "#5BC4B6",
+      50: "#3BA496",
+      100: "#65B88A",
+      200: "#F1E29F",
+      400: "#C44939",
+      800: "#983839",
+      1600: "#333",
+      def: "#7BF4D6"
+    };
     this.bgLineColor = "#555";
-    this.canvasHeight = $(this.canvas).height() - 15;
+    this.canvasHeight = $(this.canvas).height() - 16;
     this.canvasWidth = $(this.canvas).width();
+
+    this.numMarkers = Math.floor(this.canvasHeight / 23);
+    this.resetMarkers();
 
     this.lineWidth = 3;
 
@@ -29,9 +49,26 @@ Hummingbird.Graph.prototype = {
     this.tick = 0;
   },
 
+  resetMarkers: function() {
+    var leftMarkerContainer = this.el.find('div.axis_left');
+    var rightMarkerContainer = this.el.find('div.axis_right');
+
+    if(leftMarkerContainer.length == 0) { return; }
+
+    leftMarkerContainer.html('');
+    rightMarkerContainer.html('');
+
+    var incr = this.scale / this.numMarkers;
+    for(var i = 0; i <= this.numMarkers; i++) {
+      var markerValue = Math.floor(this.scale - (i * incr));
+      leftMarkerContainer.append('<p>' + markerValue + '</p>');
+      rightMarkerContainer.append('<p>' + markerValue + '</p>');
+    }
+  },
+
   addValue: function(value) {
     this.trafficLog.push(value);
-    if(this.trafficLog.length > 20) {
+    if(this.trafficLog.length > this.options.ratePerSecond) {
       this.trafficLog.shift();
     }
   },
@@ -47,7 +84,7 @@ Hummingbird.Graph.prototype = {
       alert("Sorry, this browser doesn't support canvas");
     }
 
-    this.context.font = "10px Lucida Grande";
+    this.context.font = "bold 10px Andale Mono, sans-serif";
     this.context.textAlign = "right";
   },
 
@@ -56,7 +93,7 @@ Hummingbird.Graph.prototype = {
   },
 
   drawEmptyGraph: function() {
-    var dataPoints = Math.ceil(this.canvasWidth / 6)
+    var dataPoints = Math.ceil(this.canvasWidth / (this.lineWidth * 2))
     while(dataPoints--) {
       this.drawLogPath(0);
     }
@@ -67,35 +104,65 @@ Hummingbird.Graph.prototype = {
     this.context.lineCap = "round";
     this.context.lineWidth = 12;
     this.context.beginPath();
-    this.context.moveTo(this.canvasWidth - 16, this.canvasHeight + 8);
+    this.context.moveTo(this.canvasWidth - 16, this.canvasHeight + 10);
     this.context.strokeStyle = "#000";
-    this.context.lineTo(this.canvasWidth - 70, this.canvasHeight + 8);
+    this.context.lineTo(this.canvasWidth - 70, this.canvasHeight + 10);
     this.context.stroke();
     this.context.closePath();
+    this.context.lineCap = "square";
 
     // Draw date text
     this.context.fillStyle = "#FFF";
     var date = new Date();
 
-    this.context.fillText(date.formattedTime(), this.canvasWidth - 20, this.canvasHeight + 12);
+    this.context.fillText(date.formattedTime(), this.canvasWidth - 16, this.canvasHeight + 14);
   },
 
-  drawLogPath: function(percent) {
-    if(this.options.logDate) {
-      this.tick++;
+  rescale: function(percent) {
+    if(percent == 0) { return; }
+    if(percent > 0.9) {
+      this.scale = this.scale * 2;
+    } else if(percent < 0.08) {
+      this.scale = this.scale / 4;
+    } else if(percent < 0.16) {
+      this.scale = this.scale / 2;
+    } else {
+      return;
+    }
+
+    console.log((this.el.attr('id') || "element") + " set scale to " + this.scale);
+    this.drawSeparator();
+    this.resetMarkers();
+  },
+
+  drawSeparator: function() {
+    this.shiftCanvas(this.lineWidth * 2, 0);
+
+    this.context.lineWidth = this.lineWidth;
+    this.context.beginPath();
+    this.context.strokeStyle = "#000";
+    this.context.moveTo(this.canvasWidth - 10, this.canvasHeight);
+    this.context.lineTo(this.canvasWidth - 10, 0);
+    this.context.stroke();
+    this.context.closePath();
+  },
+
+  drawLogPath: function(value) {
+    this.tick++;
+
+    if(this.options.showLogDate) {
 
       if(this.tick % 100 == 0) {
         this.logDate();
-        this.tick = 0;
       }
     }
 
-    this.addValue(percent);
+    this.addValue(value);
 
-    var average = this.runningAverage();
-    var height = Math.max(average * this.canvasHeight, 1);
-    var colorIndex = Math.min(Math.ceil((average / 2) * 10), 5);
-    var color = this.lineColors[colorIndex];
+    var average = this.runningAverage() * this.options.ratePerSecond;
+    var percent = average / this.scale;
+    var height = Math.max(percent * this.canvasHeight, 1);
+    var color = this.lineColors[this.scale] || this.lineColors.def;
     var endingPoint = this.canvasHeight - height;
 
     this.shiftCanvas(this.lineWidth * 2, 0);
@@ -113,5 +180,11 @@ Hummingbird.Graph.prototype = {
     this.context.lineTo(this.canvasWidth - 10, 0);
     this.context.stroke();
     this.context.closePath();
+
+    if(this.tick % 50 == 0) {
+      this.valueElement.text(average);
+      this.rescale(percent);
+      if(this.tick % 1000 == 0) { this.tick = 0; }
+    }
   }
 };

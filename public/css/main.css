@@ -10,6 +10,7 @@ h1 {
   color: #FFF;
   text-transform: uppercase;
   font-family: 'TitilliumText14L800wt', sans-serif;
+  margin-left: 58px;
 }
 
 div.hummingbird_graph h2 {
@@ -17,13 +18,14 @@ div.hummingbird_graph h2 {
   text-transform: uppercase;
   font-size: 0.9em;
   margin-bottom: 0.2em;
-  margin-left: 55px;
+  margin-left: 58px;
 }
 
 div.hummingbird_graph canvas {
   float: left;
   padding: 14px 0 20px 0;
   color: #F00;
+  font-weight: bold;
 }
 
 div.hummingbird_graph div.axis_left,
@@ -33,6 +35,7 @@ div.hummingbird_graph div.axis_right {
   color: #4F4C4B;
   font-weight: bold;
   font-size: 0.8em;
+  width: 30px;
 }
 
 div.hummingbird_graph div.axis_left {
@@ -50,6 +53,7 @@ div.hummingbird_graph div.axis_right {
 }
 
 #sales {
+  margin-left: 50px;
 }
 
 #sales div.sale {

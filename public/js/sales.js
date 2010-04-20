@@ -9,7 +9,7 @@ Hummingbird.getSales = function() {
       var name = this.name;
       var url = "http://www.gilt.com/s/" + this.url_key;
 
-      var saleDiv = $("<div id='sale_" + this.url_key + "' class='sale'></div>");
+      var saleDiv = $("<div id='sale_" + this.url_key + "' data-id='" + this.url_key + "' class='sale'></div>");
       saleDiv.append("<img class='editorial' src='" + editorialImage + "'/>");
       saleDiv.append("<h2>" + name + "</h2>");
 
@@ -25,6 +25,20 @@ Hummingbird.getSales = function() {
   });
 };
 
+Hummingbird.resortSales = function() {
+  var sortedSales = $("div#sales div.sale").sorted({
+    by: function(a) {
+      return a.find('div.hummingbird_graph').attr('data-value');
+    }
+  });
+
+  $.each(sortedSales, function() {
+    $(this).prependTo("div#sales");
+  });
+};
+
 $(document).ready(function() {
   Hummingbird.getSales();
+
+  setInterval(Hummingbird.resortSales, 3000);
 });

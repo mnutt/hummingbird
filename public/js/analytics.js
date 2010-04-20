@@ -46,7 +46,7 @@ Hummingbird.Graph.prototype = {
 
     this.lineWidth = 3;
 
-    this.drawEmptyGraph();
+    // this.drawEmptyGraph();
     this.tick = 0;
   },
 
@@ -131,7 +131,6 @@ Hummingbird.Graph.prototype = {
       return;
     }
 
-    console.log((this.el.attr('id') || "element") + " set scale to " + this.scale);
     this.drawSeparator();
     this.resetMarkers();
   },
@@ -186,6 +185,7 @@ Hummingbird.Graph.prototype = {
 
     if(this.tick % (this.options.ratePerSecond * 2) == 0) { // Every 2 seconds
       this.valueElement.text(average);
+      this.el.attr('data-value', average);
       this.rescale(percent);
       if(this.tick % 1000 == 0) { this.tick = 0; }
     }

@@ -8,7 +8,8 @@ Hummingbird.Graph = function(el, options) {
   var defaults = {
     showLogDate: false,
     showMarkers: true,
-    ratePerSecond: 10
+    ratePerSecond: 10,
+    showBackgroundBars: true
   }
 
   this.options = $.extend(defaults, options);
@@ -37,7 +38,7 @@ Hummingbird.Graph.prototype = {
       def: "#7BF4D6"
     };
     this.bgLineColor = "#555";
-    this.canvasHeight = $(this.canvas).height() - 16;
+    this.canvasHeight = $(this.canvas).height();
     this.canvasWidth = $(this.canvas).width();
 
     this.numMarkers = Math.floor(this.canvasHeight / 23);
@@ -174,14 +175,16 @@ Hummingbird.Graph.prototype = {
     this.context.stroke();
     this.context.closePath();
 
-    this.context.beginPath();
-    this.context.strokeStyle = this.bgLineColor;
-    this.context.moveTo(this.canvasWidth - 10, endingPoint);
-    this.context.lineTo(this.canvasWidth - 10, 0);
-    this.context.stroke();
-    this.context.closePath();
+    if(this.options.showBackgroundBars) {
+      this.context.beginPath();
+      this.context.strokeStyle = this.bgLineColor;
+      this.context.moveTo(this.canvasWidth - 10, endingPoint);
+      this.context.lineTo(this.canvasWidth - 10, 0);
+      this.context.stroke();
+      this.context.closePath();
+    }
 
-    if(this.tick % 50 == 0) {
+    if(this.tick % (this.options.ratePerSecond * 2) == 0) { // Every 2 seconds
       this.valueElement.text(average);
       this.rescale(percent);
       if(this.tick % 1000 == 0) { this.tick = 0; }

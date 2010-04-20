@@ -13,10 +13,13 @@ Hummingbird.getSales = function() {
       saleDiv.append("<img class='editorial' src='" + editorialImage + "'/>");
       saleDiv.append("<h2>" + name + "</h2>");
 
-      var canvas = $("<canvas width='180' height='50'></canvas>");
-      saleDiv.append(canvas);
+      var graph = $("<div class='hummingbird_graph'></div>");
+
+      var canvas = $("<canvas width='185' height='70'></canvas>");
+      graph.append(canvas);
+      saleDiv.append(graph);
       $("#sales").append(saleDiv);
-      var saleGraph = new Hummingbird.Graph(saleDiv, { ratePerSecond: 2 });
+      var saleGraph = new Hummingbird.Graph(graph, { ratePerSecond: 2, initialScope: 200, backgroundImage: editorialImage, showBackgroundBars: false });
       Hummingbird.saleGraphs[this.url_key] = saleGraph;
     });
   });

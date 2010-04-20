@@ -59,12 +59,29 @@ div.hummingbird_graph div.axis_right {
 #sales div.sale {
   float: left;
   width: 180px;
-  height: 180px;
+  height: 100px;
   overflow: hidden;
   padding: 10px;
+  position: relative;
 }
 
-#sales div.sale canvas {
+#sales div.sale div.hummingbird_graph {
+  position: absolute;
+  top: -5px;
+  left: 10px;
+  width: 180px;
+}
+
+#sales div.sale img {
+  opacity: 0.5;
+}
+
+#sales div.sale div.axis_right {
+  float: left;
+}
+
+#sales div.sale div.axis_left {
+  display: none;
 }
 
 #sales div.sale h2 {

@@ -22,6 +22,22 @@ describe 'View'
     end
   end
 
+  describe '.productId()'
+    it 'extracts the product id'
+      var env = { u: "http://localhost/s/gucci/product/12345" }
+
+      var view = new v.View(env)
+      view.productId().should.equal 12345
+    end
+
+    it 'handles other stuff at the end of the url'
+      var env = { u: "http://localhost/s/gucci/product/12345?foobar" }
+
+      var view = new v.View(env)
+      view.productId().should.equal 12345
+    end
+  end
+
   describe '.event()'
     it 'extracts the cart_add event'
       var env = { events: "scAdd,scJunk" }

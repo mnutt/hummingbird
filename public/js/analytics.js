@@ -9,7 +9,8 @@ Hummingbird.Graph = function(el, options) {
     showLogDate: false,
     showMarkers: true,
     ratePerSecond: 10,
-    showBackgroundBars: true
+    showBackgroundBars: true,
+    barColor: null
   }
 
   this.options = $.extend(defaults, options);
@@ -19,6 +20,7 @@ Hummingbird.Graph = function(el, options) {
   this.canvas = $(el).find('canvas').get(0);
   this.valueElement = this.el.find('span.value');
   this.trafficLog = [];
+  this.longTrafficLog = [];
 
   this.init();
 };
@@ -28,13 +30,16 @@ Hummingbird.Graph.prototype = {
     this.setupContext();
 
     this.lineColors = {
-      25: "#5BC4B6",
-      50: "#3BA496",
-      100: "#65B88A",
-      200: "#F1E29F",
-      400: "#C44939",
+      1600: "#FFF",
       800: "#983839",
-      1600: "#333",
+      400: "#C44939",
+      200: "#F1E29F",
+      100: "#7BE4D6",
+      50: "#65B88A",
+      25: "#5BC4B6",
+      12.5: "#3BA496",
+      6.25: "#1B8476",
+      3.125: "#006456",
       def: "#7BF4D6"
     };
     this.bgLineColor = "#555";
@@ -72,6 +77,11 @@ Hummingbird.Graph.prototype = {
     if(this.trafficLog.length > this.options.ratePerSecond) {
       this.trafficLog.shift();
     }
+
+    this.longTrafficLog.push(value);
+    if(this.longTrafficLog.length > 200) {
+      this.longTrafficLog.shift();
+    }
   },
 
   shiftCanvas: function(x, y) {
@@ -91,6 +101,10 @@ Hummingbird.Graph.prototype = {
 
   runningAverage: function() {
     return this.trafficLog.sum() / this.trafficLog.length;
+  },
+
+  longAverage: function() {
+    return this.longTrafficLog.sum() / this.longTrafficLog.length;
   },
 
   drawEmptyGraph: function() {
@@ -162,7 +176,7 @@ Hummingbird.Graph.prototype = {
     var average = this.runningAverage() * this.options.ratePerSecond;
     var percent = average / this.scale;
     var height = Math.max(percent * this.canvasHeight, 1);
-    var color = this.lineColors[this.scale] || this.lineColors.def;
+    var color = this.options.barColor || this.lineColors[this.scale] || this.lineColors.def;
     var endingPoint = this.canvasHeight - height;
 
     this.shiftCanvas(this.lineWidth * 2, 0);
@@ -185,7 +199,7 @@ Hummingbird.Graph.prototype = {
 
     if(this.tick % (this.options.ratePerSecond * 2) == 0) { // Every 2 seconds
       this.valueElement.text(average);
-      this.el.attr('data-value', average);
+      this.el.attr('data-average', this.longAverage());
       this.rescale(percent);
       if(this.tick % 1000 == 0) { this.tick = 0; }
     }

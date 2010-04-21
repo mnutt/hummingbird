@@ -72,6 +72,19 @@ div.hummingbird_graph div.axis_right {
   width: 180px;
 }
 
+#sales div.sale div.hummingbird_graph div.req_s {
+  position: absolute;
+  top: 15px;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #FFF;
+  font-weight: bold;
+  padding: 5px;
+  font-size: 0.6em;
+  -moz-border-radius-bottomright: 5px;
+  -webkit-border-bottom-right-radius: 5px;
+}
+
 #sales div.sale img {
   opacity: 0.5;
 }

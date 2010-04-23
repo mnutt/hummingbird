@@ -9,6 +9,8 @@ hb = require('hummingbird')
 http = require('http');
 v = require('view');
 sys = require('sys');
+mongo = require('deps/node-mongodb-native/lib/mongodb');
+db = new mongo.Db('hummingbird_test', new mongo.Server('localhost', 27017, {}), {});
 
 MockRequest = function(url) {
   this.url = url;
@@ -49,8 +51,10 @@ MockCollection.prototype = {
   }
 }
 
-JSpec
-  .exec('spec/unit/hummingbird_spec.js')
-  .exec('spec/unit/view_spec.js')
-  .run({ reporter: JSpec.reporters.Terminal, fixturePath: 'spec/fixtures', failuresOnly: true })
-  .report()
+db.open(function(p_db) {
+  JSpec
+    .exec('spec/unit/hummingbird_spec.js')
+    .exec('spec/unit/view_spec.js')
+    .run({ reporter: JSpec.reporters.Terminal, fixturePath: 'spec/fixtures', failuresOnly: true })
+    .report()
+});

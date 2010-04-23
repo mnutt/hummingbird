@@ -3,7 +3,7 @@ describe 'Hummingbird'
     it 'outputs a 1x1 tracking pixel to the response'
       var req = new MockRequest("/tracking.gif")
       var res = new MockResponse()
-      var hummingbird = new hb.Hummingbird()
+      var hummingbird = new hb.Hummingbird(db, function() {})
 
       hummingbird.writePixel(res)
 
@@ -15,7 +15,7 @@ describe 'Hummingbird'
 
   describe '.addClient'
     it 'increases the allViewsMetric client count by 1'
-      var hummingbird = new hb.Hummingbird();
+      var hummingbird = new hb.Hummingbird(db, function() {});
       var mockClient = {};
 
       hummingbird.allViewsMetric.clients.length.should.equal 0
@@ -26,7 +26,7 @@ describe 'Hummingbird'
 
   describe '.removeClient'
     it 'decreases the allViewsMetric client count by 1'
-      var hummingbird = new hb.Hummingbird();
+      var hummingbird = new hb.Hummingbird(db, function() {});
       var mockClient = {};
       hummingbird.addClient(mockClient);
 
@@ -38,7 +38,7 @@ describe 'Hummingbird'
 
   describe '.serveRequest'
     it 'adds a timestamp to the environment'
-      var hummingbird = new hb.Hummingbird()
+      var hummingbird = new hb.Hummingbird(db, function() {})
       var req = new MockRequest("http://localhost/t.gif?u=foobar")
       var res = new MockResponse()
       var collection = new MockCollection()

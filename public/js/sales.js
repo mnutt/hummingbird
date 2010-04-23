@@ -29,7 +29,7 @@ Hummingbird.getSales = function() {
 Hummingbird.resortSales = function() {
   var sortedSales = $("div#sales div.sale").sorted({
     by: function(a) {
-      return a.find('div.hummingbird_graph').attr('data-average');
+      return a.find('div.hummingbird_graph').attr('data-average') || -1;
     }
   });
 

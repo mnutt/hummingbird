@@ -42,6 +42,5 @@ db.open(function(p_db) {
 });
 
 sys.puts('Web Socket server running at ws://localhost:' + WEB_SOCKET_PORT);
-
 var staticAssets = require('static_assets');
 staticAssets.serveStatic(MONITOR_PORT);

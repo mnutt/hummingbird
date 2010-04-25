@@ -1,5 +1,5 @@
 
-require.paths.unshift('spec', '/usr/local/Cellar/ruby-enterprise-edition/2009.10/lib/ruby/gems/1.8/gems/jspec-4.2.1/lib', 'lib')
+require.paths.unshift('spec', '/opt/local/lib/ruby/gems/1.8/gems/jspec-4.2.1/lib', 'lib')
 require.paths.unshift(__dirname + '/../lib');
 require.paths.unshift(__dirname + '/..');
 
@@ -8,6 +8,7 @@ require('unit/spec.helper')
 hb = require('hummingbird')
 http = require('http');
 v = require('view');
+m = require('metric');
 sys = require('sys');
 mongo = require('deps/node-mongodb-native/lib/mongodb');
 db = new mongo.Db('hummingbird_test', new mongo.Server('localhost', 27017, {}), {});
@@ -55,6 +56,7 @@ db.open(function(p_db) {
   JSpec
     .exec('spec/unit/hummingbird_spec.js')
     .exec('spec/unit/view_spec.js')
+    .exec('spec/unit/metric_spec.js')
     .run({ reporter: JSpec.reporters.Terminal, fixturePath: 'spec/fixtures', failuresOnly: true })
     .report()
 });

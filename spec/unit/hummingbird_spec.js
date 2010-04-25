@@ -18,9 +18,9 @@ describe 'Hummingbird'
       var hummingbird = new hb.Hummingbird(db, function() {});
       var mockClient = {};
 
-      hummingbird.allViewsMetric.clients.length.should.equal 0
+      hummingbird.metrics[0].clients.length.should.equal 0
       hummingbird.addClient(mockClient);
-      hummingbird.allViewsMetric.clients.length.should.equal 1
+      hummingbird.metrics[0].clients.length.should.equal 1
     end
   end
 
@@ -30,9 +30,9 @@ describe 'Hummingbird'
       var mockClient = {};
       hummingbird.addClient(mockClient);
 
-      hummingbird.allViewsMetric.clients.length.should.equal 1
+      hummingbird.metrics[0].clients.length.should.equal 1
       hummingbird.removeClient(mockClient);
-      hummingbird.allViewsMetric.clients.length.should.equal 0
+      hummingbird.metrics[0].clients.length.should.equal 0
     end
   end
 

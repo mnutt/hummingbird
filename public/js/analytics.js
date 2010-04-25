@@ -104,7 +104,7 @@ Hummingbird.Graph.prototype = {
   },
 
   longAverage: function() {
-    return this.longTrafficLog.sum() / this.longTrafficLog.length;
+    return this.longTrafficLog.sum() * 1.0 / this.longTrafficLog.length;
   },
 
   drawEmptyGraph: function() {
@@ -134,6 +134,8 @@ Hummingbird.Graph.prototype = {
   },
 
   rescale: function(percent) {
+    var oldScale = this.scale;
+
     if(percent == 0) { return; }
     if(percent > 0.9) {
       this.scale = this.scale * 2;
@@ -145,18 +147,20 @@ Hummingbird.Graph.prototype = {
       return;
     }
 
-    this.drawSeparator();
+    this.drawSeparator(percent, oldScale, this.scale);
     this.resetMarkers();
   },
 
-  drawSeparator: function() {
+  drawSeparator: function(percent, oldScale, newScale) {
     this.shiftCanvas(this.lineWidth * 2, 0);
+    var newHeight = percent * this.canvasHeight;
+    var oldHeight = percent * (oldScale/newScale) * this.canvasHeight;
 
     this.context.lineWidth = this.lineWidth;
     this.context.beginPath();
-    this.context.strokeStyle = "#000";
-    this.context.moveTo(this.canvasWidth - 10, this.canvasHeight);
-    this.context.lineTo(this.canvasWidth - 10, 0);
+    this.context.strokeStyle = "#CCC";
+    this.context.moveTo(this.canvasWidth - 10, this.canvasHeight - oldHeight);
+    this.context.lineTo(this.canvasWidth - 10, this.canvasHeight - newHeight);
     this.context.stroke();
     this.context.closePath();
   },
@@ -198,8 +202,8 @@ Hummingbird.Graph.prototype = {
     }
 
     if(this.tick % (this.options.ratePerSecond * 2) == 0) { // Every 2 seconds
-      this.valueElement.text(average);
-      this.el.attr('data-average', this.longAverage());
+      this.valueElement.text(Math.round(this.longAverage() * 60));
+      this.el.attr('data-average', this.longAverage() * 60);
       this.rescale(percent);
       if(this.tick % 1000 == 0) { this.tick = 0; }
     }

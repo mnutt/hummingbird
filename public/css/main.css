@@ -1,7 +1,6 @@
 @charset "utf-8";
 
 body {
-
   background-color: #2F2C2B;
   font-family: "Lucida Grande", Helvetica, sans-serif;
 }
@@ -53,7 +52,7 @@ div.hummingbird_graph div.axis_right {
 }
 
 #sales {
-  margin-left: 50px;
+  margin-left: 60px;
 }
 
 #sales div.sale {
@@ -61,13 +60,13 @@ div.hummingbird_graph div.axis_right {
   width: 180px;
   height: 100px;
   overflow: hidden;
-  padding: 10px;
+  padding: 10px 0;
   position: relative;
 }
 
 #sales div.sale div.hummingbird_graph {
   position: absolute;
-  top: -5px;
+  top: -6px;
   left: 10px;
   width: 180px;
 }

@@ -23,6 +23,14 @@ Hummingbird.getSales = function() {
       var saleGraph = new Hummingbird.Graph(graph, { ratePerSecond: 2, initialScope: 200, backgroundImage: editorialImage, showBackgroundBars: false });
       Hummingbird.saleGraphs[this.url_key] = saleGraph;
     });
+
+    var canvasWidth = $("#log canvas").width() - 8;
+    var salesPerRow = Math.floor(canvasWidth / 190);
+    var extraSpace = canvasWidth % 190;
+    var extraSpacePerSale = (extraSpace + 10) / (salesPerRow - 1);
+
+    $("#sales div.sale").css({marginRight: extraSpacePerSale + 10});
+    $("body").css({minWidth: $("#log").width()});
   });
 };
 

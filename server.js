@@ -5,7 +5,7 @@ var sys = require('sys'),
   http = require('http'),
   ws = require('deps/node-ws/ws'),
   mongo = require('deps/node-mongodb-native/lib/mongodb'),
-  hb = require('hummingbird');
+  Hummingbird = require('hummingbird').Hummingbird;
 
 var TRACKING_PORT = 8000,
     WEB_SOCKET_PORT = 8080,
@@ -14,7 +14,7 @@ var TRACKING_PORT = 8000,
 var db = new mongo.Db('hummingbird', new mongo.Server('localhost', 27017, {}), {});
 
 db.open(function(p_db) {
-  var hummingbird = new hb.Hummingbird(db, function() {
+  var hummingbird = new Hummingbird(db, function() {
     http.createServer(function(req, res) {
       try {
         hummingbird.serveRequest(req, res);

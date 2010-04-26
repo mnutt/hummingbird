@@ -20,7 +20,6 @@ Hummingbird.Graph = function(el, options) {
   this.canvas = $(el).find('canvas').get(0);
   this.valueElement = this.el.find('span.value');
   this.trafficLog = [];
-  this.longTrafficLog = [];
 
   this.init();
 };
@@ -77,11 +76,6 @@ Hummingbird.Graph.prototype = {
     if(this.trafficLog.length > this.options.ratePerSecond) {
       this.trafficLog.shift();
     }
-
-    this.longTrafficLog.push(value);
-    if(this.longTrafficLog.length > 200) {
-      this.longTrafficLog.shift();
-    }
   },
 
   shiftCanvas: function(x, y) {
@@ -100,11 +94,7 @@ Hummingbird.Graph.prototype = {
   },
 
   runningAverage: function() {
-    return this.trafficLog.sum() / this.trafficLog.length;
-  },
-
-  longAverage: function() {
-    return this.longTrafficLog.sum() * 1.0 / this.longTrafficLog.length;
+    return this.trafficLog.sum() * 1.0 / this.trafficLog.length;
   },
 
   drawEmptyGraph: function() {
@@ -202,9 +192,11 @@ Hummingbird.Graph.prototype = {
     }
 
     if(this.tick % (this.options.ratePerSecond * 2) == 0) { // Every 2 seconds
-      this.valueElement.text(Math.round(this.longAverage() * 60));
-      this.el.attr('data-average', this.longAverage() * 60);
+      this.valueElement.text(average);
+      this.el.attr('data-average', average);
+
       this.rescale(percent);
+
       if(this.tick % 1000 == 0) { this.tick = 0; }
     }
   }

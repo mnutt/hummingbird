@@ -28,11 +28,15 @@ db.open(function(p_db) {
 
   // Websocket TCP server
   ws.createServer(function (websocket) {
-    hummingbird.addClient(websocket);
-
     websocket.addListener("connect", function (resource) {
       // emitted after handshake
       sys.log("ws connect: " + resource);
+      if (resource === '/') {
+        hummingbird.addClient(websocket);
+      }
+      else if (resource === '/aggregates') {
+        hummingbird.serveAggregates(websocket);
+      }
     }).addListener("close", function () {
       // emitted when server or client closes connection
       hummingbird.removeClient(websocket);

@@ -1,5 +1,4 @@
-
-require.paths.unshift('spec', '/opt/local/lib/ruby/gems/1.8/gems/jspec-4.2.1/lib', 'lib')
+require.paths.unshift('spec', './spec/lib', 'lib')
 require.paths.unshift(__dirname + '/../lib');
 require.paths.unshift(__dirname + '/..');
 

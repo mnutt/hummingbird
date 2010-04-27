@@ -10,6 +10,8 @@ Hummingbird.Graph = function(el, options) {
     showMarkers: true,
     ratePerSecond: 10,
     showBackgroundBars: true,
+    tickLineColor: '#666',
+    bgLineColor: '#555',
     barColor: null
   }
 
@@ -41,7 +43,6 @@ Hummingbird.Graph.prototype = {
       3.125: "#006456",
       def: "#7BF4D6"
     };
-    this.bgLineColor = "#555";
     this.canvasHeight = $(this.canvas).height();
     this.canvasWidth = $(this.canvas).width();
 
@@ -173,6 +174,17 @@ Hummingbird.Graph.prototype = {
     var color = this.options.barColor || this.lineColors[this.scale] || this.lineColors.def;
     var endingPoint = this.canvasHeight - height;
 
+    if(this.tick % (this.options.ratePerSecond * 2) == 0) { // Every 2 seconds
+      this.valueElement.text(average);
+      this.el.attr('data-average', average);
+
+      this.rescale(percent);
+
+      if(this.tick % 1000 == 0) { this.tick = 0; }
+
+      return;
+    }
+
     this.shiftCanvas(this.lineWidth * 2, 0);
     this.context.lineWidth = this.lineWidth;
     this.context.beginPath();
@@ -184,20 +196,17 @@ Hummingbird.Graph.prototype = {
 
     if(this.options.showBackgroundBars) {
       this.context.beginPath();
-      this.context.strokeStyle = this.bgLineColor;
+
+      if(this.tick % this.options.ratePerSecond == 0) {
+        this.context.strokeStyle = this.options.tickLineColor;
+      } else {
+        this.context.strokeStyle = this.options.bgLineColor;
+      }
+
       this.context.moveTo(this.canvasWidth - 10, endingPoint);
       this.context.lineTo(this.canvasWidth - 10, 0);
       this.context.stroke();
       this.context.closePath();
-    }
-
-    if(this.tick % (this.options.ratePerSecond * 2) == 0) { // Every 2 seconds
-      this.valueElement.text(average);
-      this.el.attr('data-average', average);
-
-      this.rescale(percent);
-
-      if(this.tick % 1000 == 0) { this.tick = 0; }
     }
   }
 };

@@ -4,6 +4,7 @@ Hummingbird.saleGraphs = {};
 
 Hummingbird.getSales = function() {
   $.getJSON("/sale_list", function(data) {
+    data.data.active_sales.concat(data.data.upcoming_sales);
     $.each(data.data.active_sales, function() {
       var editorialImage = "http://www.gilt.com" + this.sale_editorial_image;
       var name = this.name;

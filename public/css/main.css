@@ -35,6 +35,8 @@ div.hummingbird_graph div.axis_right {
   font-weight: bold;
   font-size: 0.8em;
   width: 30px;
+  position: relative;
+  top: -5px;
 }
 
 div.hummingbird_graph div.axis_left {
@@ -74,7 +76,7 @@ div.hummingbird_graph div.axis_right {
 #sales div.sale div.hummingbird_graph div.req_s {
   position: absolute;
   top: 15px;
-  left: 0;
+  left: -10px;
   background-color: rgba(0, 0, 0, 0.8);
   color: #FFF;
   font-weight: bold;
@@ -99,7 +101,8 @@ div.hummingbird_graph div.axis_right {
 #sales div.sale h2 {
   color: #CCC;
   font-size: 0.7em;
-  height: 1.8em;
+  height: 2.4em;
+  overflow: hidden;
 }
 
 #sales div.sale img.editorial {

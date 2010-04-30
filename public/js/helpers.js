@@ -23,6 +23,17 @@ Date.prototype.formattedTime = function() {
   return formattedDate;
 };
 
+Number.prototype.commify = function() {
+  var strArray = this.toString().split('').reverse();
+  var commas = [];
+  for(var i = 0; i < strArray.length; i++) {
+    if(i > 0 && i % 3 == 0) { commas.push(','); }
+    commas.push(strArray[i]);
+  }
+
+  return commas.reverse().join('');
+};
+
 // Custom sorting plugin
 (function($) {
   $.fn.sorted = function(customOptions) {

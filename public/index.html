@@ -10,6 +10,15 @@
   <script src="/js/sales.js"></script>
   <script src="/js/websocket.js"></script>
 
+  <script>
+    $(document).ready(function() {
+      Hummingbird.WebSocket.start();
+      Hummingbird.getSales();
+
+      setInterval(Hummingbird.resortSales, 3000);
+    });
+  </script>
+
   <title>Hummingbird</title>
 
   <link rel="stylesheet" media="all" href="/css/main.css" />

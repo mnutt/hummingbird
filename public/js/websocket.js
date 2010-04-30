@@ -60,7 +60,3 @@ Hummingbird.WebSocket.start = function() {
     //alert("connected...");
   };
 };
-
-$(document).ready(function(){
-  Hummingbird.WebSocket.start();
-});

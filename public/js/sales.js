@@ -46,9 +46,3 @@ Hummingbird.resortSales = function() {
     $(this).prependTo("div#sales");
   });
 };
-
-$(document).ready(function() {
-  Hummingbird.getSales();
-
-  setInterval(Hummingbird.resortSales, 3000);
-});

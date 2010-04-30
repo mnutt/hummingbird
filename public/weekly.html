@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+
+<head>
+  <script src="/js/jquery-1.4.2.min.js"></script>
+  <script src="/js/helpers.js"></script>
+  <script src="/js/analytics.js"></script>
+
+  <script src="/js/sales.js"></script>
+  <script src="/js/websocket.js"></script>
+
+  <script>
+    $(function() {
+      var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+      $.getJSON("/sale_list", function(saleData) {
+        saleData.data.active_sales.concat(saleData.data.upcoming_sales);
+        var sales = {};
+        $.each(saleData.data.active_sales, function() {
+          sales[this.url_key] = this;
+        });
+
+        $.getJSON("/week.json", function(data) {
+          var dayTemplate = $("#day_template");
+          var saleTemplate = $("#sale_template");
+
+          var today = new Date();
+          today.setHours(0); today.setMinutes(0); today.setSeconds(0); today.setMilliseconds(0);
+
+          $.each(data, function() {
+            var day = new Date(this.day);
+            if(day.getTime() == today.getTime()) {
+              var weekDay = "Today";
+            } else {
+              var weekDay = weekDays[day.getDay()];
+            }
+
+            var dateDiv = dayTemplate.clone().attr('id', 'date_' + day.getTime()).attr('style', '');
+            dateDiv.find('div.date_title').text(weekDay);
+            dateDiv.find('div.all_views').text(this.total.commify());
+            dateDiv.find('div.cart_adds').text(this.cartAdds.commify());
+
+            $.each(this.sales.slice(0, 4), function() {
+              var saleDiv = saleTemplate.clone().attr('id', '').attr('style', '');
+              var sale = sales[this.url_key];
+              saleDiv.prepend("<img width='185' height='70' src='http://localhost.com" + sale.featured_image_path + "'/>");
+              saleDiv.find('div.sale_title').text(sale.name);
+              saleDiv.find('div.sale_views').text(this.views);
+              dateDiv.find('div.sales').append(saleDiv);
+            });
+            dateDiv.find('div.sales').append("<div style='clear: left;'></div>");
+
+            dateDiv.appendTo('#days');
+          });
+        });
+      });
+    });
+
+  </script>
+
+  <title>Hummingbird</title>
+
+  <link rel="stylesheet" media="all" href="/css/main.css" />
+  <link rel="stylesheet" media="all" href="/css/weekly.css" />
+</head>
+
+<body>
+  <h1>Hummingbird</h1>
+
+  <div id="days"></div>
+
+  <div id="day_template" class="day">
+
+    <div class="all_views_container">
+      <div class="all_views">0</div>
+      <p>Page views</p>
+    </div>
+
+    <div class="cart_adds_container">
+      <div class="cart_adds">0</div>
+      <p>Cart adds</p>
+    </div>
+
+    <div class="date_title">Monday</div>
+
+    <div class="sale_container">
+      <p>Top Sales:</p>
+      <div class="sales"></div>
+    </div>
+
+    <div style="clear: both;"></div>
+  </div>
+
+  <div id="sale_template" class="day_sale">
+    <div class="sale_views"></div>
+    <div class="sale_title"></div>
+  </div>
+
+  </div>
+</body>
+</html>

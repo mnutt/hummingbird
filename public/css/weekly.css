@@ -1,0 +1,77 @@
+#days {
+  margin: 20px 58px;
+}
+
+div.day {
+  color: #FFF;
+  border-top: 2px solid #666;
+}
+
+div.day div.date_title {
+  color: #FFF;
+  text-transform: uppercase;
+  font-family: 'TitilliumText14L800wt', sans-serif;
+  font-size: 2.5em;
+}
+
+div.day div.all_views_container,
+div.day div.cart_adds_container {
+  float: right;
+  clear: right;
+  text-align: right;
+}
+
+div.day div.all_views,
+div.day div.cart_adds {
+  font-size: 2.5em;
+  font-weight: bold;
+  margin: 4px 0 0 10px;
+}
+
+div.day div.all_views {
+  color: #5BC4B6;
+}
+
+div.day div.all_views_container p,
+div.day div.cart_adds_container p {
+  margin: 0 0 1em 0;
+  text-transform: uppercase;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+div.day div.sales {
+  margin: 0 10px 20px 0;
+}
+
+div.day div.day_sale {
+  width: 180px;
+  float: left;
+  margin: 0 20px 10px 0;
+  position: relative;
+}
+
+div.sale_container p {
+  margin: 10px 0 0 0;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+div.day div.day_sale div.sale_views {
+  font-weight: bold;
+  padding: 4px;
+  background-color: #000;
+  float: right;
+  margin: 0 -5px 5px 5px;
+}
+
+div.day div.day_sale div.sale_title {
+  font-size: 0.7em;
+  width: 180px;
+  margin: 5px 0 0 0;
+}
+
+#day_template, #sale_template {
+  display: none;
+}

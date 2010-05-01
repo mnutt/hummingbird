@@ -11,6 +11,9 @@
   <script src="/js/websocket.js"></script>
 
   <script>
+Hummingbird.WebSocket = {};
+Hummingbird.WebSocket.state = "stopped";
+
     $(function() {
       var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -38,8 +41,8 @@
 
             var dateDiv = dayTemplate.clone().attr('id', 'date_' + day.getTime()).attr('style', '');
             dateDiv.find('div.date_title').text(weekDay);
-            dateDiv.find('div.all_views').text(this.total.commify());
-            dateDiv.find('div.cart_adds').text(this.cartAdds.commify());
+            dateDiv.find('div.all_views').text(this.total.commify()).data('total', this.total);
+            dateDiv.find('div.cart_adds').text(this.cartAdds.commify()).data('cart_adds', this.cartAdds);;
 
             $.each(this.sales.slice(0, 4), function() {
               var saleDiv = saleTemplate.clone().attr('id', '').attr('style', '');
@@ -55,6 +58,39 @@
           });
         });
       });
+
+      if(document.location.search.match(/use_prod/)) {
+        var wsServer = "ws://hummingbird.giltrunway.com:8080";
+      } else {
+        var wsServer = "ws://" + document.location.hostname + ":8080";
+      }
+      var ws = new WebSocket(wsServer);
+      ws.onmessage = function(evt) {
+        var data = JSON.parse(evt.data);
+        if(data.total && data.total > 0) {
+          var el = $("div.day:first-child div.all_views");
+          var prevTotal = el.data("total");
+          el.text((prevTotal + data.total).commify()).data('total', prevTotal + data.total);
+        }
+        if(data.cartAdds && data.cartAdds > 0) {
+          var el = $("div.day:first-child div.cart_adds");
+          var prevCartAdds = el.data("cart_adds");
+          el.text((prevCartAdds + data.cartAdds).commify()).data('cart_adds', prevCartAdds + data.cartAdds);
+        }
+      };
+      ws.onclose = function() {
+        if(Hummingbird.WebSocket.state == "retrying") {
+          // Wait a while to try restarting
+          console.log("still no socket, retrying in 3 seconds");
+          setTimeout(Hummingbird.WebSocket.start, 3000);
+        } else {
+          // First attempt at restarting, try immediately
+          Hummingbird.WebSocket.state = "retrying";
+          console.log("socket lost, retrying immediately");
+          setTimeout(Hummingbird.WebSocket.start, 200);
+        }
+      };
+
     });
 
   </script>

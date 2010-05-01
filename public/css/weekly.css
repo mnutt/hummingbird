@@ -41,14 +41,15 @@ div.day div.cart_adds_container p {
 }
 
 div.day div.sales {
-  margin: 0 10px 20px 0;
+  margin: 0 100px 20px 0;
 }
 
 div.day div.day_sale {
   width: 180px;
   float: left;
-  margin: 0 20px 10px 0;
+  margin: 0 20px 0 0;
   position: relative;
+  height: 130px;
 }
 
 div.sale_container p {

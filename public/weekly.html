@@ -24,7 +24,12 @@ Hummingbird.WebSocket.state = "stopped";
           sales[this.url_key] = this;
         });
 
-        $.getJSON("/week.json", function(data) {
+        var weekJson = "/week.json";
+        if(document.location.search.match(/use_prod/)) {
+          weekJson += "?use_prod";
+        }
+
+        $.getJSON(weekJson, function(data) {
           var dayTemplate = $("#day_template");
           var saleTemplate = $("#sale_template");
 

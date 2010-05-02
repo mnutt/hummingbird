@@ -55,7 +55,13 @@ db.open(function(p_db) {
         proxy.route("/sale_list",
                     "http://www.gilt.com/pagegen_service/sale/sale_list", req, res);
       } else if(req.url.match(/\/week.json/)) {
-        weekly.serve(db, req, res);
+        if(req.url.match(/use_prod/)) {
+          proxy.route("/week.json",
+                      "http://hummingbird.giltrunway.com:8088/week.json", req, res);
+        }
+        else {
+          weekly.serve(db, req, res);
+        }
       } else {
         staticAssets.serveStatic(req, res);
       }

@@ -52,10 +52,13 @@ Hummingbird.WebSocket.state = "stopped";
             $.each(this.sales.slice(0, 4), function() {
               var saleDiv = saleTemplate.clone().attr('id', '').attr('style', '');
               var sale = sales[this.url_key];
-              saleDiv.prepend("<img width='185' height='70' src='http://localhost.com" + sale.featured_image_path + "'/>");
-              saleDiv.find('div.sale_title').text(sale.name);
-              saleDiv.find('div.sale_views').text(this.views);
-              dateDiv.find('div.sales').append(saleDiv);
+
+              if (sale) {
+                saleDiv.prepend("<img width='185' height='70' src='http://cdn1.gilt.com" + sale.featured_image_path + "'/>");
+                saleDiv.find('div.sale_title').text(sale.name);
+                saleDiv.find('div.sale_views').text(this.views);
+                dateDiv.find('div.sales').append(saleDiv);
+              }
             });
             dateDiv.find('div.sales').append("<div style='clear: left;'></div>");
 

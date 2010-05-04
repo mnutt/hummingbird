@@ -34,14 +34,14 @@
           var saleTemplate = $("#sale_template");
 
           var today = new Date();
-          today.setHours(0); today.setMinutes(0); today.setSeconds(0); today.setMilliseconds(0);
+          today.setUTCHours(0); today.setUTCMinutes(0); today.setUTCSeconds(0); today.setUTCMilliseconds(0);
 
           $.each(data, function() {
             var day = new Date(this.day);
             if(day.getTime() == today.getTime()) {
               var weekDay = "Today";
             } else {
-              var weekDay = weekDays[day.getDay()];
+              var weekDay = weekDays[day.getUTCDay()];
             }
 
             var dateDiv = dayTemplate.clone().attr('id', 'date_' + day.getTime()).attr('style', '');
@@ -126,7 +126,7 @@
       <p>Cart adds</p>
     </div>
 
-    <div class="date_title">Monday</div>
+    <div class="date_title"></div>
 
     <div class="sale_container">
       <p>Top Sales:</p>

@@ -11,7 +11,7 @@ var sys = require('sys'),
 
 var TRACKING_PORT = 8000,
     WEB_SOCKET_PORT = 8080,
-    MONITOR_PORT = 8088;
+    MONITOR_PORT = 8888;
 
 var db = new mongo.Db('hummingbird', new mongo.Server('localhost', 27017, {}), {});
 

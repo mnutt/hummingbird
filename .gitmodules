@@ -9,7 +9,7 @@
 	url = git://github.com/christkv/node-mongodb-native.git
 [submodule "deps/node-ws"]
 	path = deps/node-ws
-	url = git://github.com/mnutt/node.ws.js
+	url = git://github.com/ncr/node.ws.js.git
 [submodule "deps/express"]
 	path = deps/express
 	url = git://github.com/visionmedia/express.git

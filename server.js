@@ -4,7 +4,6 @@ require.paths.unshift(__dirname);
 var sys = require('sys'),
   http = require('http'),
   ws = require('deps/node-ws/ws'),
-  proxy = require('proxy'),
   weekly = require('weekly'),
   mongo = require('deps/node-mongodb-native/lib/mongodb'),
   Hummingbird = require('hummingbird').Hummingbird;

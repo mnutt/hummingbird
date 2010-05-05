@@ -11,7 +11,7 @@ configure(function(){
   set('pagegen_uri', "http://www.gilt.com/pagegen_service/sale/sale_list");
   set('db', db);
   use(Static);
-  this.server.port = 8088;;
+  this.server.port = 8088;
 });
 
 get('/', function(){
@@ -20,7 +20,7 @@ get('/', function(){
 
 get('/sale_list', function() {
   var self = this;
-  svc.fetchJSON(Express.settings['pagegen_uri'], function(data) {
+  svc.fetchJSON(set('pagegen_uri'), function(data) {
     self.contentType('json');
     self.respond(200, data);
   });

@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+
+<head>
+  <script src="/public/js/jquery-1.4.2.min.js"></script>
+  <script src="/public/js/helpers.js"></script>
+  <script src="/public/js/analytics.js"></script>
+
+  <script src="/public/js/sales.js"></script>
+  <script src="/public/js/websocket.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      Hummingbird.WebSocket.start();
+      Hummingbird.getSales();
+
+      setInterval(Hummingbird.resortSales, 3000);
+    });
+  </script>
+
+  <title>Hummingbird</title>
+
+  <link rel="stylesheet" media="all" href="/public/css/main.css" />
+</head>
+
+<body>
+  <%= body %>
+</body>
+</html>

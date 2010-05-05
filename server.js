@@ -13,7 +13,7 @@ var TRACKING_PORT = 8000,
     WEB_SOCKET_PORT = 8080,
     MONITOR_PORT = 8888;
 
-var db = new mongo.Db('hummingbird', new mongo.Server('localhost', 27017, {}), {});
+db = new mongo.Db('hummingbird', new mongo.Server('localhost', 27017, {}), {});
 
 db.open(function(p_db) {
   var hummingbird = new Hummingbird(db, function() {
@@ -26,7 +26,7 @@ db.open(function(p_db) {
     }).listen(TRACKING_PORT);
   });
 
-  sys.puts('Tracking server running at http://localhost:' + TRACKING_PORT + '/tracking_pixel.gif');
+  sys.puts('Tracking server running at http://*:' + TRACKING_PORT + '/tracking_pixel.gif');
 
   // Websocket TCP server
   ws.createServer(function (websocket) {
@@ -46,30 +46,8 @@ db.open(function(p_db) {
     });
   }).listen(WEB_SOCKET_PORT);
 
-  sys.puts('Web Socket server running at ws://localhost:' + WEB_SOCKET_PORT);
+  sys.puts('Web Socket server running at ws://*:' + WEB_SOCKET_PORT);
   var staticAssets = require('static_assets');
 
-  try {
-    http.createServer(function(req, res) {
-      if(req.url.match(/\/sale_list/)) {
-        proxy.route("/sale_list",
-                    "http://www.gilt.com/pagegen_service/sale/sale_list", req, res);
-      } else if(req.url.match(/\/week.json/)) {
-        if(req.url.match(/use_prod/)) {
-          proxy.route("/week.json",
-                      "http://hummingbird.giltrunway.com:8088/week.json", req, res);
-        }
-        else {
-          weekly.serve(db, req, res);
-        }
-      } else {
-        staticAssets.serveStatic(req, res);
-      }
-    }).listen(MONITOR_PORT);
-
-    sys.puts('Analytics server running at http://localhost:' + MONITOR_PORT + '/');
-  } catch(e) {
-    sys.puts('Detected webserver already running on http://localhost:' + MONITOR_PORT + '.');
-  }
-
+  require('monitor');
 });

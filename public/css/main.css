@@ -113,6 +113,6 @@ div.hummingbird_graph div.axis_right {
 
 @font-face {
 	font-family: 'TitilliumText14L800wt';
-	src: url('/fonts/TitilliumText800wt.eot');
-	src: local('TitilliumText14L'), local('TitilliumText14L-800wt'), url('/fonts/TitilliumText800wt.woff') format('woff'), url('/fonts/TitilliumText800wt.ttf') format('truetype'), url('/fonts/TitilliumText800wt.svg#TitilliumText14L-800wt') format('svg');
+	src: url('/public/fonts/TitilliumText800wt.eot');
+	src: local('TitilliumText14L'), local('TitilliumText14L-800wt'), url('/public/fonts/TitilliumText800wt.woff') format('woff'), url('/public/fonts/TitilliumText800wt.ttf') format('truetype'), url('/public/fonts/TitilliumText800wt.svg#TitilliumText14L-800wt') format('svg');
 }

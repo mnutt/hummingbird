@@ -11,7 +11,7 @@ configure(function(){
   set('pagegen_uri', "http://www.gilt.com/pagegen_service/sale/sale_list");
   set('db', db);
   use(Static);
-  this.server.port = 8088;
+  this.server.port = 8888;
 });
 
 get('/', function(){

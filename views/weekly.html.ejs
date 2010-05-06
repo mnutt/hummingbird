@@ -1,0 +1,40 @@
+  <h1>Hummingbird</h1>
+
+  <div id="days"></div>
+
+  <div id="day_template" class="day">
+
+    <div class="all_views_container">
+      <div class="all_views">0</div>
+      <p>Page views</p>
+    </div>
+
+    <div class="cart_adds_container">
+      <div class="cart_adds">0</div>
+      <p>Cart adds</p>
+    </div>
+
+    <div class="date_title"></div>
+
+    <div class="sale_container">
+      <p>Top Sales:</p>
+      <div class="sales"></div>
+    </div>
+
+    <div style="clear: both;"></div>
+  </div>
+
+  <div id="sale_template" class="day_sale">
+    <div class="sale_views"></div>
+    <div class="sale_title"></div>
+  </div>
+
+  <script>
+    Hummingbird.WebSocket = {};
+    Hummingbird.WebSocket.state = "stopped";
+
+    $(function() {
+      Hummingbird.Weekly.init();
+    });
+
+  </script>

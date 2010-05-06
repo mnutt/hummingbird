@@ -18,6 +18,10 @@ get('/', function(){
   this.render('index.html.ejs');
 });
 
+get('/weekly', function() {
+  this.render('weekly.html.ejs');
+});
+
 get('/sale_list', function() {
   var self = this;
   svc.fetchJSON(set('pagegen_uri'), function(data) {
@@ -26,7 +30,7 @@ get('/sale_list', function() {
   });
 });
 
-get('/weekly.json', function() {
+get('/week.json', function() {
   var self = this;
   weekly.findByDay(Express.settings['db'], function(data) {
     self.contentType('json');

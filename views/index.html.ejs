@@ -28,3 +28,11 @@
 
   <div id="sales"></div>
 
+  <script>
+    $(document).ready(function() {
+      Hummingbird.WebSocket.start();
+      Hummingbird.getSales();
+
+      setInterval(Hummingbird.resortSales, 3000);
+    });
+  </script>

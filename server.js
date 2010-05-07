@@ -46,7 +46,4 @@ db.open(function(p_db) {
   }).listen(WEB_SOCKET_PORT);
 
   sys.puts('Web Socket server running at ws://*:' + WEB_SOCKET_PORT);
-  var staticAssets = require('static_assets');
-
-  require('monitor');
 });

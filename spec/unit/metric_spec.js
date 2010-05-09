@@ -1,11 +1,16 @@
 describe 'Metric'
   describe '.addValue'
-    it 'calls the passed "addHandler" function'
-      var metric = new m.Metric('test', {foo: 0}, 100, db, function(view) {
+    it 'calls the passed "incrementCallback" function'
+      var metric = new m.Metric();
+      metric.name = 'test';
+      metric.initialData = {foo: 0};
+      metric.interval = 100;
+      metric.db = db;
+      metric.incrementCallback = function(view) {
         this.data.foo = view;
-      });
+      };
       var view = 5;
-      metric.addValue(view);
+      metric.incrementCallback(view);
 
       metric.data.foo.should.equal 5
     end
@@ -17,7 +22,7 @@ describe 'Metric'
         this.data.foo = view;
         metric.insertData();
       });
- 
+
       // metric.addValue(5);
       // TODO
     end

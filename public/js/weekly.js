@@ -34,20 +34,28 @@ Hummingbird.Weekly.init = function() {
 
         var dateDiv = dayTemplate.clone().attr('id', 'date_' + day.getTime()).attr('style', '');
         dateDiv.find('div.date_title').text(weekDay);
-        dateDiv.find('div.all_views').text(this.total.commify()).data('total', this.total);
-        dateDiv.find('div.cart_adds').text(this.cartAdds.commify()).data('cart_adds', this.cartAdds);;
+        if(this.total) {
+          dateDiv.find('div.all_views').text(this.total.commify()).data('total', this.total);
+        }
 
-        $.each(this.sales.slice(0, 4), function() {
-          var saleDiv = saleTemplate.clone().attr('id', '').attr('style', '');
-          var sale = sales[this.url_key];
+        if(this.cartAdds) {
+          dateDiv.find('div.cart_adds').text(this.cartAdds.commify()).data('cart_adds', this.cartAdds);
+        }
 
-          if (sale) {
-            saleDiv.prepend("<img width='185' height='70' src='http://cdn1.gilt.com" + sale.featured_image_path + "'/>");
-            saleDiv.find('div.sale_title').text(sale.name);
-            saleDiv.find('div.sale_views').text(this.views);
-            dateDiv.find('div.sales').append(saleDiv);
-          }
-        });
+        if(this.sales) {
+          $.each(this.sales.slice(0, 4), function() {
+            var saleDiv = saleTemplate.clone().attr('id', '').attr('style', '');
+            var sale = sales[this.url_key];
+
+            if (sale) {
+              saleDiv.prepend("<img width='185' height='70' src='http://cdn1.gilt.com" + sale.featured_image_path + "'/>");
+              saleDiv.find('div.sale_title').text(sale.name);
+              saleDiv.find('div.sale_views').text(this.views);
+              dateDiv.find('div.sales').append(saleDiv);
+            }
+          });
+        }
+
         dateDiv.find('div.sales').append("<div style='clear: left;'></div>");
 
         dateDiv.appendTo('#days');

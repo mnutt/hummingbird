@@ -46,8 +46,10 @@ MockCollection = function() {
 }
 
 MockCollection.prototype = {
-  insert: function(data) {
-    this.inserts.push(data)
+  insertAll: function(docs) {
+    for(var i = 0; i < docs.length; i++) {
+      this.inserts.push(docs[i])
+    }
   }
 }
 

@@ -42,7 +42,7 @@ describe 'Hummingbird'
       var req = new MockRequest("http://localhost/t.gif?u=foobar")
       var res = new MockResponse()
       var collection = new MockCollection()
-      hummingbird.setCollection(collection)
+      hummingbird.collection = collection
 
       hummingbird.serveRequest(req, res)
 

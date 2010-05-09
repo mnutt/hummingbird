@@ -1,0 +1,8 @@
+{
+  "name" : "Hummingbird",
+
+  "capistrano" : {
+    "repository" :       "git://github.com/mnutt/hummingbird.git",
+    "hummingbird_host" : "hummingbird.your-host.com"
+  }
+}

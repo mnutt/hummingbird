@@ -56,3 +56,16 @@ Tips
 -----
 
  * To run the UI locally but stream data from your production server, use the url http://localhost:8088/?ws_server=your-host.com&ws_port=12345
+
+
+Contributors
+------------
+
+ * Michael Nutt <michael@nuttnet.net>
+ * Benny Wong <benny@bwong.net>
+
+
+License
+-------
+
+Hummingbird is licensed under the MIT License. (See LICENSE)

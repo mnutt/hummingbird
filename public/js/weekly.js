@@ -64,7 +64,9 @@ Hummingbird.Weekly.init = function() {
   });
 
   if(document.location.search.match(/use_prod/)) {
-    var wsServer = "ws://hummingbird.giltrunway.com:8080";
+    var wsServerParam = document.location.search.match(/ws_server=([^\&\#]+)/) || [];
+    var wsPortParam = document.location.search.match(/ws_port=([^\&\#]+)/) || [];
+    var wsServer = "ws://" + wsServerParam[1] + ":" + (wsPortParam[1] || 8080);
   } else {
     var wsServer = "ws://" + document.location.hostname + ":8080";
   }

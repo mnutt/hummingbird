@@ -4,7 +4,7 @@ Hummingbird.WebSocket = {};
 Hummingbird.WebSocket.state = "stopped";
 Hummingbird.WebSocket.start = function() {
   if(!("WebSocket" in window)) {
-    console.log("Sorry, the build of your browser does not support WebSockets. Please use latest Chrome or Webkit nightly");
+    console.log("Sorry, the build of your browser does not support WebSockets. Please try latest Chrome or Webkit nightly");
     return;
   }
 
@@ -16,8 +16,10 @@ Hummingbird.WebSocket.start = function() {
   cartAdds.find('canvas').get(0).width = $(window).width() - 160;
   var cartAddsGraph = new Hummingbird.Graph(cartAdds, { ratePerSecond: 20 });
 
-  if(document.location.search.match(/use_prod/)) {
-    var wsServer = "ws://hummingbird.giltrunway.com:8080";
+  if(document.location.search.match(/ws_server/)) {
+    var wsServerParam = document.location.search.match(/ws_server=([^\&\#]+)/) || [];
+    var wsPortParam = document.location.search.match(/ws_port=([^\&\#]+)/) || [];
+    var wsServer = "ws://" + wsServerParam[1] + ":" + (wsPortParam[1] || 8080);
   } else {
     var wsServer = "ws://" + document.location.hostname + ":8080";
   }
@@ -57,6 +59,5 @@ Hummingbird.WebSocket.start = function() {
   ws.onopen = function() {
     Hummingbird.WebSocket.state = "started";
     console.log("socket started");
-    //alert("connected...");
   };
 };

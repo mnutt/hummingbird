@@ -28,6 +28,9 @@ Installation
     # Initialize the express submodules
     cd deps/express; git submodule update --init; cd ../..
 
+    # Copy the default configuration file
+    cp config/app.json.sample config/app.json
+
 
 Running Hummingbird
 ------------------------------
@@ -52,11 +55,4 @@ Specs
 Tips
 -----
 
- * To run the UI locally but get some production data, use the url http://localhost:8088/?use_prod
-
-
-Known Issues
--------------------
-
- * node-paperboy has issues with returning 304's that cause some weirdness in some browsers.  Try shift-reload until it's fixed.
-
+ * To run the UI locally but stream data from your production server, use the url http://localhost:8088/?ws_server=your-host.com&ws_port=12345

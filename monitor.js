@@ -3,6 +3,7 @@ require.paths.unshift(__dirname);
 require.paths.unshift(__dirname + '/deps/express/lib')
 
 var sys = require('sys'),
+  fs = require('fs'),
   mongo = require('deps/node-mongodb-native/lib/mongodb'),
   svc = require('service_json'),
   weekly = require('weekly');
@@ -18,7 +19,16 @@ db.open(function(p_db) {
     set('pagegen_uri', "http://www.gilt.com/pagegen_service/sale/sale_list");
     set('db', db);
     use(Static);
-    this.server.port = 8888;
+
+    try {
+      var configJSON = fs.readFileSync(__dirname + "/config/app.json");
+    } catch(e) {
+      sys.log("File config/app.json not found.  Try: `cp config/app.json.sample config/app.json`");
+    }
+    var config = JSON.parse(configJSON);
+
+    this.server.port = config.monitor_port;
+    set('name', config.name);
   });
 
   get('/', function(){

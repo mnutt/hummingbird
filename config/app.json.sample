@@ -1,5 +1,6 @@
 {
   "name" : "Hummingbird",
+  "monitor_port" : 8888,
 
   "capistrano" : {
     "repository" :       "git://github.com/mnutt/hummingbird.git",

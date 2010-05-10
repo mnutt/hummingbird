@@ -87,7 +87,7 @@
     h3 { text-align: center; color: #dedede; }
     a { color: #0088C0; border: 0; }
     .download { float: right; }
-		pre { background: #161616; color: #fff; padding: 15px; }
+		pre { background: #161616; color: #fff; padding: 15px; margin-bottom: 2.3em; }
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
     .footer { text-align:center; padding-top:30px; font-size: 0.8em; }
 
@@ -137,6 +137,10 @@
 
     <div style="clear: both;"></div>
 
+    <h2>How It works</h2>
+
+    <img style="margin-top: -15px;" src="images/explanation.png" />
+
     <h2>Downloading</h2>
 
     <p>You can clone the project with <a href="http://git-scm.com">Git</a>
@@ -155,6 +159,10 @@ $ git submodule update --init</pre>
       <pre>$ cp config/app.json.sample config/app.json</pre>
     </p>
 
+    <p>Start MongoDB if it isn't already started:
+      <pre>$ mongod &> log/mongodb.log &</pre>
+    </p>
+
     <p>Start the server and the monitor app:
       <pre>$ node server.js &> log/hummingbird.log &
 $ node monitor.js &> log/hummingbird_monitor.log &</pre>
@@ -165,10 +173,6 @@ $ node monitor.js &> log/hummingbird_monitor.log &</pre>
       We run Hummingbird on Amazon EC2.  Capistrano recipes and Ubuntu upstart
       scripts are included in config/ubuntu/upstart.
     </p>
-
-    <h2>How It works</h2>
-
-    <img style="margin-top: -15px;" src="images/explanation.png" />
 
     <h2>Contributors</h2>
 

@@ -1,0 +1,106 @@
+/*
+    awesome buttons are based on a blog post by ZERB
+    Read their blog post for more information:
+    "Super awesome Buttons with CSS3 and RGBA":http://www.zurb.com/article/266/super-awesome-buttons-with-css3-and-rgba
+
+    these buttons are even more awesome, as the need only one color for all three states,
+    and have an super awesome onclick state
+*/
+
+/* set an awesome color for the buttons, feel free to add new colors like an .awesome.green or .awesome.secondary */
+.awesome {
+  background-color: #111 !important;
+  color: #fff !important;
+}
+
+/* the awesome size gets set here. Feel Free to add new sizes, like .awesome.small or .small.large   */
+.awesome        { padding: 5px 10px 6px !important; font-size: 13px !important; }
+.awesome:active	{ padding: 6px 10px 5px !important; }
+
+/* Touch the rest at your onw risk. */
+.awesome {
+  border: 0 !important;
+  cursor: pointer !important;
+  font-style: normal !important;
+  font-weight: bold !important;
+  font: inherit !important;
+  line-height: 1 !important;
+  position: relative !important;
+  text-align: cente !important;
+  text-decoration: none !important;
+
+  /* vertical margin is the oposite of button's awesomeness */
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+
+  /* not all browser support these, but who cares? */
+  text-shadow: 0 -1px 1px rgba(0,0,0,0.25), -2px 0 1px rgba(0,0,0,0.25) !important;
+
+          border-radius: 5px !important;
+     -moz-border-radius: 5px !important;
+  -webkit-border-radius: 5px !important;
+          box-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
+     -moz-box-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
+  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
+
+  /* who needs images these days? */
+  background-image: -moz-linear-gradient(top, rgba(255,255,255,.2), rgba(150,150,150,.2), rgba(0,0,0,.0)) !important;
+  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255,255,255,.2)), color-stop(0.5, rgba(150,150,150,.2)), to(rgba(0,0,0,.0))) !important;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#30ffffff,endColorstr=#10000000) progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=135,strength=2);
+
+  /* cross browser inline block hack
+     see http://blog.mozilla.com/webdev/2009/02/20/cross-browser-inline-block/ */
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle !important;
+  *display: inline !important;
+  position: relative;
+
+  /* IE luv */
+  zoom: 1;
+
+  /*disable text selection (Firefox only)*/
+  -moz-user-select: none;
+}
+
+/* OPERA only
+   if there is no border set, Opera shows a transparent background-color if border-radius is set. */
+@media all and (-webkit-min-device-pixel-ratio:10000),not all and (-webkit-min-device-pixel-ratio:0) {
+  input.awesome {
+    border: 1px solid RGBa(0,0,0,0) !important;
+  }
+}
+
+/* hide selection background color */
+.awesome::selection {
+	background: transparent;
+}
+
+.awesome {
+  outline: 0; /*remove dotted line, works for links only*/
+}
+.awesome::-moz-focus-inner {
+  border: none; /* remove dotted lines for buttons */
+}
+.awesome:focus,
+.awesome:hover {
+  background-image: -moz-linear-gradient(top, rgba(255,255,255,.4), rgba(150,150,150,.3), rgba(0,0,0,.0)) !important;
+  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255,255,255,.4)), color-stop(0.5, rgba(150,150,150,.3)), to(rgba(0,0,0,.0))) !important;
+  #filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#50ffffff,endColorstr=#20000000) progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=135,strength=2);
+}
+.awesome:active	{
+  background-image: -moz-linear-gradient(top, rgba(0,0,0,.2), rgba(150,150,150,.2), rgba(255,255,255,.2)) !important;
+  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(0,0,0,.2)), color-stop(0.5, rgba(150,150,150,.2)), to(rgba(255,255,255,.2))) !important;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#20000000,endColorstr=#50ffffff) progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=315,strength=1);
+
+          box-shadow: inset 0 1px 2px rgba(0,0,0,0.7) !important;
+     -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.7) !important;
+  -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.7) !important;
+}
+
+/* Safari doesn't support inset box shadow, so we better remove it */
+@media screen and (-webkit-min-device-pixel-ratio:0){
+  .awesome:active	{
+    -webkit-box-shadow: none;
+  }
+}

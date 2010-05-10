@@ -83,6 +83,18 @@
       font-size: 0.8em !important;
     }
 
+    .video embed {
+      float: left;
+      margin: 0 15px 0 0;
+    }
+
+    .video strong {
+      display: block;
+    }
+
+    .video {
+      clear: both;
+    }
 
     ul, li { list-style: none; line-height: 1.5em; padding-left: 0.8em; }
 		h2 { font-size: 1.5em; color: #dedede; margin-top: 1.5em; }
@@ -176,6 +188,18 @@ $ node monitor.js &> log/hummingbird_monitor.log &</pre>
       scripts are included in config/ubuntu/upstart.
     </p>
 
+    <h2>Presentations</h2>
+
+    <div class="video">
+      <embed src="http://blip.tv/play/AYHcul4C" type="application/x-shockwave-flash" width="480" height="350" allowscriptaccess="always" allowfullscreen="true"></embed>
+      <div class="desc">
+        <strong>MongoSF</strong>
+        <p>A high-level overview of the motivations behind Hummingbird and how it was built.</p>
+        <p><a href="http://www.10gen.com/event_mongosf_10apr30">All Talks at MongoSF</a></p>
+      </div>
+      <div style="clear: both;"></div>
+    </div>
+
     <h2>Contributors</h2>
 
     <ul>
@@ -185,6 +209,11 @@ $ node monitor.js &> log/hummingbird_monitor.log &</pre>
     </ul>
 
     <div class="footer">
+      <p>
+        <a href="http://mongodb.com"><img src="images/powered_by_mongo.png" /></a>
+        &nbsp; &nbsp;
+        <a href="http://www.gilt.com"><img src="images/gilt-logo.png" /></a>
+      </p>
       <p>&middot; &middot; &middot;</p>
       Follow me on twitter: <a href="http://twitter.com/michaeln3">@michaeln3</a>
     </div>

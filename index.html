@@ -31,6 +31,18 @@
       margin: 15px 0 0 -15px;
     }
 
+    div.follow {
+      display: none;
+      margin-top: 2.3em;
+      float: right;
+      font-size: 0.8em;
+      font-weight: bold;
+    }
+
+    div.follow a {
+      background-color: #555 !important;
+    }
+
     p.notice {
       background-color: #000;
       color: #999;
@@ -70,6 +82,7 @@
     }
 
 
+    ul, li { list-style: none; line-height: 1.5em; padding-left: 0.8em; }
 		h2 { font-size: 1.5em; color: #dedede; margin-top: 1.5em; }
     h3 { text-align: center; color: #dedede; }
     a { color: #dedede; }
@@ -96,6 +109,10 @@
   <a href="http://github.com/mnutt/hummingbird"><img style="display: none; position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
 
   <div id="container">
+    <div class="follow">
+      Follow me on Twitter: <span style="position: relative; top: -2px;"><a class="awesome" href="http://twitter.com/michaeln3">@michaeln3</a></span>
+    </div>
+
     <h1>Hummingbird</h1>
 
     <p class="notice">
@@ -152,6 +169,14 @@ $ node monitor.js &> log/hummingbird_monitor.log &</pre>
     <h2>How It works</h2>
 
     <img style="margin-top: -15px;" src="images/explanation.png" />
+
+    <h2>Contributors</h2>
+
+    <ul>
+      <li>Michael Nutt</li>
+      <li>Benny Wong</li>
+      <li>Hummingbird development graciously supported by <a href="http://www.gilt.com">Gilt Groupe</a></li>
+    </ul>
 
     <div class="footer">
       <p>&middot; &middot; &middot;</p>

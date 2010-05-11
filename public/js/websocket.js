@@ -58,12 +58,12 @@ Hummingbird.WebSocket.prototype = {
   }
 }
 
-// MAIN WEBSOCKET
+// DASHBOARD WEBSOCKET
 
-Hummingbird.WebSocket.Main = function() { }
-Hummingbird.WebSocket.Main.prototype = new Hummingbird.WebSocket;
+Hummingbird.WebSocket.Dashboard = function() { }
+Hummingbird.WebSocket.Dashboard.prototype = new Hummingbird.WebSocket;
 
-Hummingbird.WebSocket.Main.prototype.start = function() {
+Hummingbird.WebSocket.Dashboard.prototype.start = function() {
   if (!this.webSocketEnabled())
     return;
 

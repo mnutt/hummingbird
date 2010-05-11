@@ -10,5 +10,9 @@ HummingbirdTracker.track = function(env) {
   env.gen = document.cookie.match(/gender=([^;]*);/)[1];
   env.uid = document.cookie.match(/user_id=([^\_]*)_([^;]*)/)[2];
 
+  if(document.referrer && document.referrer != "") {
+    env.ref = document.referrer;
+  }
+
   $('body').append('<img src="http://localhost:8000/tracking.gif?' + jQuery.param(env) + '"/>');
 };

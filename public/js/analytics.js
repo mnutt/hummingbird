@@ -127,7 +127,7 @@ Hummingbird.Graph.prototype = {
   rescale: function(percent) {
     var oldScale = this.scale;
 
-    if(percent == 0) { return; }
+    if(percent === 0) { return; }
     if(percent > 0.9) {
       this.scale = this.scale * 2;
     } else if(percent < 0.08) {
@@ -136,6 +136,15 @@ Hummingbird.Graph.prototype = {
       this.scale = this.scale / 2;
     } else {
       return;
+    }
+
+    // Set lower bound
+    if (this.scale < 10) {
+      this.scale = 10;
+      // Return if no change in scale
+      if (oldScale === this.scale) {
+        return;
+      }
     }
 
     this.drawSeparator(percent, oldScale, this.scale);

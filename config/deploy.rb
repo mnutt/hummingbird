@@ -44,7 +44,7 @@ end
 namespace :update do
   desc 'Creates symlinks for shared resources'
   task :symlink_shared do
-    symlinks = { 'log' => 'log' }
+    symlinks = { 'log' => 'log', 'config/app.json' => 'config/app.json' }
     symlinks.each do |shared, current|
       run "rm -rf #{latest_release}/#{current}"
       run "ln -s #{shared_path}/#{shared} #{latest_release}/#{current}"

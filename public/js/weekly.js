@@ -62,39 +62,5 @@ Hummingbird.Weekly.init = function() {
       });
     });
   });
-
-  if(document.location.search.match(/use_prod/)) {
-    var wsServerParam = document.location.search.match(/ws_server=([^\&\#]+)/) || [];
-    var wsPortParam = document.location.search.match(/ws_port=([^\&\#]+)/) || [];
-    var wsServer = "ws://" + wsServerParam[1] + ":" + (wsPortParam[1] || 8080);
-  } else {
-    var wsServer = "ws://" + document.location.hostname + ":8080";
-  }
-  var ws = new WebSocket(wsServer);
-  ws.onmessage = function(evt) {
-    var data = JSON.parse(evt.data);
-    if(data.total && data.total > 0) {
-      var el = $("div.day:first-child div.all_views");
-      var prevTotal = el.data("total");
-      el.text((prevTotal + data.total).commify()).data('total', prevTotal + data.total);
-    }
-    if(data.cartAdds && data.cartAdds > 0) {
-      var el = $("div.day:first-child div.cart_adds");
-      var prevCartAdds = el.data("cart_adds");
-      el.text((prevCartAdds + data.cartAdds).commify()).data('cart_adds', prevCartAdds + data.cartAdds);
-    }
-  };
-  ws.onclose = function() {
-    if(Hummingbird.WebSocket.state == "retrying") {
-      // Wait a while to try restarting
-      console.log("still no socket, retrying in 3 seconds");
-      setTimeout(Hummingbird.WebSocket.start, 3000);
-    } else {
-      // First attempt at restarting, try immediately
-      Hummingbird.WebSocket.state = "retrying";
-      console.log("socket lost, retrying immediately");
-      setTimeout(Hummingbird.WebSocket.start, 200);
-    }
-  };
 };
 

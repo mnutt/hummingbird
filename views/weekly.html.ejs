@@ -30,10 +30,10 @@
   </div>
 
   <script>
-    Hummingbird.WebSocket = {};
-    Hummingbird.WebSocket.state = "stopped";
-
     $(function() {
+      var hummingSocket = new Hummingbird.WebSocket.Weekly();
+      hummingSocket.start();
+
       Hummingbird.Weekly.init();
     });
 

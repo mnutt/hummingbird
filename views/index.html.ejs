@@ -30,7 +30,9 @@
 
   <script>
     $(document).ready(function() {
-      Hummingbird.WebSocket.start();
+      var hummingSocket = new Hummingbird.WebSocket.Main();
+      hummingSocket.start();
+
       Hummingbird.getSales();
 
       setInterval(Hummingbird.resortSales, 3000);

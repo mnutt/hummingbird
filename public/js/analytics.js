@@ -61,15 +61,31 @@ Hummingbird.Graph.prototype = {
 
     if(leftMarkerContainer.length == 0) { return; }
 
-    leftMarkerContainer.html('');
-    rightMarkerContainer.html('');
+    var resetMarkerContainer = function(container, numMarkers, scale) {
+      var incr = scale / numMarkers;
+      for(var i = 0; i <= numMarkers; i++) {
+        var markerValue = Math.floor(scale - (i * incr));
+        container.append('<p>' + markerValue + '</p>');
+      }
+    };
 
-    var incr = this.scale / this.numMarkers;
-    for(var i = 0; i <= this.numMarkers; i++) {
-      var markerValue = Math.floor(this.scale - (i * incr));
-      leftMarkerContainer.append('<p>' + markerValue + '</p>');
-      rightMarkerContainer.append('<p>' + markerValue + '</p>');
+    var numMarkers = this.numMarkers;
+    var scale = this.scale;
+
+    rightMarkerContainer.html('');
+    resetMarkerContainer(rightMarkerContainer, numMarkers, scale);
+
+    var millisecsBeforeUpdating = 0;
+    if (this.lineWidth != null && this.options.ratePerSecond != null) {
+      var millisecsPerTick = 1000 / this.options.ratePerSecond;
+      var ticksPerFrame = this.canvasWidth / (this.lineWidth * 2.0);
+      millisecsBeforeUpdating = millisecsPerTick * ticksPerFrame;
     }
+
+    setTimeout(function() {
+      leftMarkerContainer.html('');
+      resetMarkerContainer(leftMarkerContainer, numMarkers, scale);
+    }, millisecsBeforeUpdating);
   },
 
   addValue: function(value) {

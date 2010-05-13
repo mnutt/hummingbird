@@ -16,7 +16,6 @@ db = new mongo.Db('hummingbird', new mongo.Server('localhost', 27017, {}), {});
 db.open(function(p_db) {
   configure(function(){
     set('root', __dirname);
-    set('pagegen_uri', "http://www.gilt.com/pagegen_service/sale/sale_list");
     set('db', db);
     use(Static);
 
@@ -25,10 +24,16 @@ db.open(function(p_db) {
     } catch(e) {
       sys.log("File config/app.json not found.  Try: `cp config/app.json.sample config/app.json`");
     }
+
+    sys.log("Started server with config: ");
+    sys.puts(configJSON);
     var config = JSON.parse(configJSON);
 
     this.server.port = config.monitor_port;
-    set('name', config.name);
+  
+    for(var i in config) {
+      set(i, config[i]);
+    }
   });
 
   get('/', function(){
@@ -41,10 +46,15 @@ db.open(function(p_db) {
 
   get('/sale_list', function() {
     var self = this;
-    svc.fetchJSON(set('pagegen_uri'), function(data) {
-      self.contentType('json');
-      self.respond(200, data);
-    });
+
+    if(set('sales_uri')) {
+      svc.fetchJSON(set('sales_uri'), function(data) {
+        self.contentType('json');
+        self.respond(200, data);
+      });
+    } else {
+      self.respond(500, "No sales uri");
+    }
   });
 
   get('/week.json', function() {

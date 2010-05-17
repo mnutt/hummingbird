@@ -23,7 +23,11 @@ Installation
 
     git clone git://github.com/mnutt/hummingbird.git
     cd hummingbird
+
+    # Update submodules
     git submodule update --init
+    # If you are running an older version of git, you may have to run the following instead:
+    # git submodule init . && git submodule update .
 
     # Initialize the express submodules
     cd deps/express; git submodule update --init; cd ../..

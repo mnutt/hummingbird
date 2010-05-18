@@ -1,6 +1,8 @@
 {
   "name" : "Hummingbird",
   "monitor_port" : 8888,
+  "tracking_port" : 8000,
+  "websocket_port" : 8080,
 
   "capistrano" : {
     "repository" :       "git://github.com/mnutt/hummingbird.git",

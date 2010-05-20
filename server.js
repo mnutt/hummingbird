@@ -22,7 +22,8 @@ db.addListener("error", function(error) {
 });
 
 db.open(function(p_db) {
-  var hummingbird = new Hummingbird(db, function() {
+  var hummingbird = new Hummingbird();
+  hummingbird.init(db, function() {
     http.createServer(function(req, res) {
       try {
         hummingbird.serveRequest(req, res);

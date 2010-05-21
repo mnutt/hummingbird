@@ -18,6 +18,8 @@ db.open(function(p_db) {
     set('root', __dirname);
     set('db', db);
     use(Static);
+    use(Cookie);
+    use(Logger);
 
     try {
       var configJSON = fs.readFileSync(__dirname + "/config/app.json");
@@ -30,21 +32,41 @@ db.open(function(p_db) {
     var config = JSON.parse(configJSON);
 
     this.server.port = config.monitor_port;
-  
+
     for(var i in config) {
       set(i, config[i]);
     }
+
   });
 
   get('/', function(){
+    authenticate(this);
     this.render('index.html.ejs');
   });
 
   get('/weekly', function() {
+    authenticate(this);
     this.render('weekly.html.ejs');
   });
 
+  get('/login', function() {
+    this.render('login.html.ejs');
+  });
+
+  post('/login', function() {
+    if(this.params.post.password == set('password')) {
+      this.cookie('not_secret', this.params.post.password);
+
+      sys.log("Auth succeeded for " + this.params.post.username);
+      this.redirect('/');
+    } else {
+      sys.log("Auth failed for " + this.params.post.username);
+      this.redirect('/login');
+    }
+  });
+
   get('/sale_list', function() {
+    authenticate(this);
     var self = this;
 
     if(set('sales_uri')) {
@@ -58,6 +80,7 @@ db.open(function(p_db) {
   });
 
   get('/week.json', function() {
+    authenticate(this);
     var self = this;
     weekly.findByDay(Express.settings['db'], function(data) {
       self.contentType('json');
@@ -67,3 +90,9 @@ db.open(function(p_db) {
 
   run();
 });
+
+var authenticate = function(req) {
+  if(set('password') != req.cookies['not_secret']) {
+    req.redirect('/login');
+  }
+};

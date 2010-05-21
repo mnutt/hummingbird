@@ -31,7 +31,9 @@ Hummingbird.Graph.prototype = {
     this.setupContext();
 
     this.lineColors = {
-      1600: "#FFF",
+      6400: "#FFFFFF",
+      3200: "#BBBBBB",
+      1600: "#999999",
       800: "#983839",
       400: "#C44939",
       200: "#F1E29F",
@@ -62,11 +64,13 @@ Hummingbird.Graph.prototype = {
     if(leftMarkerContainer.length == 0) { return; }
 
     var resetMarkerContainer = function(container, numMarkers, scale) {
+      container.css({opacity: 1});
       var incr = scale / numMarkers;
       for(var i = 0; i <= numMarkers; i++) {
         var markerValue = Math.floor(scale - (i * incr));
         container.append('<p>' + markerValue + '</p>');
       }
+      container.animate({opacity: 0.3});
     };
 
     var numMarkers = this.numMarkers;

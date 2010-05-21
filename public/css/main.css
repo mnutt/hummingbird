@@ -31,7 +31,8 @@ div.hummingbird_graph div.axis_left,
 div.hummingbird_graph div.axis_right {
   float: left;
   line-height: 1em;
-  color: #4F4C4B;
+  color: #FFF;
+  opacity: 0.3;
   font-weight: bold;
   font-size: 0.8em;
   width: 30px;

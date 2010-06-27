@@ -13,7 +13,7 @@ try {
 } catch(e) {
   sys.log("File config/app.json not found.  Try: `cp config/app.json.sample config/app.json`");
 }
-var config = JSON.parse(configJSON);
+var config = JSON.parse(configJSON.toString());
 
 db = new mongo.Db('hummingbird', new mongo.Server('localhost', 27017, {}), {});
 

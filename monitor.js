@@ -29,7 +29,7 @@ db.open(function(p_db) {
 
     sys.log("Started server with config: ");
     sys.puts(configJSON);
-    var config = JSON.parse(configJSON);
+    var config = JSON.parse(configJSON.toString());
 
     this.server.port = config.monitor_port;
 

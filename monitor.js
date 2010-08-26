@@ -8,18 +8,20 @@ var sys = require('sys'),
   svc = require('service_json'),
   weekly = require('weekly');
 
-require('express');
-require('express/plugins');
+var express = require('express');
+app = express.createServer();
+
+//require('express/plugins');
 
 db = new mongo.Db('hummingbird', new mongo.Server('localhost', 27017, {}), {});
 
 db.open(function(p_db) {
-  configure(function(){
-    set('root', __dirname);
-    set('db', db);
-    use(Static);
-    use(Cookie);
-    use(Logger);
+  app.configure(function(){
+    app.set('root', __dirname);
+    app.set('db', db);
+    app.use(express.staticProvider(__dirname + "public"));
+    app.use(express.cookieDecoder);
+    app.use(express.logger());
 
     try {
       var configJSON = fs.readFileSync(__dirname + "/config/app.json");
@@ -31,29 +33,30 @@ db.open(function(p_db) {
     sys.puts(configJSON);
     var config = JSON.parse(configJSON.toString());
 
-    this.server.port = config.monitor_port;
+    //this.server.port = config.monitor_port;
+    app.port = config.monitor_port;
 
     for(var i in config) {
-      set(i, config[i]);
+      app.set(i, config[i]);
     }
 
   });
 
-  get('/', function(){
+  app.get('/', function(){
     authenticate(this);
     this.render('index.html.ejs');
   });
 
-  get('/weekly', function() {
+  app.get('/weekly', function() {
     authenticate(this);
     this.render('weekly.html.ejs');
   });
 
-  get('/login', function() {
+  app.get('/login', function() {
     this.render('login.html.ejs');
   });
 
-  post('/login', function() {
+  app.post('/login', function() {
     if(this.params.post.password == set('password')) {
       this.cookie('not_secret', this.params.post.password);
 
@@ -65,7 +68,7 @@ db.open(function(p_db) {
     }
   });
 
-  get('/sale_list', function() {
+  app.get('/sale_list', function() {
     authenticate(this);
     var self = this;
 
@@ -79,7 +82,7 @@ db.open(function(p_db) {
     }
   });
 
-  get('/week.json', function() {
+  app.get('/week.json', function() {
     authenticate(this);
     var self = this;
     weekly.findByDay(Express.settings['db'], function(data) {
@@ -88,7 +91,7 @@ db.open(function(p_db) {
     });
   });
 
-  run();
+  app.listen();
 });
 
 var authenticate = function(req) {

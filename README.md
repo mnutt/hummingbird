@@ -31,6 +31,9 @@ Installation
 
     # Initialize the express submodules
     cd deps/express; git submodule update --init; cd ../..
+    
+    # build the native mongo db driver
+    cd deps/node-mongodb-native; make
 
     # Copy the default configuration file
     cp config/app.json.sample config/app.json

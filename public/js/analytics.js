@@ -104,8 +104,9 @@ Hummingbird.Graph.prototype = {
   },
 
   setupContext: function() {
-    if(this.canvas.getContext) {
-      this.context = this.canvas.getContext('2d');
+    var canvas = document.getElementById('page_views_canvas')
+    if(canvas.getContext) {
+      this.context = canvas.getContext('2d');
     } else {
       alert("Sorry, this browser doesn't support canvas");
     }

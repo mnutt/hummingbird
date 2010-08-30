@@ -9,7 +9,7 @@ Hummingbird.Aggregates.start = function() {
   }
 
   var lastHourDiv = $("#pageviews_last_hour");
-  lastHourDiv.find('canvas').get(0).width = $(window).width() - 160;
+  lastHourDiv.find('page_views_canvas').width = $(window).width() - 160;
   var lastHourGraph = new Hummingbird.Graph(lastHourDiv, { ratePerSecond: 20, logDate: true });
 
   var wsServer = "ws://" + document.location.hostname + ":8080/aggregates";

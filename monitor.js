@@ -1,11 +1,13 @@
 require.paths.unshift(__dirname + '/lib');
 require.paths.unshift(__dirname);
-require.paths.unshift(__dirname + '/deps/express/lib')
-require.paths.unshift(__dirname + '/deps/express/support')
+require.paths.unshift(__dirname + '/deps');
+require.paths.unshift(__dirname + '/deps/express/support');
+require.paths.unshift(__dirname + '/deps/express/support/connect/lib');
+require.paths.unshift(__dirname + '/deps/node-mongodb-native/lib');
 
 var sys = require('sys'),
   fs = require('fs'),
-  mongo = require('deps/node-mongodb-native/lib/mongodb'),
+  mongo = require('mongodb'),
   svc = require('service_json'),
   weekly = require('weekly');
 

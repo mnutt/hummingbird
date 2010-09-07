@@ -1,37 +1,50 @@
 require.paths.unshift(__dirname + '/lib');
 require.paths.unshift(__dirname);
 
-var sys = require('sys'),
-  http = require('http'),
+var http = require('http'),
   weekly = require('weekly'),
   fs = require('fs'),
+  io = require('deps/node-socket.io'),
   mongo = require('deps/node-mongodb-native/lib/mongodb'),
   Hummingbird = require('hummingbird').Hummingbird;
 
 try {
   var configJSON = fs.readFileSync(__dirname + "/config/app.json");
 } catch(e) {
-  sys.log("File config/app.json not found.  Try: `cp config/app.json.sample config/app.json`");
+  console.log("File config/app.json not found.  Try: `cp config/app.json.sample config/app.json`");
 }
 var config = JSON.parse(configJSON.toString());
 
 db = new mongo.Db('hummingbird', new mongo.Server('localhost', 27017, {}), {});
 
 db.addListener("error", function(error) {
-  sys.puts("Error connecting to mongo -- perhaps it isn't running?");
+  console.log("Error connecting to mongo -- perhaps it isn't running?");
 });
 
 db.open(function(p_db) {
   var hummingbird = new Hummingbird();
   hummingbird.init(db, function() {
-    http.createServer(function(req, res) {
+    var server = http.createServer(function(req, res) {
       try {
         hummingbird.serveRequest(req, res);
       } catch(e) {
         hummingbird.handleError(req, res, e);
       }
-    }).listen(config.tracking_port);
+    });
+    server.listen(config.tracking_port, "127.0.0.1");
+
+    socket = io.listen(server);
+
+    socket.on('connection', function(client){
+      // new client is here!
+      client.on('disconnect', function(){ console.log("Lost ws client"); })
+    });
+
+    hummingbird.socket = socket;
+    hummingbird.addAllMetrics(socket, db);
+
+    console.log('Web Socket server running at ws://*:' + config.tracking_port);
   });
 
-  sys.puts('Tracking server running at http://*:' + config.tracking_port + '/tracking_pixel.gif');
+  console.log('Tracking server running at http://*:' + config.tracking_port + '/tracking_pixel.gif');
 });

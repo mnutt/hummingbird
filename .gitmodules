@@ -19,3 +19,9 @@
 [submodule "deps/node-websocket-server"]
 	path = deps/node-websocket-server
 	url = http://github.com/mnutt/node-websocket-server.git
+[submodule "deps/node-socket.io"]
+	path = deps/node-socket.io
+	url = http://github.com/LearnBoost/Socket.IO-node.git
+[submodule "public/socket.io"]
+	path = public/socket.io
+	url = http://github.com/LearnBoost/Socket.IO.git

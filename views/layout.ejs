@@ -4,11 +4,15 @@
 
 <head>
   <script src="/js/jquery-1.4.2.min.js"></script>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    io.setPath('/socket.io/');
+  </script>
+
   <script src="/js/helpers.js"></script>
   <script src="/js/analytics.js"></script>
-  <script src="/js/aggregates.js"></script>
 
-  <script src="/js/sales.js"></script>
   <script src="/js/websocket.js"></script>
   <script src="/js/weekly.js"></script>
 

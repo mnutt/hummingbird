@@ -100,7 +100,12 @@ Hummingbird.Graph.prototype = {
   },
 
   shiftCanvas: function(x, y) {
-    this.context.putImageData(this.context.getImageData(x, y, this.canvas.width, this.canvas.height), 0, 0);
+    // Browser sniffing is bad, but each browser has different performance characteristics
+    if($.browser.mozilla) {
+      this.context.drawImage(this.context.canvas, -x, -y);
+    } else {
+      this.context.putImageData(this.context.getImageData(x, y, this.canvas.width - x, this.canvas.height - y), 0, 0);
+    }
   },
 
   setupContext: function() {

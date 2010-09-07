@@ -25,11 +25,11 @@ Installation
     cd hummingbird
 
     # Update submodules
-    git submodule update --init
-    # If you are running an older version of git, you may have to run the following instead:
+    git submodule update --init --recursive
+    # If you are running a *really* old version of git, you may have to run the following instead:
     # git submodule init . && git submodule update .
 
-    # Initialize the express submodules
+    # If your version of git does not have the --recursive flag, initialize the express submodules
     cd deps/express; git submodule update --init; cd ../..
     
     # build the native mongo db driver

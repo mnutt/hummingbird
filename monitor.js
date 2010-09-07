@@ -9,12 +9,10 @@ var sys = require('sys'),
   fs = require('fs'),
   mongo = require('mongodb'),
   svc = require('service_json'),
-  weekly = require('weekly');
+  weekly = require('weekly'),
+  express = require('express');
 
-var express = require('express');
 app = express.createServer();
-
-//require('express/plugins');
 
 db = new mongo.Db('hummingbird', new mongo.Server('localhost', 27017, {}), {});
 

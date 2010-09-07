@@ -12,29 +12,18 @@
 
   <div style="clear: both;"></div>
 
-  <div id="cart_adds" class="hummingbird_graph">
-
-    <h2><span class="value"></span> Cart Adds / Second</h2>
-
-    <div class="axis_left"></div>
-
-    <canvas width="760" height="72"></canvas>
-
-    <div class="axis_right"></div>
-
-  </div>
-
-  <div style="clear: both;"></div>
-
-  <div id="sales"></div>
+  <button id="test_it" value="Send test traffic">Send test traffic</button>
 
   <script>
     $(document).ready(function() {
       var hummingSocket = new Hummingbird.WebSocket.Dashboard();
       hummingSocket.start();
 
-      Hummingbird.getSales();
+      $("#test_it").click(function(e) {
+        e.preventDefault();
 
-      setInterval(Hummingbird.resortSales, 3000);
+        var img = document.createElement('img');
+        img.src = "http://localhost:8000/tracking_pixel.gif?f=" + Math.ceil(Math.random() * 1000000)
+      });
     });
   </script>

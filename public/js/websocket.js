@@ -76,7 +76,7 @@ Hummingbird.WebSocket.Dashboard.prototype.start = function() {
   this.socket.connect();
 
   var totalDiv = $("#log");
-  totalDiv.find('canvas').get(0).width = $(window).width() - 160;
+  totalDiv.find('div.graph').width($(window).width() - 160);
   var totalGraph = new Hummingbird.Graph(totalDiv, { ratePerSecond: 20, logDate: true });
 
   var self = this;

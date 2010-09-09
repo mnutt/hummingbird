@@ -56,3 +56,6 @@ Number.prototype.commify = function() {
     return $(arr);
   };
 })(jQuery);
+
+var console = window.console;
+  if (!console) console = {log: function(){ }, error: function(){ }};

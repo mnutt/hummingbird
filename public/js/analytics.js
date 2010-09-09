@@ -19,7 +19,7 @@ Hummingbird.Graph = function(el, options) {
 
   this.scale = 800;
   this.el = $(el);
-  this.canvas = $(el).find('canvas').get(0);
+  this.graph = $(el).find('div.graph');
   this.valueElement = this.el.find('span.value');
   this.trafficLog = [];
 
@@ -28,8 +28,6 @@ Hummingbird.Graph = function(el, options) {
 
 Hummingbird.Graph.prototype = {
   init: function() {
-    this.setupContext();
-
     this.lineColors = {
       6400: "#FFFFFF",
       3200: "#BBBBBB",
@@ -45,15 +43,18 @@ Hummingbird.Graph.prototype = {
       3.125: "#006456",
       def: "#7BF4D6"
     };
-    this.canvasHeight = $(this.canvas).height();
-    this.canvasWidth = $(this.canvas).width();
-
-    this.numMarkers = Math.floor(this.canvasHeight / 23);
-    this.resetMarkers();
 
     this.lineWidth = 3;
 
-    // this.drawEmptyGraph();
+    this.graphHeight = 216; // this.graph.height();
+    this.graphWidth = this.graph.width();
+
+    this.numPoints = Math.ceil(this.graphWidth / (this.lineWidth * 2));
+
+    this.numMarkers = Math.floor(this.graphHeight / 23);
+    this.resetMarkers();
+
+    this.drawEmptyGraph();
     this.tick = 0;
   },
 
@@ -82,14 +83,20 @@ Hummingbird.Graph.prototype = {
     var millisecsBeforeUpdating = 0;
     if (this.lineWidth != null && this.options.ratePerSecond != null) {
       var millisecsPerTick = 1000 / this.options.ratePerSecond;
-      var ticksPerFrame = this.canvasWidth / (this.lineWidth * 2.0);
+      var ticksPerFrame = this.graphWidth / (this.lineWidth * 2.0);
       millisecsBeforeUpdating = millisecsPerTick * ticksPerFrame;
     }
 
-    setTimeout(function() {
-      leftMarkerContainer.html('');
+    if(leftMarkerContainer.html().length == 0) {
+      // Update immediately if it's empty
       resetMarkerContainer(leftMarkerContainer, numMarkers, scale);
-    }, millisecsBeforeUpdating);
+    } else {
+      // Otherwise wait until the scale change reaches it
+      setTimeout(function() {
+        leftMarkerContainer.html('');
+        resetMarkerContainer(leftMarkerContainer, numMarkers, scale);
+      }, millisecsBeforeUpdating);
+    }
   },
 
   addValue: function(value) {
@@ -99,55 +106,16 @@ Hummingbird.Graph.prototype = {
     }
   },
 
-  shiftCanvas: function(x, y) {
-    // Browser sniffing is bad, but each browser has different performance characteristics
-    if($.browser.mozilla) {
-      this.context.drawImage(this.context.canvas, -x, -y);
-    } else {
-      this.context.putImageData(this.context.getImageData(x, y, this.canvas.width - x, this.canvas.height - y), 0, 0);
-    }
-  },
-
-  setupContext: function() {
-    var canvas = document.getElementById('page_views_canvas')
-    if(canvas.getContext) {
-      this.context = canvas.getContext('2d');
-    } else {
-      alert("Sorry, this browser doesn't support canvas");
-    }
-
-    this.context.font = "bold 10px Andale Mono, sans-serif";
-    this.context.textAlign = "right";
-  },
-
   runningAverage: function() {
     return this.trafficLog.sum() * 1.0 / this.trafficLog.length;
   },
 
   drawEmptyGraph: function() {
-    var dataPoints = Math.ceil(this.canvasWidth / (this.lineWidth * 2))
+    var dataPoints = this.numPoints;
+
     while(dataPoints--) {
       this.drawLogPath(0);
     }
-  },
-
-  logDate: function() {
-    // Draw text background
-    this.context.lineCap = "round";
-    this.context.lineWidth = 12;
-    this.context.beginPath();
-    this.context.moveTo(this.canvasWidth - 16, this.canvasHeight + 10);
-    this.context.strokeStyle = "#000";
-    this.context.lineTo(this.canvasWidth - 70, this.canvasHeight + 10);
-    this.context.stroke();
-    this.context.closePath();
-    this.context.lineCap = "square";
-
-    // Draw date text
-    this.context.fillStyle = "#FFF";
-    var date = new Date();
-
-    this.context.fillText(date.formattedTime(), this.canvasWidth - 16, this.canvasHeight + 14);
   },
 
   rescale: function(percent) {
@@ -178,36 +146,27 @@ Hummingbird.Graph.prototype = {
   },
 
   drawSeparator: function(percent, oldScale, newScale) {
-    this.shiftCanvas(this.lineWidth * 2, 0);
-    var newHeight = percent * this.canvasHeight;
-    var oldHeight = percent * (oldScale/newScale) * this.canvasHeight;
+    var newHeight = percent * this.graphHeight;
+    var oldHeight = percent * (oldScale/newScale) * this.graphHeight;
+    var lineHeight = Math.abs(oldHeight - newHeight);
+    var borderBottom = Math.min(oldHeight, newHeight);
+    var borderTop = this.graphHeight - lineHeight - borderBottom;
 
-    this.context.lineWidth = this.lineWidth;
-    this.context.beginPath();
-    this.context.strokeStyle = "#CCC";
-    this.context.moveTo(this.canvasWidth - 10, this.canvasHeight - oldHeight);
-    this.context.lineTo(this.canvasWidth - 10, this.canvasHeight - newHeight);
-    this.context.stroke();
-    this.context.closePath();
+    var line = $("<div style='border-bottom: " + borderBottom + "px solid #333; height: " + lineHeight + "px; border-top: " + borderTop + "px solid #333; background-color: #FFF' class='line'></div>");
+    line.prependTo(this.graph);
+    this.graph.find("div:nth-child(200)").remove();
   },
 
   drawLogPath: function(value) {
     this.tick++;
 
-    if(this.options.showLogDate) {
-
-      if(this.tick % 100 == 0) {
-        this.logDate();
-      }
-    }
-
     this.addValue(value);
 
     var average = this.runningAverage() * this.options.ratePerSecond;
     var percent = average / this.scale;
-    var height = Math.max(percent * this.canvasHeight, 1);
+    var height = Math.max(percent * this.graphHeight, 1);
     var color = this.options.barColor || this.lineColors[this.scale] || this.lineColors.def;
-    var endingPoint = this.canvasHeight - height;
+    var lineHeight = this.graphHeight - height;
 
     if(this.tick % (this.options.ratePerSecond * 2) == 0) { // Every 2 seconds
       this.valueElement.text(average);
@@ -220,28 +179,16 @@ Hummingbird.Graph.prototype = {
       return;
     }
 
-    this.shiftCanvas(this.lineWidth * 2, 0);
-    this.context.lineWidth = this.lineWidth;
-    this.context.beginPath();
-    this.context.strokeStyle = color;
-    this.context.moveTo(this.canvasWidth - 10, this.canvasHeight);
-    this.context.lineTo(this.canvasWidth - 10, endingPoint);
-    this.context.stroke();
-    this.context.closePath();
-
-    if(this.options.showBackgroundBars) {
-      this.context.beginPath();
-
-      if(this.tick % this.options.ratePerSecond == 0) {
-        this.context.strokeStyle = this.options.tickLineColor;
-      } else {
-        this.context.strokeStyle = this.options.bgLineColor;
-      }
-
-      this.context.moveTo(this.canvasWidth - 10, endingPoint);
-      this.context.lineTo(this.canvasWidth - 10, 0);
-      this.context.stroke();
-      this.context.closePath();
+    var backgroundColor;
+    if(this.tick % this.options.ratePerSecond == 0) {
+      backgroundColor = this.options.tickLineColor;
+    } else {
+      backgroundColor = this.options.bgLineColor;
     }
+
+
+    var line = $("<div style='width: " + this.lineWidth + "px; height: " + height + "px; border-top: " + lineHeight + "px solid " + backgroundColor + "; background-color: " + color + "' class='line'></div>");
+    line.prependTo(this.graph);
+    this.graph.find("div:nth-child(" + (this.numPoints+20) + ")").remove();
   }
 };

@@ -82,7 +82,7 @@ db.open(function(p_db) {
       res.send(data);
     });
   });
-  app.listen(app.set('monitor_port'), '127.0.0.1');
+  app.listen(app.set('monitor_port'), '0.0.0.0');
 });
 
 var authenticate = function(req) {

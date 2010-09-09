@@ -20,11 +20,16 @@ div.hummingbird_graph h2 {
   margin-left: 58px;
 }
 
-div.hummingbird_graph canvas {
+div.hummingbird_graph div.graph {
   float: left;
   padding: 14px 0 20px 0;
   color: #F00;
   font-weight: bold;
+  position: relative;
+  overflow: hidden;
+  width: 760px;
+  height: 216px;
+  display: block;
 }
 
 div.hummingbird_graph div.axis_left,
@@ -52,6 +57,15 @@ div.hummingbird_graph div.axis_right {
 #hummingbird_cart_adds div.axis_left,
 #hummingbird_cart_adds div.axis_right {
   line-height: 0.3em;
+}
+
+div.graph div.line {
+  float: right;
+  height: 1px;
+  width: 3px;
+  border-top: 99px solid #00F;
+  margin: 0 0 100px 3px;
+  background-color: #F00;
 }
 
 #sales {

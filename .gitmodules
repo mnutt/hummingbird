@@ -1,21 +1,6 @@
-[submodule "deps/nodeunit"]
-	path = deps/nodeunit
-	url = http://github.com/caolan/nodeunit.git
-[submodule "deps/node-paperboy"]
-	path = deps/node-paperboy
-	url = http://github.com/felixge/node-paperboy.git
 [submodule "deps/node-mongodb-native"]
 	path = deps/node-mongodb-native
 	url = http://github.com/christkv/node-mongodb-native.git
-[submodule "deps/node-ws"]
-	path = deps/node-ws
-	url = http://github.com/ncr/node.ws.js.git
-[submodule "deps/node-microseconds"]
-	path = deps/node-microseconds
-	url = http://github.com/tmpvar/node-microseconds.git
-[submodule "deps/node-websocket-server"]
-	path = deps/node-websocket-server
-	url = http://github.com/mnutt/node-websocket-server.git
 [submodule "deps/node-socket.io"]
 	path = deps/node-socket.io
 	url = http://github.com/LearnBoost/Socket.IO-node.git

@@ -1,4 +1,30 @@
-  <h1><%= app.set('name') %></h1>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+
+<head>
+  <script src="/js/jquery-1.4.2.min.js"></script>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    io.setPath('/socket.io/');
+  </script>
+
+  <script src="/js/helpers.js"></script>
+  <script src="/js/analytics.js"></script>
+
+  <script src="/js/websocket.js"></script>
+  <script src="/js/weekly.js"></script>
+
+  <title>Hummingbird</title>
+
+  <link rel="stylesheet" media="all" href="/css/main.css" />
+  <link rel="stylesheet" media="all" href="/css/weekly.css" />
+</head>
+
+<body>
+
+  <h1>Hummingbird</h1>
 
   <div class="hummingbird_graph" id="log">
 
@@ -27,3 +53,6 @@
       });
     });
   </script>
+
+</body>
+</html>

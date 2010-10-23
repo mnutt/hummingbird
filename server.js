@@ -4,6 +4,7 @@ require.paths.unshift(__dirname);
 var http = require('http'),
   weekly = require('weekly'),
   fs = require('fs'),
+  static = require('deps/node-static/lib/node-static'),
   io = require('deps/node-socket.io'),
   mongo = require('deps/node-mongodb-native/lib/mongodb'),
   Hummingbird = require('hummingbird').Hummingbird;
@@ -48,3 +49,15 @@ db.open(function(p_db) {
 
   console.log('Tracking server running at http://*:' + config.tracking_port + '/tracking_pixel.gif');
 });
+
+if(config.enable_dashboard) {
+  var file = new(static.Server)('./public');
+
+  http.createServer(function (request, response) {
+    request.addListener('end', function () {
+      file.serve(request, response);
+    });
+  }).listen(config.dashboard_port);
+
+  console.log('Dashboard server running at http://*:' + config.dashboard_port);
+}

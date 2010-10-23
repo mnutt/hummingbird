@@ -10,9 +10,6 @@
 [submodule "deps/node-ws"]
 	path = deps/node-ws
 	url = http://github.com/ncr/node.ws.js.git
-[submodule "deps/express"]
-	path = deps/express
-	url = http://github.com/visionmedia/express.git
 [submodule "deps/node-microseconds"]
 	path = deps/node-microseconds
 	url = http://github.com/tmpvar/node-microseconds.git
@@ -25,3 +22,6 @@
 [submodule "public/socket.io"]
 	path = public/socket.io
 	url = http://github.com/LearnBoost/Socket.IO.git
+[submodule "deps/node-static"]
+	path = deps/node-static
+	url = http://github.com/cloudhead/node-static.git

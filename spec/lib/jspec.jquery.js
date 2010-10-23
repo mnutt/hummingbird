@@ -60,9 +60,18 @@ JSpec
     },
     
     have_event_handlers : function(actual, expected) {
-      return jQuery(actual).data('events') ?
-        jQuery(actual).data('events').hasOwnProperty(expected) :
-          false
+      if (jQuery(actual).data('events') && jQuery(actual).data('events').hasOwnProperty(expected)) {
+        return true;
+      } else if (jQuery(actual.context).data('events') && jQuery(actual.context).data('events').hasOwnProperty(expected)) {
+        var events = jQuery(actual.context).data('events')[expected];
+
+        for (index in events) {
+          if (events[index].selector === actual.selector) {
+            return true;
+          }
+        }
+      }
+      return false;
     },
     
     'be disabled selected checked' : function(attr) {

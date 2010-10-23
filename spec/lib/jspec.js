@@ -4,7 +4,7 @@
 ;(function(){
 
   JSpec = {
-    version   : '4.2.1',
+    version   : '4.3.3',
     assert    : true,
     cache     : {},
     suites    : [],
@@ -1050,8 +1050,12 @@
       if (object === false) return 'false'
       if (object.an_instance_of) return 'an instance of ' + object.an_instance_of.name
       if (object.jquery && object.selector.length > 0) return 'selector ' + puts(object.selector)
-      if (object.jquery) return object.get(0).outerHTML
-      if (object.nodeName) return object.outerHTML
+      if (object.jquery && object.get(0) && object.get(0).outerHTML) return object.get(0).outerHTML
+      if (object.jquery && object.get(0) && object.get(0).nodeType == 9) return 'jQuery(document)'
+      if (object.jquery && object.get(0)) return document.createElement('div').appendChild(object.get(0)).parentNode.innerHTML
+      if (object.jquery && object.length == 0) return 'jQuery()'
+      if (object.nodeName && object.outerHTML) return object.outerHTML
+      if (object.nodeName) return document.createElement('div').appendChild(object).parentNode.innerHTML
       switch (object.constructor) {
         case Function: return object.name || object 
         case String: 
@@ -1272,12 +1276,13 @@
      destub : function(object, method) {
        var captures
        if (method) {
-         if (object['__prototype__' + method])
+         if (object.hasOwnProperty('__prototype__' + method))
            delete object[method]
-         else
+         else if (object.hasOwnProperty('__original__' + method))
            object[method] = object['__original__' + method]
+
          delete object['__prototype__' + method]
-         delete object['__original____' + method]
+         delete object['__original__' + method]
        }
        else if (object) {
          for (var key in object)
@@ -1302,9 +1307,13 @@
      
      stub : function(object, method) {
        hook('stubbing', object, method)
+			 
+			 //unbind any stub already present on this method
+			 JSpec.destub(object, method);
        JSpec.stubbed.push(object)
        var type = object.hasOwnProperty(method) ? '__original__' : '__prototype__'
        object[type + method] = object[method]
+
        object[method] = function(){}
        return {
          and_return : function(value) {
@@ -1749,10 +1758,20 @@
   
   // --- Node.js support
   
-  if (typeof GLOBAL === 'object' && typeof exports === 'object')
-    quit = process.exit,
-    print = require('sys').puts,
-    readFile = require('fs').readFileSync
+  if (typeof GLOBAL === 'object' && typeof exports === 'object') {
+    var fs = require('fs')
+    quit = process.exit
+    print = require('sys').puts
+    readFile = function(file){
+      return fs.readFileSync(file).toString('utf8')
+    }
+  }
+
+  // --- envjsrb / johnson support
+
+  if (typeof Johnson === 'object') {
+    quit = function () {}
+  }
   
   // --- Utility functions
 
@@ -1872,17 +1891,17 @@
     },
     
     have_prop : function(actual, property, value) {
-      return actual[property] === undefined ||
-               actual[property] instanceof Function ? false:
-                 value === undefined ? true:
-                   does(actual[property], 'eql', value)
+      var actualVal = actual[property], actualType = typeof actualVal
+      return (actualType == 'function' || actualType == 'undefined') ? false :
+        typeof value === 'undefined' ||
+        does(actual[property],'eql',value)
     },
     
     have_property : function(actual, property, value) {
-      return actual[property] === undefined ||
-               actual[property] instanceof Function ? false:
-                 value === undefined ? true:
-                   value === actual[property]
+      var actualVal = actual[property], actualType = typeof actualVal
+      return (actualType == 'function' || actualType == 'undefined') ? false :
+        typeof value === 'undefined' ||
+        value === actualVal
     }
   })
   

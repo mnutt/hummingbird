@@ -27,11 +27,7 @@ Installation
     # Update submodules
     git submodule update --init --recursive
     # If you are running a *really* old version of git, you may have to run the following instead:
-    # git submodule init . && git submodule update .
 
-    # If your version of git does not have the --recursive flag, initialize the express submodules
-    cd deps/express; git submodule update --init; cd ../..
-    
     # build the native mongo db driver
     cd deps/node-mongodb-native; make
 
@@ -47,9 +43,9 @@ To start the analytics server, run the following:
     mongod &   (or start mongo some other way)
     node server.js
 
-To start the web monitor, run:
-
-    node monitor.js
+By default a dashboard will be run on port 8080.  You can disable it for production use in
+config/app.json.  The dashboard is just html served out of public/; you can serve it using
+any webserver.
 
 
 Specs
@@ -62,7 +58,7 @@ Specs
 Tips
 -----
 
- * To run the UI locally but stream data from your production server, use the url http://localhost:8088/?ws_server=your-host.com&ws_port=12345
+ * To run the UI locally but stream data from your production server, use the url http://localhost:8080/?ws_server=your-host.com&ws_port=12345
 
 
 Contributors

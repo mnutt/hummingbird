@@ -29,7 +29,7 @@ Hummingbird.Graph = function(element, socket, options) {
 
   this.options = $.extend(defaults, options);
 
-  this.scale = 800;
+  this.scale = 50;
   this.element = element;
   this.socket = socket
   this.graph = this.element.find('div.graph');

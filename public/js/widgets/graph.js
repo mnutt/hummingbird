@@ -19,7 +19,7 @@ Hummingbird.Graph = function(element, socket, options) {
   var defaults = {
     showLogDate: false,
     showMarkers: true,
-    ratePerSecond: 10,
+    ratePerSecond: 20,
     showBackgroundBars: true,
     tickLineColor: '#666',
     bgLineColor: '#555',
@@ -32,7 +32,6 @@ Hummingbird.Graph = function(element, socket, options) {
   this.element = element;
   this.socket = socket
   this.graph = this.element.find('div.graph');
-  this.valueElement = this.element.find('span.value');
   this.trafficLog = [];
 
   this.createGraph();
@@ -183,12 +182,11 @@ $.extend(Hummingbird.Graph.prototype, {
 
     var average = this.runningAverage() * this.options.ratePerSecond;
     var percent = average / this.scale;
-    var height = Math.max(percent * this.graphHeight, 1);
+    var height = Math.floor(percent * this.graphHeight);
     var color = this.options.barColor || this.lineColors[this.scale] || this.lineColors.def;
     var lineHeight = this.graphHeight - height;
 
     if(this.tick % (this.options.ratePerSecond * 2) == 0) { // Every 2 seconds
-      this.valueElement.text(average);
       this.element.attr('data-average', average);
 
       this.rescale(percent);
@@ -206,9 +204,8 @@ $.extend(Hummingbird.Graph.prototype, {
     }
 
 
-    var line = $("<div style='width: " + this.lineWidth + "px; height: " + height + "px; border-top: " + lineHeight + "px solid " + backgroundColor + "; background-color: " + color + "' class='line'></div>");
+    var line = $("<div style='width: " + this.lineWidth + "px; height: " + height + "px; border-top: " + lineHeight + "px solid " + backgroundColor + "; background-color: " + color + "; border-bottom: 1px solid " + color + ";' class='line'></div>");
     line.prependTo(this.graph);
-    var before = this.graph.find("div").length;
 
     if(!isInitialFill) {
       this.graph.children().last().remove();

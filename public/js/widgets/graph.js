@@ -1,8 +1,19 @@
+$.fn.hummingbirdGraph = function(socket, options) {
+  if(this.length == 0) { return; }
+
+  this.each(function() {
+    new Hummingbird.Graph($(this), socket, options);
+  });
+
+  return this;
+};
+
+
 if(!Hummingbird) { var Hummingbird = {}; }
 
-Hummingbird.Graph = function(el, options) {
+Hummingbird.Graph = function(element, socket, options) {
   if ( !(this instanceof Hummingbird.Graph) ) {
-    return new Hummingbird.Graph(canvas);
+    return new Hummingbird.Graph(element, socket, options);
   }
 
   var defaults = {
@@ -18,16 +29,24 @@ Hummingbird.Graph = function(el, options) {
   this.options = $.extend(defaults, options);
 
   this.scale = 800;
-  this.el = $(el);
-  this.graph = $(el).find('div.graph');
-  this.valueElement = this.el.find('span.value');
+  this.element = element;
+  this.socket = socket
+  this.graph = this.element.find('div.graph');
+  this.valueElement = this.element.find('span.value');
   this.trafficLog = [];
 
-  this.init();
+  this.createGraph();
+  this.initialize();
 };
 
-Hummingbird.Graph.prototype = {
-  init: function() {
+Hummingbird.Graph.prototype = new Hummingbird.Base();
+
+$.extend(Hummingbird.Graph.prototype, {
+  onMessage: function(message) {
+    this.drawLogPath(message);
+  },
+
+  createGraph: function() {
     this.lineColors = {
       6400: "#FFFFFF",
       3200: "#BBBBBB",
@@ -59,8 +78,8 @@ Hummingbird.Graph.prototype = {
   },
 
   resetMarkers: function() {
-    var leftMarkerContainer = this.el.find('div.axis_left');
-    var rightMarkerContainer = this.el.find('div.axis_right');
+    var leftMarkerContainer = this.element.find('div.axis_left');
+    var rightMarkerContainer = this.element.find('div.axis_right');
 
     if(leftMarkerContainer.length == 0) { return; }
 
@@ -114,7 +133,7 @@ Hummingbird.Graph.prototype = {
     var dataPoints = this.numPoints;
 
     while(dataPoints--) {
-      this.drawLogPath(0);
+      this.drawLogPath(0, true);
     }
   },
 
@@ -157,7 +176,7 @@ Hummingbird.Graph.prototype = {
     this.graph.find("div:nth-child(200)").remove();
   },
 
-  drawLogPath: function(value) {
+  drawLogPath: function(value, isInitialFill) {
     this.tick++;
 
     this.addValue(value);
@@ -170,7 +189,7 @@ Hummingbird.Graph.prototype = {
 
     if(this.tick % (this.options.ratePerSecond * 2) == 0) { // Every 2 seconds
       this.valueElement.text(average);
-      this.el.attr('data-average', average);
+      this.element.attr('data-average', average);
 
       this.rescale(percent);
 
@@ -189,6 +208,10 @@ Hummingbird.Graph.prototype = {
 
     var line = $("<div style='width: " + this.lineWidth + "px; height: " + height + "px; border-top: " + lineHeight + "px solid " + backgroundColor + "; background-color: " + color + "' class='line'></div>");
     line.prependTo(this.graph);
-    this.graph.find("div:nth-child(" + (this.numPoints+20) + ")").remove();
+    var before = this.graph.find("div").length;
+
+    if(!isInitialFill) {
+      this.graph.children().last().remove();
+    }
   }
-};
+});

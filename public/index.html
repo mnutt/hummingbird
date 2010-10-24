@@ -3,7 +3,7 @@
 <html>
 
 <head>
-  <script src="/js/jquery-1.4.2.min.js"></script>
+  <script src="/js/jquery-1.4.2.js"></script>
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
@@ -11,12 +11,13 @@
   </script>
 
   <script src="/js/helpers.js"></script>
-  <script src="/js/analytics.js"></script>
 
   <script src="/js/websocket.js"></script>
   <script src="/js/weekly.js"></script>
+
   <script src="/js/widgets/base.js"></script>
   <script src="/js/widgets/logger.js"></script>
+  <script src="/js/widgets/graph.js"></script>
   <script src="/js/widgets/count.js"></script>
 
   <title>Hummingbird</title>
@@ -48,11 +49,11 @@
       hummingbirdSocket = new Hummingbird.WebSocket();
       hummingbirdSocket.start();
 
-      //$("#page_views_canvas").hummingbirdGraph(hummingbirdSocket,
-      //                                         {
-      //                                           data: { total: true },
-      //                                           rate: 30
-      //                                         });
+      $("#log").hummingbirdGraph(hummingbirdSocket,
+                                 {
+                                   data: { total: true },
+                                   rate: 30
+                                 });
 
       $("h2.graph_title span.value").hummingbirdCount(hummingbirdSocket,
                                                       {

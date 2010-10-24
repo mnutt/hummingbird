@@ -30,44 +30,69 @@
 
   <h1>Hummingbird</h1>
 
-  <h2 class="graph_title"><span class="value">0</span> Pageviews / Second</h2>
+  <div class="hummingbird_graph" id="total">
 
-  <div class="hummingbird_graph" id="log">
+    <h2 class="graph_title">All Traffic: <span class="value">0</span> Pageviews / Second</h2>
 
     <div class="axis_left"></div>
-    <div class="graph" id='page_views_canvas'></div>
+    <div class="graph"></div>
     <div class="axis_right"></div>
 
   </div>
 
   <div style="clear: both;"></div>
 
-  <button id="test_it" style="margin-left: 60px;" value="Send test traffic">Send test traffic</button>
+  <div class="hummingbird_graph" id="cart_adds">
+
+    <h2 class="graph_title">Cart Traffic:</h2>
+
+    <div class="axis_left"></div>
+    <div class="graph"></div>
+    <div class="axis_right"></div>
+
+  </div>
+
+  <div style="clear: both;"></div>
+
+  <button id="test_it" style="margin-left: 60px;">Send test traffic</button>
+  <button id="test_cart" style="margin-left: 60px;">Send test traffic to cart</button>
 
   <script>
     $(document).ready(function() {
       hummingbirdSocket = new Hummingbird.WebSocket();
       hummingbirdSocket.start();
 
-      $("#log").hummingbirdGraph(hummingbirdSocket,
+      $("#total").hummingbirdGraph(hummingbirdSocket,
                                  {
-                                   data: { total: true },
-                                   rate: 30
+                                   data: { total: true }
                                  });
 
-      $("h2.graph_title span.value").hummingbirdCount(hummingbirdSocket,
-                                                      {
-                                                        data: { total: true },
-                                                        rate: 3
-                                                      });
+      $("#cart_adds").hummingbirdGraph(hummingbirdSocket,
+                                       {
+                                         data: { cartAdds: true },
+                                         graphHeight: 100
+                                       });
 
-//      new Hummingbird.Logger(window, hummingbirdSocket, { data: {cartAdds: true} });
+      $("#total h2.graph_title span.value").hummingbirdCount(hummingbirdSocket,
+                                                             {
+                                                               data: { total: true },
+                                                               every: 10
+                                                             });
+
+      new Hummingbird.Logger(window, hummingbirdSocket, { data: {cartAdds: true}, every: 20 });
 
       $("#test_it").click(function(e) {
         e.preventDefault();
 
         var img = document.createElement('img');
         img.src = "http://localhost:8000/tracking_pixel.gif?f=" + Math.ceil(Math.random() * 1000000)
+      });
+
+      $("#test_cart").click(function(e) {
+        e.preventDefault();
+
+        var img = document.createElement('img');
+        img.src = "http://localhost:8000/tracking_pixel.gif?events=scAdd&f=" + Math.ceil(Math.random() * 1000000)
       });
     });
   </script>

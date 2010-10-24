@@ -23,7 +23,8 @@ Hummingbird.Graph = function(element, socket, options) {
     showBackgroundBars: true,
     tickLineColor: '#666',
     bgLineColor: '#555',
-    barColor: null
+    barColor: null,
+    graphHeight: 216
   }
 
   this.options = $.extend(defaults, options);
@@ -64,7 +65,8 @@ $.extend(Hummingbird.Graph.prototype, {
 
     this.lineWidth = 3;
 
-    this.graphHeight = 216; // this.graph.height();
+    this.graphHeight = this.options.graphHeight; // this.graph.height();
+    this.graph.height(this.graphHeight);
     this.graphWidth = this.graph.width();
 
     this.numPoints = Math.ceil(this.graphWidth / (this.lineWidth * 2));

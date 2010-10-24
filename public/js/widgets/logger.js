@@ -11,5 +11,5 @@ Hummingbird.Logger = function(element, socket, options) {
 Hummingbird.Logger.prototype = new Hummingbird.Base();
 
 Hummingbird.Logger.prototype.onMessage = function(message) {
-  console.log(JSON.stringify(message));
+  console.log("Logger: " + JSON.stringify(message));
 };

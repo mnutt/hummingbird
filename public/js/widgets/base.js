@@ -4,6 +4,8 @@ Hummingbird.Base = function() {};
 
 Hummingbird.Base.prototype = {
 
+  validMessageCount: 0,
+
   initialize: function() {
     this.setFilter();
     this.registerHandler();
@@ -20,7 +22,11 @@ Hummingbird.Base.prototype = {
   onData: function(fullData) {
     var message = this.extract(fullData);
     if(typeof(message) != "undefined") {
-      this.onMessage(message);
+      this.validMessageCount += 1;
+
+      if((!this.options.every) || (this.validMessageCount % this.options.every == 0)) {
+        this.onMessage(message);
+      }
     }
   },
 

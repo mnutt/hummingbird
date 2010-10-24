@@ -6,7 +6,10 @@ Hummingbird.Base.prototype = {
 
   validMessageCount: 0,
 
+  messageRate: 20,
+
   initialize: function() {
+    this.averageLog = [];
     this.setFilter();
     this.registerHandler();
   },
@@ -20,12 +23,16 @@ Hummingbird.Base.prototype = {
   },
 
   onData: function(fullData) {
+    var average;
     var message = this.extract(fullData);
     if(typeof(message) != "undefined") {
       this.validMessageCount += 1;
 
+      // Calculate the average over N seconds if the averageOver option is set
+      if(this.options.averageOver) { average = this.addToAverage(message); }
+
       if((!this.options.every) || (this.validMessageCount % this.options.every == 0)) {
-        this.onMessage(message);
+        this.onMessage(message, this.average());
       }
     }
   },
@@ -54,6 +61,21 @@ Hummingbird.Base.prototype = {
         break;
       }
     }
+  },
+
+  addToAverage: function(newValue) {
+    var averageCount = this.options.averageOver * this.messageRate;
+
+    this.averageLog.push(newValue);
+    if(this.averageLog.length > averageCount) {
+      this.averageLog.shift();
+    }
+  },
+
+  average: function() {
+    if(this.averageLog.length == 0) { return 0; }
+
+    return this.averageLog.sum() * 1.0 / this.averageLog.length * this.messageRate;
   }
 
 };

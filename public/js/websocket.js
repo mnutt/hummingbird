@@ -5,8 +5,9 @@ Hummingbird.WebSocket = function() {
 };
 
 Hummingbird.WebSocket.prototype = {
+
   // WebSocket callbacks
-  onclose: function() {
+  onClose: function() {
     var self = this;
     if(this.getState() == "retrying") {
       // Wait a while to try restarting
@@ -20,9 +21,20 @@ Hummingbird.WebSocket.prototype = {
     }
   },
 
-  onopen: function() {
+  onOpen: function() {
     this.setState("started");
     console.log("socket started");
+  },
+
+  onMessage: function(message) {
+    var data = JSON.parse(message);
+    var i = this.handlers.length;
+    while(i--) {
+      var handler = this.handlers[i][0];
+      var scope = this.handlers[i][1];
+
+      handler.apply(scope, [data]);
+    }
   },
 
   // Hummingbird WebSocket functions
@@ -35,7 +47,17 @@ Hummingbird.WebSocket.prototype = {
   },
 
   start: function() {
-    console.log("start() not implemented");
+    // Functions that extract data and update UI elements
+    this.handlers = [];
+
+    this.socket = new io.Socket(this.webSocketURI(), {port: this.webSocketPort()});
+    this.socket.connect();
+
+    var self = this;
+
+    this.socket.on('message', function(message) { self.onMessage(message); });
+    this.socket.on('disconnect', function() { self.onClose(); });
+    this.socket.on('connect', function() { self.onOpen(); });
   },
 
   webSocketEnabled: function() {
@@ -57,6 +79,19 @@ Hummingbird.WebSocket.prototype = {
     return wsServer;
   },
 
+  registerHandler: function(handler, object) {
+    this.handlers.push([handler, object]);
+  },
+
+  unregisterHandler: function(handler) {
+    for(var i = 0; i < this.handlers.length; i++) {
+      if(this.handlers[i] === val) {
+        this.handlers.splice(i, 1);
+        break;
+      }
+    }
+  },
+
   webSocketPort: function() {
     if(document.location.search.match(/ws_server/)) {
       var wsPortParam = document.location.search.match(/ws_port=([^\&\#]+)/) || [];
@@ -65,6 +100,16 @@ Hummingbird.WebSocket.prototype = {
     return 8000;
   }
 }
+
+$.fn.hummingbirdGraph = function(socket, options) {
+  if(this.length == 0) { return; }
+
+  this.each(function() {
+    new Hummingbird.WebSocket.Graph($(this), socket, options);
+  });
+
+  return this;
+};
 
 // DASHBOARD WEBSOCKET
 
@@ -89,8 +134,8 @@ Hummingbird.WebSocket.Dashboard.prototype.start = function() {
     }
   })
 
-  this.socket.on('disconnect', function() { self.onclose(); });
-  this.socket.on('connect', function() { self.onopen(); });
+  this.socket.on('disconnect', function() { self.onClose(); });
+  this.socket.on('connect', function() { self.onOpen(); });
 };
 
 // WEEKLY WEBSOCKET
@@ -116,7 +161,7 @@ Hummingbird.WebSocket.Weekly.prototype.start = function() {
     }
   });
 
-  this.socket.on('disconnect', function() { self.onclose(); });
-  this.socket.on('open', function() { self.onopen(); });
+  this.socket.on('disconnect', function() { self.onClose(); });
+  this.socket.on('open', function() { self.onOpen(); });
 }
 

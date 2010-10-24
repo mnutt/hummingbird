@@ -12,7 +12,7 @@ h1 {
   margin-left: 58px;
 }
 
-div.hummingbird_graph h2 {
+h2.graph_title {
   color: #CCC;
   text-transform: uppercase;
   font-size: 0.9em;

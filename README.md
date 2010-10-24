@@ -26,7 +26,6 @@ Installation
 
     # Update submodules
     git submodule update --init --recursive
-    # If you are running a *really* old version of git, you may have to run the following instead:
 
     # build the native mongo db driver
     cd deps/node-mongodb-native; make

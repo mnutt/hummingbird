@@ -15,6 +15,9 @@
 
   <script src="/js/websocket.js"></script>
   <script src="/js/weekly.js"></script>
+  <script src="/js/widgets/base.js"></script>
+  <script src="/js/widgets/logger.js"></script>
+  <script src="/js/widgets/count.js"></script>
 
   <title>Hummingbird</title>
 
@@ -26,9 +29,9 @@
 
   <h1>Hummingbird</h1>
 
-  <div class="hummingbird_graph" id="log">
+  <h2 class="graph_title"><span class="value">0</span> Pageviews / Second</h2>
 
-    <h2><span class="value"></span> Pageviews / Second</h2>
+  <div class="hummingbird_graph" id="log">
 
     <div class="axis_left"></div>
     <div class="graph" id='page_views_canvas'></div>
@@ -42,8 +45,22 @@
 
   <script>
     $(document).ready(function() {
-      var hummingSocket = new Hummingbird.WebSocket.Dashboard();
-      hummingSocket.start();
+      hummingbirdSocket = new Hummingbird.WebSocket();
+      hummingbirdSocket.start();
+
+      //$("#page_views_canvas").hummingbirdGraph(hummingbirdSocket,
+      //                                         {
+      //                                           data: { total: true },
+      //                                           rate: 30
+      //                                         });
+
+      $("h2.graph_title span.value").hummingbirdCount(hummingbirdSocket,
+                                                      {
+                                                        data: { total: true },
+                                                        rate: 3
+                                                      });
+
+//      new Hummingbird.Logger(window, hummingbirdSocket, { data: {cartAdds: true} });
 
       $("#test_it").click(function(e) {
         e.preventDefault();

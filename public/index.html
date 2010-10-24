@@ -22,6 +22,8 @@
 
   <title>Hummingbird</title>
 
+  <link rel="shortcut icon" type="image/png" href="/images/favicon.png" />
+
   <link rel="stylesheet" media="all" href="/css/main.css" />
   <link rel="stylesheet" media="all" href="/css/weekly.css" />
 </head>
@@ -79,7 +81,12 @@
                                                                every: 10
                                                              });
 
-      new Hummingbird.Logger(window, hummingbirdSocket, { data: {cartAdds: true}, every: 20 });
+      new Hummingbird.Logger(window,
+                             hummingbirdSocket,
+                             {
+                               data: { cartAdds: true},
+                               every: 20
+                             });
 
       $("#test_it").click(function(e) {
         e.preventDefault();

@@ -32,7 +32,7 @@ db.open(function(p_db) {
         hummingbird.handleError(req, res, e);
       }
     });
-    server.listen(config.tracking_port, "127.0.0.1");
+    server.listen(config.tracking_port, "0.0.0.0");
 
     socket = io.listen(server);
 

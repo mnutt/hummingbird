@@ -13,18 +13,21 @@
   <script src="/js/helpers.js"></script>
 
   <script src="/js/websocket.js"></script>
-  <script src="/js/weekly.js"></script>
+  <script src="/js/polymaps.js"></script>
+
 
   <script src="/js/widgets/base.js"></script>
   <script src="/js/widgets/logger.js"></script>
   <script src="/js/widgets/graph.js"></script>
   <script src="/js/widgets/count.js"></script>
+  <script src="/js/widgets/map.js"></script>
 
   <title>Hummingbird</title>
 
   <link rel="shortcut icon" type="image/png" href="/images/favicon.png" />
 
   <link rel="stylesheet" media="all" href="/css/main.css" />
+  <link rel="stylesheet" media="all" href="/css/map.css" />
   <link rel="stylesheet" media="all" href="/css/weekly.css" />
 </head>
 
@@ -59,6 +62,10 @@
   <button id="test_it" style="margin-left: 60px;">Send test traffic</button>
   <button id="test_cart" style="margin-left: 60px;">Send test traffic to cart</button>
 
+  <div style="clear: both;"></div>
+
+  <div id="map_container" style="margin: 40px; width: 800px; height: 450px; position: relative;"></div>
+
   <script>
     $(document).ready(function() {
       hummingbirdSocket = new Hummingbird.WebSocket();
@@ -80,6 +87,8 @@
                                                                data: { total: true },
                                                                every: 10
                                                              });
+
+      $("#map_container").hummingbirdMap(hummingbirdSocket, { data: { location: true } });
 
       new Hummingbird.Logger(window,
                              hummingbirdSocket,

@@ -47,6 +47,37 @@ config/app.json.  The dashboard is just html served out of public/; you can serv
 any webserver.
 
 
+Architecture Overview
+---------------------
+
+Hummingbird is organized into two parts: a node.js-based tracking server that records user
+activity via a tracking pixel, and a collection of javascript-based widgets that display that
+activity.  The server records all activity in MongoDB and broadcasts it to the clients using
+WebSockets if possible, and falling back to Flash sockets if necessary.
+
+The Hummingbird.WebSocket object receives websocket events from the server in the form of JSON
+objects.  Individual widgets subscribe to a property in the JSON tree and register handler
+functions to be called whenever that property is present.
+
+
+Logging Customization
+---------------------
+
+Metrics are stored in lib/metrics and auto-loaded..  Each metric contains a handler function that is
+called every time a new user event occurs.  Metrics store data in the `data` object property which
+gets emitted to clients in intervals specified by the metric. A basic example can be found in
+lib/metrics/all.js. An example of how a metric can filter based on urls is in lib/metric/sales.js.
+
+
+Display Customization
+---------------------
+
+Hummingbird comes with some stock widgets (Counter, Logger, Graph) that demonstrate how to hook into
+the data provided by the node.js server.  For the minimum amount required to create a widget, see
+public/js/widgets/logger.js.  A widget is an object whose prototype extends Hummingbird.Base and
+implements onMessage.
+
+
 Specs
 --------
 

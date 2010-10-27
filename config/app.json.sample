@@ -1,11 +1,10 @@
 {
   "name" : "Hummingbird",
 
-  "monitor_port" : 8888,
   "tracking_port" : 8000,
+  "dashboard_port" : 8080,
 
-  "username" : "admin",
-  "password" : "change_this",
+  "enable_dashboard" : true,
 
   "capistrano" : {
     "repository" :       "git://github.com/mnutt/hummingbird.git",

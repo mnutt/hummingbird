@@ -57,5 +57,7 @@ Number.prototype.commify = function() {
   };
 })(jQuery);
 
-var console = window.console;
-  if (!console) console = {log: function(){ }, error: function(){ }};
+if(typeof(console) == "undefined") {
+  var console = window.console;
+    if (!console) console = {log: function(){ }, error: function(){ }};
+}

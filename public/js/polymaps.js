@@ -1173,7 +1173,7 @@ po.geoJson = function(fetch) {
       a.setAttribute("begin", "indefinite");
       a.setAttribute("type", "scale");
       a.setAttribute("attributeName", "r");
-      a.setAttribute("values", "0;10");
+      a.setAttribute("values", "0;20;10");
       a.setAttribute("fill", "freeze");
       a.setAttribute("dur", "3s");
       circle.appendChild(a);
@@ -1186,22 +1186,53 @@ po.geoJson = function(fetch) {
       g.addEventListener("mouseover", function(e) {
         var el = e.target.parentNode;
         el.parentNode.appendChild(el);
-      });
+      }, true);
 
       if(o.text) {
         var t = po.svg("text");
-        var b = po.svg("path");
-        b.setAttribute("d", "M351,269.5L346,264.5L334,264.5A5,5,0,0,1,329,259.5L329,257.5L329,252.5L329,247.5L329,245.5A5,5,0,0,1,334,240.5L346,240.5L351,240.5L356,240.5L368,240.5A5,5,0,0,1,373,245.5L373,247.5L373,252.5L373,257.5L373,259.5A5,5,0,0,1,368,264.5L356,264.5Z");
-        b.setAttribute("class", "label");
-        b.setAttribute("transform", "translate(" + (p.x - 351) + "," + (p.y - r - 273) + ")");
         t.textContent = o.text;
         t.setAttribute("class", "label");
         t.setAttribute("transform", "translate(" + p.x + "," + (p.y - r - 18) + ")");
-        g.appendChild(b);
         g.appendChild(t);
+
+        setTimeout(function() {
+          console.log();
+          var b = po.svg("path");
+          var textWidth = (t.getBBox().width / 2) + 6;
+
+          var bg = "";
+          bg += "M 0, 29";
+          bg += "L -5, 24";
+          bg += "L " + (-1 * (textWidth - 5)) + ", 24";
+          bg += "A 5, 5, 0, 0, 1, " + (-1 * textWidth) + ", 19";
+          bg += "L " + (-1 * textWidth) + ", 17";
+          bg += "L " + (-1 * textWidth) + ", 12";
+          bg += "L " + (-1 * textWidth) + ", 7";
+          bg += "L " + (-1 * textWidth) + ", 5";
+          bg += "A 5, 5, 0, 0, 1, " + (-1 * (textWidth - 5)) + ", 0";
+          bg += "L 5, 0";
+          bg += "L 0, 0";
+          bg += "L 5, 0";
+          bg += "L " + (textWidth - 5) + ", 0";
+          bg += "A 5, 5, 0, 0, 1, " + textWidth + ", 5";
+          bg += "L " + textWidth + ", 7";
+          bg += "L " + textWidth + ", 12";
+          bg += "L " + textWidth + ", 17";
+          bg += "L " + textWidth + ", 19";
+          bg += "A 5, 5, 0, 0, 1, " + (textWidth - 5) + ", 24";
+          bg += "L 5, 24";
+          bg += "Z";
+
+          b.setAttribute("d", bg);
+          b.setAttribute("class", "label");
+          b.setAttribute("transform", "translate(" + (p.x) + "," + (p.y - r - 32) + ")");
+          g.appendChild(b);
+          g.appendChild(t);
+        }, 5);
+
       }
 
-      a.beginElement();
+      if(a.beginElement) { a.beginElement(); }
 
       setTimeout(function() {
         var toRemove = g.parentNode.parentNode.parentNode;

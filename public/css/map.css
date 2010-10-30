@@ -48,18 +48,11 @@ text.label {
   fill: #FFF;
   font-weight: bold;
   text-anchor: middle;
-  opacity: 0;
 }
 
 path.label {
   fill: #000;
   stroke: #000;
-  opacity: 0;
-}
-
-g.point:hover text.label, g.point:hover path.label {
-  opacity: 1.0;
-  -webkit-transition: opacity 0.2s linear;
 }
 
 g.point:hover circle.point {

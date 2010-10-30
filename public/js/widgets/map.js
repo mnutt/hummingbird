@@ -16,7 +16,6 @@ Hummingbird.Map = function(element, socket, options) {
 
   this.po = org.polymaps;
 
-  this.po.raphael = Raphael(this.element.get(0), "100%", "100%");
   this.map = this.po.map()
     .container(this.element.find("svg").get(0))
     .center({lat: 39, lon: -96})

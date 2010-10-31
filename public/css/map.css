@@ -52,7 +52,6 @@ text.label {
 
 path.label {
   fill: #000;
-  stroke: #000;
 }
 
 g.point:hover circle.point {

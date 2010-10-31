@@ -57,7 +57,27 @@ Number.prototype.commify = function() {
   };
 })(jQuery);
 
-if(typeof(console) == "undefined") {
-  var console = window.console;
-    if (!console) console = {log: function(){ }, error: function(){ }};
-}
+// Fix delay() to be stoppable...
+(function($) {
+  $.fn.delay = function( time, type ) {
+		time = jQuery.fx ? jQuery.fx.speeds[time] || time : time;
+		type = type || "fx";
+
+		return this.queue( type, function() {
+			var elem = this;
+			$(elem).data('delay_timer', setTimeout(function() {
+				jQuery.dequeue( elem, type );
+			}, time ));
+		});
+  };
+
+  $.fn.stopDelay = function() {
+    clearTimeout($(this).data('delay_timer'));
+    return $(this);
+  };
+})(jQuery);
+
+
+var console = window.console;
+  if (!console) console = {log: function(){ }, error: function(){ }};
+

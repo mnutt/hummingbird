@@ -1163,26 +1163,26 @@ po.geoJson = function(fetch) {
   var types = {
 
     Point: function(o, proj) {
+      var p = proj(o.coordinates),
+          c = po.svg("circle");
+      c.setAttribute("r", 4.5);
+      c.setAttribute("transform", "translate(" + p.x + "," + p.y + ")");
+      return c;
+    },
+
+    Marker: function(o, proj) {
       var g = po.svg("g"),
           c = o.coordinates,
           p = proj(o.coordinates),
           r = o.radius || 4.5,
-          a = po.svg("animate");
           circle = po.svg("circle");
-
-      a.setAttribute("begin", "indefinite");
-      a.setAttribute("type", "scale");
-      a.setAttribute("attributeName", "r");
-      a.setAttribute("values", "0;20;10");
-      a.setAttribute("fill", "freeze");
-      a.setAttribute("dur", "3s");
-      circle.appendChild(a);
 
       circle.setAttribute("r", r);
       circle.setAttribute("class", "point");
       circle.setAttribute("transform", "translate(" + p.x + "," + p.y + ")");
       g.appendChild(circle);
       g.setAttribute("class", "point");
+      g.setAttribute("id", o.id);
       g.addEventListener("mouseover", function(e) {
         var el = e.target.parentNode;
         el.parentNode.appendChild(el);
@@ -1228,16 +1228,10 @@ po.geoJson = function(fetch) {
           b.setAttribute("transform", "translate(" + (p.x) + "," + (p.y - r - 32) + ")");
           g.appendChild(b);
           g.appendChild(t);
+
         }, 5);
 
       }
-
-      if(a.beginElement) { a.beginElement(); }
-
-      setTimeout(function() {
-        var toRemove = g.parentNode.parentNode.parentNode;
-        toRemove.parentNode.removeChild(toRemove);
-      }, 7000);
 
       return g;
     },

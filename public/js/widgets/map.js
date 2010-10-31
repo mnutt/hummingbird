@@ -56,8 +56,35 @@ $.extend(Hummingbird.Map.prototype, {
         var geo = value[i];
         if(typeof(geo.latitude) == "undefined") { continue; }
 
-        this.map.add(this.po.geoJson().features([{geometry: { coordinates: [parseFloat(geo.longitude), parseFloat(geo.latitude)], type: "Point", radius: 10, text: geo.city || "" } }]));
+        this.addMarker(parseFloat(geo.longitude), parseFloat(geo.latitude), 10, geo.city);
       }
     }
   },
+
+  addMarker: function(lon, lat, radius, text) {
+    var id = ("mark_" + lon + "_" + lat).replace(/[^0-9a-z_]/g, '');
+
+    var existing = $("#" + id);
+    if(existing.length == 0) {
+      // If marker doesn't exist, create it
+      var geometry = {
+        coordinates: [lon, lat],
+        type: "Marker",
+        id: id,
+        radius: radius,
+        text: text || ""
+      };
+
+      this.map.add(this.po.geoJson().features([{ geometry: geometry }]));
+      existing = $("#" + id);
+    } else {
+      // Stop the current animation queue and set opacity back to 1
+      existing.stop(true).stopDelay().css({ opacity: 1 });
+    }
+
+    // After 4 seconds, fade marker out then remove the whole layer
+    existing.delay(4000).animate({ opacity: 0 }, 1000, function() {
+      $(this).parent().parent().parent().remove();
+    });
+  }
 });

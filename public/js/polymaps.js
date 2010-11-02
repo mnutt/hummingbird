@@ -1196,7 +1196,6 @@ po.geoJson = function(fetch) {
         g.appendChild(t);
 
         setTimeout(function() {
-          console.log();
           var b = po.svg("path");
           var textWidth = (t.getBBox().width / 2) + 6;
 

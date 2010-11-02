@@ -26,7 +26,7 @@ Hummingbird.Map = function(element, socket, options) {
   this.map.add(this.po.image()
           .url(this.po.url("http://{S}tile.cloudmade.com"
                       + "/e5db7ff94b054de799146f983c9c4a70"
-                      + "/20760/256/{Z}/{X}/{Y}.png")
+                      + "/26332/256/{Z}/{X}/{Y}.png")
                .hosts(["a.", "b.", "c.", ""])));
 
   this.map.add(this.po.fullscreen());

@@ -45,7 +45,7 @@ div.hummingbird_graph div.axis_right {
 }
 
 div.hummingbird_graph div.axis_left {
-  padding: 0 15px;
+  padding: 0 5px 0 25px;
   text-align: right;
 }
 

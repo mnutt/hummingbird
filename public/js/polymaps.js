@@ -1192,7 +1192,7 @@ po.geoJson = function(fetch) {
         var t = po.svg("text");
         t.textContent = o.text;
         t.setAttribute("class", "label");
-        t.setAttribute("transform", "translate(" + p.x + "," + (p.y - r - 18) + ")");
+        t.setAttribute("transform", "translate(" + p.x + "," + (p.y - r - 17) + ")");
         g.appendChild(t);
 
         setTimeout(function() {
@@ -1960,7 +1960,7 @@ po.fullscreen = function() {
 
     } else {
       container.css({
-        position: null,
+        position: "relative",
         borderWidth: null,
         width: null,
         height: null,

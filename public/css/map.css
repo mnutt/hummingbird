@@ -1,3 +1,7 @@
+#map_container svg.map {
+  background-color: #2F2C2B;
+}
+
 .compass .back {
   fill: #eee;
   fill-opacity: .8;

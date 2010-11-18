@@ -4,9 +4,9 @@ require.paths.unshift(__dirname);
 var http = require('http'),
   weekly = require('weekly'),
   fs = require('fs'),
-  static = require('deps/node-static/lib/node-static'),
-  io = require('deps/node-socket.io'),
-  mongo = require('deps/node-mongodb-native/lib/mongodb'),
+  static = require('node-static'),
+  io = require('socket.io'),
+  mongo = require('mongodb'),
   Hummingbird = require('hummingbird').Hummingbird;
 
 try {

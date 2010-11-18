@@ -1,12 +1,3 @@
-[submodule "deps/node-mongodb-native"]
-	path = deps/node-mongodb-native
-	url = http://github.com/christkv/node-mongodb-native.git
-[submodule "deps/node-socket.io"]
-	path = deps/node-socket.io
-	url = http://github.com/LearnBoost/Socket.IO-node.git
 [submodule "public/socket.io"]
 	path = public/socket.io
 	url = http://github.com/LearnBoost/Socket.IO.git
-[submodule "deps/node-static"]
-	path = deps/node-static
-	url = http://github.com/cloudhead/node-static.git

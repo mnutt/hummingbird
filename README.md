@@ -15,6 +15,7 @@ Requirements
 -------------------
 
  * node.js v0.1.96
+ * npm v0.2.4
  * mongodb
 
 
@@ -24,11 +25,8 @@ Installation
     git clone git://github.com/mnutt/hummingbird.git
     cd hummingbird
 
-    # Update submodules
-    git submodule update --init --recursive
-
-    # build the native mongo db driver
-    cd deps/node-mongodb-native; make
+    # Use npm to install the dependencies
+    npm link .
 
     # Copy the default configuration file
     cp config/app.json.sample config/app.json

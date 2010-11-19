@@ -9,7 +9,7 @@ http = require('http');
 v = require('view');
 m = require('metric');
 sys = require('sys');
-mongo = require('deps/node-mongodb-native/lib/mongodb');
+mongo = require('mongodb');
 db = new mongo.Db('hummingbird_test', new mongo.Server('localhost', 27017, {}), {});
 
 MockRequest = function(url) {

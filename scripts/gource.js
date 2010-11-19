@@ -2,7 +2,7 @@ require.paths.unshift(__dirname + "/..");
 
 var sys = require('sys'),
   arrays = require('deps/arrays'),
-  mongo = require('deps/node-mongodb-native/lib/mongodb');
+  mongo = require('mongodb');
 
 var db = new mongo.Db('hummingbird', new mongo.Server('localhost', 27017, {}), {});
 

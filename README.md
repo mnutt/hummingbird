@@ -25,6 +25,9 @@ Installation
     git clone git://github.com/mnutt/hummingbird.git
     cd hummingbird
 
+    # Update submodules
+    git submodule update --init --recursive
+    
     # Use npm to install the dependencies
     npm link .
 

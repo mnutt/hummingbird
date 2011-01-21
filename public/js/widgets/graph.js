@@ -174,7 +174,7 @@ $.extend(Hummingbird.Graph.prototype, {
 
     var average = Math.round(value);
     var percent = average / this.scale;
-    var height = Math.floor(percent * this.graphHeight);
+    var height = Math.min(Math.floor(percent * this.graphHeight), this.graphHeight);
     var color = this.options.barColor || this.lineColors[this.scale] || this.lineColors.def;
     var lineHeight = this.graphHeight - height;
 

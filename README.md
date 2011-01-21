@@ -45,6 +45,16 @@ config/app.json.  The dashboard is just html served out of public/; you can serv
 any webserver.
 
 
+Deployment
+----------
+
+Make sure to properly secure the dashboard if you don't want outside people to see it. The dashboard
+httpServer's 'listen' function takes a second argument that is the interface to bind; typically you
+would choose "127.0.0.1" to only allow access from localhost, or "0.0.0.0" to listen on all
+interfaces.  In production you should change the instances of "localhost:8000" in public/index.html
+to point to the server where you're hosting the dashboard.
+
+
 Architecture Overview
 ---------------------
 

@@ -5,6 +5,7 @@
         "mongodb": "0.7.9"
         ,"socket.io": "0.6.1"
         ,"node-static": "0.5.2"
+        ,"geoip": "0.3.1-1"
     }
     , "repository" :    { "type" :  "git"
                         , "url" :   "http://github.com/mnutt/hummingbird.git" }

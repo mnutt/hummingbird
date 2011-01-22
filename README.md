@@ -31,6 +31,10 @@ Installation
     # Copy the default configuration file
     cp config/app.json.sample config/app.json
 
+    # To use the map, download MaxMind's GeoIP database and extract to the root directory:
+    wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
+    gunzip GeoLiteCity.dat.gz
+
 
 Running Hummingbird
 ------------------------------
@@ -71,10 +75,11 @@ functions to be called whenever that property is present.
 Logging Customization
 ---------------------
 
-Metrics are stored in lib/metrics and auto-loaded..  Each metric contains a handler function that is
+Metrics are stored in lib/metrics and auto-loaded. Each metric contains a handler function that is
 called every time a new user event occurs.  Metrics store data in the `data` object property which
 gets emitted to clients in intervals specified by the metric. A basic example can be found in
-lib/metrics/all.js. An example of how a metric can filter based on urls is in lib/metric/sales.js.
+lib/metrics/total_views.js. An example of how a metric can filter based on urls is in
+lib/metric/sales.js.
 
 
 Display Customization

@@ -18,9 +18,9 @@ Hummingbird.Map = function(element, socket, options) {
 
   this.map = this.po.map()
     .container(this.element.get(0).appendChild(this.po.svg("svg")))
-    .center({lat: 39, lon: -96})
-    .zoom(4)
-    .zoomRange([3, 9])
+    .center({lat: 39, lon: 10})
+    .zoom(2)
+    .zoomRange([2, 9])
     .add(this.po.interact());
 
   this.map.add(this.po.image()

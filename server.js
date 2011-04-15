@@ -4,6 +4,7 @@ require.paths.unshift(__dirname);
 var http = require('http'),
   weekly = require('weekly'),
   fs = require('fs'),
+  dgram = require('dgram'),
   static = require('node-static'),
   io = require('socket.io'),
   mongo = require('mongodb'),
@@ -45,6 +46,21 @@ db.open(function(p_db) {
     hummingbird.addAllMetrics(socket, db);
 
     console.log('Web Socket server running at ws://*:' + config.tracking_port);
+
+    if(config.udp_address) {
+      var udpServer = dgram.createSocket("udp4");
+
+      udpServer.on("message", function(message, rinfo) {
+        console.log("message from " + rinfo.address + " : " + rinfo.port);
+
+        var data = JSON.parse(message);
+        hummingbird.insertData(data);
+      });
+
+      udpServer.bind(config.udp_port, config.udp_address);
+
+      console.log('UDP server running on UDP port ' + config.udp_port);
+    }
   });
 
   console.log('Tracking server running at http://*:' + config.tracking_port + '/tracking_pixel.gif');

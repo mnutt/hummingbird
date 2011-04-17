@@ -2,7 +2,7 @@ if (!org) var org = {};
 if (!org.polymaps) org.polymaps = {};
 (function(po){
 
-  po.version = "2.3.0"; // semver.org
+  po.version = "2.5.0"; // semver.org
 
   var zero = {x: 0, y: 0};
 po.ns = {
@@ -40,7 +40,7 @@ po.transform = function(a, b, c, d, e, f) {
   transform.zoomFraction = function(x) {
     if (!arguments.length) return zoomFraction;
     zoomFraction = x;
-    zoomDelta = Math.floor(zoomFraction + Math.log(Math.sqrt(a * a + b * b + c * c + d * d)) / Math.log(2));
+    zoomDelta = Math.floor(zoomFraction + Math.log(Math.sqrt(a * a + b * b + c * c + d * d)) / Math.LN2);
     k = Math.pow(2, -zoomDelta);
     return transform;
   };
@@ -182,12 +182,18 @@ po.cache = function(load, unload) {
   return cache;
 };
 po.url = function(template) {
-  var hosts = [];
+  var hosts = [],
+      repeat = true;
 
   function format(c) {
     var max = c.zoom < 0 ? 1 : 1 << c.zoom,
-        column = c.column % max;
-    if (column < 0) column += max;
+        column = c.column;
+    if (repeat) {
+      column = c.column % max;
+      if (column < 0) column += max;
+    } else if ((column < 0) || (column >= max)) {
+      return null;
+    }
     return template.replace(/{(.)}/g, function(s, v) {
       switch (v) {
         case "S": return hosts[(Math.abs(c.zoom) + c.row + column) % hosts.length];
@@ -217,6 +223,12 @@ po.url = function(template) {
   format.hosts = function(x) {
     if (!arguments.length) return hosts;
     hosts = x;
+    return format;
+  };
+
+  format.repeat = function(x) {
+    if (!arguments.length) return repeat;
+    repeat = x;
     return format;
   };
 
@@ -613,7 +625,7 @@ po.map = function() {
         l = map.pointLocation({x: (bl.x + tr.x) / 2, y: (bl.y + tr.y) / 2});
 
     // update the zoom level
-    zoom = zoom + zoomFraction - Math.log(k) / Math.log(2);
+    zoom = zoom + zoomFraction - Math.log(k) / Math.LN2;
     rezoom();
 
     // set the new center
@@ -671,10 +683,9 @@ resizer.remove = function(map) {
   }
 };
 
-if(window.addEventListener) {
-  // Note: assumes single window (no frames, iframes, etc.)!
-  window.addEventListener("resize", resizer, false);
-}
+// Note: assumes single window (no frames, iframes, etc.)!
+window.addEventListener("resize", resizer, false);
+window.addEventListener("load", resizer, false);
 
 // See http://wiki.openstreetmap.org/wiki/Mercator
 
@@ -1100,16 +1111,22 @@ po.image = function() {
 
     if (typeof url == "function") {
       element.setAttribute("opacity", 0);
-      tile.request = po.queue.image(element, url(tile), function(img) {
-        delete tile.request;
+      var tileUrl = url(tile);
+      if (tileUrl != null) {
+        tile.request = po.queue.image(element, tileUrl, function(img) {
+          delete tile.request;
+          tile.ready = true;
+          tile.img = img;
+          element.removeAttribute("opacity");
+          image.dispatch({type: "load", tile: tile});
+        });
+      } else {
         tile.ready = true;
-        tile.img = img;
-        element.removeAttribute("opacity");
         image.dispatch({type: "load", tile: tile});
-      });
+      }
     } else {
       tile.ready = true;
-      if (url) element.setAttributeNS(po.ns.xlink, "href", url);
+      if (url != null) element.setAttributeNS(po.ns.xlink, "href", url);
       image.dispatch({type: "load", tile: tile});
     }
   }
@@ -1624,26 +1641,46 @@ po.wheel = function() {
     location = null;
   }
 
+  // mousewheel events are totally broken!
+  // https://bugs.webkit.org/show_bug.cgi?id=40441
+  // not only that, but Chrome and Safari differ in re. to acceleration!
+  var inner = document.createElement("div"),
+      outer = document.createElement("div");
+  outer.style.visibility = "hidden";
+  outer.style.top = "0px";
+  outer.style.height = "0px";
+  outer.style.width = "0px";
+  outer.style.overflowY = "scroll";
+  inner.style.height = "2000px";
+  outer.appendChild(inner);
+  document.body.appendChild(outer);
+
   function mousewheel(e) {
-    var delta = (e.wheelDelta / 120 || -e.detail) * .1,
+    var delta = e.wheelDelta || -e.detail,
         point;
 
-    /* Detect fast & large wheel events on WebKit. */
-    if (bug40441 < 0) {
-      var now = Date.now(), since = now - last;
-      if ((since > 9) && (Math.abs(e.wheelDelta) / since >= 50)) bug40441 = 1;
-      last = now;
-    }
-    if (bug40441 == 1) delta *= .03;
+    /* Detect the pixels that would be scrolled by this wheel event. */
+    if (delta) {
+      if (smooth) {
+        try {
+          outer.scrollTop = 1000;
+          outer.dispatchEvent(e);
+          delta = 1000 - outer.scrollTop;
+        } catch (error) {
+          // Derp! Hope for the best?
+        }
+        delta *= .005;
+      }
 
-    /* If smooth zooming is disabled, batch events into unit steps. */
-    if (!smooth && delta) {
-      var timeNow = Date.now();
-      if (timeNow - timePrev > 200) {
-        delta = delta > 0 ? +1 : -1;
-        timePrev = timeNow;
-      } else {
-        delta = 0;
+      /* If smooth zooming is disabled, batch events into unit steps. */
+      else {
+        var timeNow = Date.now();
+        if (timeNow - timePrev > 200) {
+          delta = delta > 0 ? +1 : -1;
+          timePrev = timeNow;
+        } else {
+          delta = 0;
+        }
       }
     }
 
@@ -1692,7 +1729,7 @@ po.wheel = function() {
     if (map) {
       container.removeEventListener("mousemove", move, false);
       container.removeEventListener("mousewheel", mousewheel, false);
-      container.removeEventListener("DOMMouseScroll", mousewheel, false);
+      container.removeEventListener("MozMousePixelScroll", mousewheel, false);
       container = null;
       map.off("move", move);
     }
@@ -1701,16 +1738,13 @@ po.wheel = function() {
       container = map.container();
       container.addEventListener("mousemove", move, false);
       container.addEventListener("mousewheel", mousewheel, false);
-      container.addEventListener("DOMMouseScroll", mousewheel, false);
+      container.addEventListener("MozMousePixelScroll", mousewheel, false);
     }
     return wheel;
   };
 
   return wheel;
 };
-
-// https://bugs.webkit.org/show_bug.cgi?id=40441
-var bug40441 = /WebKit\/533/.test(navigator.userAgent) ? -1 : 0;
 po.arrow = function() {
   var arrow = {},
       key = {left: 0, right: 0, up: 0, down: 0},
@@ -1830,26 +1864,35 @@ po.hash = function() {
       lat = 90 - 1e-8, // allowable latitude range
       map;
 
-  function move() {
-    var center = map.center(),
-        zoom = map.zoom(),
-        precision = Math.max(0, Math.ceil(Math.log(zoom) / Math.LN2)),
-        s1 = "#" + zoom.toFixed(2)
-             + "/" + center.lat.toFixed(precision)
-             + "/" + center.lon.toFixed(precision);
-    if (s0 !== s1) location.replace(s0 = s1); // don't recenter the map!
-  }
-
-  function hashchange() {
-    if (location.hash === s0) return; // ignore spurious hashchange events
-    var args = (s0 = location.hash).substring(1).split("/").map(Number);
-    if (args.length < 3 || args.some(isNaN)) move(); // replace bogus hash
+  var parser = function(map, s) {
+    var args = s.split("/").map(Number);
+    if (args.length < 3 || args.some(isNaN)) return true; // replace bogus hash
     else {
       var size = map.size();
       map.zoomBy(args[0] - map.zoom(),
           {x: size.x / 2, y: size.y / 2},
           {lat: Math.min(lat, Math.max(-lat, args[1])), lon: args[2]});
     }
+  };
+
+  var formatter = function(map) {
+    var center = map.center(),
+        zoom = map.zoom(),
+        precision = Math.max(0, Math.ceil(Math.log(zoom) / Math.LN2));
+    return "#" + zoom.toFixed(2)
+             + "/" + center.lat.toFixed(precision)
+             + "/" + center.lon.toFixed(precision);
+  };
+
+  function move() {
+    var s1 = formatter(map);
+    if (s0 !== s1) location.replace(s0 = s1); // don't recenter the map!
+  }
+
+  function hashchange() {
+    if (location.hash === s0) return; // ignore spurious hashchange events
+    if (parser(map, (s0 = location.hash).substring(1)))
+      move(); // replace bogus hash
   }
 
   hash.map = function(x) {
@@ -1866,7 +1909,100 @@ po.hash = function() {
     return hash;
   };
 
+  hash.parser = function(x) {
+    if (!arguments.length) return parser;
+    parser = x;
+    return hash;
+  };
+
+  hash.formatter = function(x) {
+    if (!arguments.length) return formatter;
+    formatter = x;
+    return hash;
+  };
+
   return hash;
+};
+po.touch = function() {
+  var touch = {},
+      map,
+      container,
+      rotate = false,
+      last = 0,
+      zoom,
+      angle,
+      locations = {}; // touch identifier -> location
+
+  window.addEventListener("touchmove", touchmove, false);
+
+  function touchstart(e) {
+    var i = -1,
+        n = e.touches.length,
+        t = Date.now();
+
+    // doubletap detection
+    if ((n == 1) && (t - last < 300)) {
+      var z = map.zoom();
+      map.zoomBy(1 - z + Math.floor(z), map.mouse(e.touches[0]));
+      e.preventDefault();
+    }
+    last = t;
+
+    // store original zoom & touch locations
+    zoom = map.zoom();
+    angle = map.angle();
+    while (++i < n) {
+      t = e.touches[i];
+      locations[t.identifier] = map.pointLocation(map.mouse(t));
+    }
+  }
+
+  function touchmove(e) {
+    switch (e.touches.length) {
+      case 1: { // single-touch pan
+        var t0 = e.touches[0];
+        map.zoomBy(0, map.mouse(t0), locations[t0.identifier]);
+        e.preventDefault();
+        break;
+      }
+      case 2: { // double-touch pan + zoom + rotate
+        var t0 = e.touches[0],
+            t1 = e.touches[1],
+            p0 = map.mouse(t0),
+            p1 = map.mouse(t1),
+            p2 = {x: (p0.x + p1.x) / 2, y: (p0.y + p1.y) / 2}, // center point
+            c0 = po.map.locationCoordinate(locations[t0.identifier]),
+            c1 = po.map.locationCoordinate(locations[t1.identifier]),
+            c2 = {row: (c0.row + c1.row) / 2, column: (c0.column + c1.column) / 2, zoom: 0},
+            l2 = po.map.coordinateLocation(c2); // center location
+        map.zoomBy(Math.log(e.scale) / Math.LN2 + zoom - map.zoom(), p2, l2);
+        if (rotate) map.angle(e.rotation / 180 * Math.PI + angle);
+        e.preventDefault();
+        break;
+      }
+    }
+  }
+
+  touch.rotate = function(x) {
+    if (!arguments.length) return rotate;
+    rotate = x;
+    return touch;
+  };
+
+  touch.map = function(x) {
+    if (!arguments.length) return map;
+    if (map) {
+      container.removeEventListener("touchstart", touchstart, false);
+      container = null;
+    }
+    if (map = x) {
+      container = map.container();
+      container.addEventListener("touchstart", touchstart, false);
+    }
+    return touch;
+  };
+
+  return touch;
 };
 // Default map controls.
 po.interact = function() {
@@ -1874,12 +2010,14 @@ po.interact = function() {
       drag = po.drag(),
       wheel = po.wheel(),
       dblclick = po.dblclick(),
+      touch = po.touch(),
       arrow = po.arrow();
 
   interact.map = function(x) {
     drag.map(x);
     wheel.map(x);
     dblclick.map(x);
+    touch.map(x);
     arrow.map(x);
     return interact;
   };
@@ -2180,9 +2318,8 @@ po.compass = function() {
       case "bottom-left": y = size.y - y; break;
       case "bottom-right": x = size.x - x; y = size.y - y; break;
     }
-    var tx = "translate(" + x + "," + y + ")";
-    if (panContainer) panContainer.setAttribute("transform", tx);
-    if (zoomContainer) zoomContainer.setAttribute("transform", tx);
+    g.setAttribute("transform", "translate(" + x + "," + y + ")");
+    dragRect.setAttribute("transform", "translate(" + -x + "," + -y + ")");
     for (var i in ticks) {
       i == map.zoom()
           ? ticks[i].setAttribute("class", "active")

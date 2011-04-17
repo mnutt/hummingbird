@@ -46,7 +46,7 @@ $.extend(Hummingbird.Graph.prototype, {
   name: "Graph",
 
   onMessage: function(message, average) {
-    this.drawLogPath(average);
+    this.drawLogPath(average * this.options.averageOver);
   },
 
   createGraph: function() {

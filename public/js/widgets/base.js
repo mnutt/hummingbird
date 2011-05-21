@@ -55,16 +55,14 @@ Hummingbird.Base.prototype = {
     var obj = this.options.filter;
     if(!obj) { return; }
 
-    while(typeof(obj) != "string") {
+    while(obj && typeof(obj) != "string") {
       for(var i in obj) {
-        console.log(i);
         this.filter.push(i);
         obj = obj[i];
         break;
       }
     }
     this.filter.push(obj);
-    console.log(this.filter);
   },
 
   addToAverage: function(newValue) {

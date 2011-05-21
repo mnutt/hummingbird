@@ -72,27 +72,31 @@
 
       $("#total").hummingbirdGraph(hummingbirdSocket,
                                  {
-                                   data: { total: true }
+                                   from: "view_totals",
+                                   filter: "total"
                                  });
 
       $("#cart_adds").hummingbirdGraph(hummingbirdSocket,
                                        {
-                                         data: { cartAdds: true },
+                                         from: "view_totals",
+                                         filter: "cartAdds",
                                          graphHeight: 100
                                        });
 
       $("#total h2.graph_title span.value").hummingbirdCount(hummingbirdSocket,
                                                              {
-                                                               data: { total: true },
+                                                               from: "view_totals",
+                                                               filter: "total",
                                                                every: 10
                                                              });
 
-      $("#map_container").hummingbirdMap(hummingbirdSocket, { data: { location: true } });
+      $("#map_container").hummingbirdMap(hummingbirdSocket, { from: "hits", filter: "location" });
 
       new Hummingbird.Logger(window,
                              hummingbirdSocket,
                              {
-                               data: { cartAdds: true},
+                               from: "view_totals",
+                               filter: "cartAdds",
                                every: 20
                              });
 

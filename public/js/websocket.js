@@ -27,13 +27,13 @@ Hummingbird.WebSocket.prototype = {
   },
 
   onMessage: function(message) {
-    var data = JSON.parse(message);
-    var i = this.handlers.length;
+    message = JSON.parse(message);
+    var i = this.handlers[message.type].length;
     while(i--) {
-      var handler = this.handlers[i][0];
-      var scope = this.handlers[i][1];
+      var handler = this.handlers[message.type][i][0];
+      var scope = this.handlers[message.type][i][1];
 
-      handler.apply(scope, [data]);
+      handler.apply(scope, [message.data]);
     }
   },
 
@@ -79,15 +79,18 @@ Hummingbird.WebSocket.prototype = {
     return wsServer;
   },
 
-  registerHandler: function(handler, object) {
-    this.handlers.push([handler, object]);
+  registerHandler: function(handler, scope, type) {
+    if(!this.handlers[type]) { this.handlers[type] = []; }
+    this.handlers[type].push([handler, scope]);
   },
 
   unregisterHandler: function(handler) {
-    for(var i = 0; i < this.handlers.length; i++) {
-      if(this.handlers[i] === val) {
-        this.handlers.splice(i, 1);
-        break;
+    for(var type in this.handlers) {
+      for(var i = 0; i < this.handlers[type].length; i++) {
+        if(this.handlers[type][i] === val) {
+          this.handlers[type].splice(i, 1);
+          break;
+        }
       }
     }
   },
@@ -110,58 +113,3 @@ $.fn.hummingbirdGraph = function(socket, options) {
 
   return this;
 };
-
-// DASHBOARD WEBSOCKET
-
-Hummingbird.WebSocket.Dashboard = function() { }
-Hummingbird.WebSocket.Dashboard.prototype = new Hummingbird.WebSocket;
-
-Hummingbird.WebSocket.Dashboard.prototype.start = function() {
-  this.socket = new io.Socket(this.webSocketURI(), {port: this.webSocketPort()});
-  this.socket.connect();
-
-  var totalDiv = $("#log");
-  totalDiv.find('div.graph').width($(window).width() - 160);
-  var totalGraph = new Hummingbird.Graph(totalDiv, { ratePerSecond: 20, logDate: true });
-
-  var self = this;
-
-  this.socket.on('message', function(msg) {
-    var data = JSON.parse(msg);
-
-    if(typeof(data.total) != "undefined") {
-      totalGraph.drawLogPath(data.total);
-    }
-  })
-
-  this.socket.on('disconnect', function() { self.onClose(); });
-  this.socket.on('connect', function() { self.onOpen(); });
-};
-
-// WEEKLY WEBSOCKET
-
-Hummingbird.WebSocket.Weekly = function() { }
-Hummingbird.WebSocket.Weekly.prototype = new Hummingbird.WebSocket;
-
-Hummingbird.WebSocket.Weekly.prototype.start = function() {
-  if (!this.webSocketEnabled())
-    return;
-
-  this.socket = new io.Socket(this.webSocketURI(), {port: this.webSocketPort()});
-  this.socket.connect();
-
-  var self = this;
-
-  this.socket.on('message', function(msg) {
-    var data = JSON.parse(msg);
-    if(data.total && data.total > 0) {
-      var el = $("div.day:first-child div.all_views");
-      var prevTotal = el.data("total");
-      el.text((prevTotal + data.total).commify()).data('total', prevTotal + data.total);
-    }
-  });
-
-  this.socket.on('disconnect', function() { self.onClose(); });
-  this.socket.on('open', function() { self.onOpen(); });
-}
-

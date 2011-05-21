@@ -51,6 +51,7 @@ Hummingbird.Map.prototype = new Hummingbird.Base();
 $.extend(Hummingbird.Map.prototype, {
   name: "Map",
   onMessage: function(value, average) {
+    console.log(value);
     if(value && value.length > 0) {
       for(var i in value) {
         var geo = value[i];

@@ -15,7 +15,7 @@ Hummingbird.Base.prototype = {
   },
 
   registerHandler: function() {
-    this.socket.registerHandler(this.onData, this);
+    this.socket.registerHandler(this.onData, this, this.from);
   },
 
   onMessage: function(message) {
@@ -25,6 +25,7 @@ Hummingbird.Base.prototype = {
   onData: function(fullData) {
     var average;
     var message = this.extract(fullData);
+
     if(typeof(message) != "undefined") {
       this.validMessageCount += 1;
 
@@ -43,24 +44,27 @@ Hummingbird.Base.prototype = {
     var obj = data;
     for(var i = 0, len = this.filter.length; i < len; i++) {
       obj = obj[this.filter[i]];
-      if(typeof(obj) == "undefined") { return; }
     }
 
     return obj;
   },
 
   setFilter: function() {
-    var obj = this.options.data;
-
     this.filter = [];
 
-    while(typeof(obj) == "object") {
+    var obj = this.options.filter;
+    if(!obj) { return; }
+
+    while(typeof(obj) != "string") {
       for(var i in obj) {
+        console.log(i);
         this.filter.push(i);
         obj = obj[i];
         break;
       }
     }
+    this.filter.push(obj);
+    console.log(this.filter);
   },
 
   addToAverage: function(newValue) {

@@ -3,7 +3,7 @@ require.paths.unshift(__dirname);
 
 var http = require('http'),
   weekly = require('weekly'),
-  config = require('./config/app.json'),
+  config = require('./config/config'),
   dgram = require('dgram'),
   static = require('node-static'),
   io = require('socket.io'),

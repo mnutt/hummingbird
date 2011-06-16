@@ -3,19 +3,12 @@ require.paths.unshift(__dirname);
 
 var http = require('http'),
   weekly = require('weekly'),
-  fs = require('fs'),
+  config = require('./config/config'),
   dgram = require('dgram'),
   static = require('node-static'),
   io = require('socket.io'),
   mongo = require('mongodb'),
   Hummingbird = require('hummingbird').Hummingbird;
-
-try {
-  var configJSON = fs.readFileSync(__dirname + "/config/app.json");
-} catch(e) {
-  console.log("File config/app.json not found.  Try: `cp config/app.json.sample config/app.json`");
-}
-var config = JSON.parse(configJSON.toString());
 
 db = new mongo.Db('hummingbird', new mongo.Server(config.mongo_host, config.mongo_port, {}), {});
 

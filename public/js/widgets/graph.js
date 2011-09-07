@@ -31,7 +31,7 @@ Hummingbird.Graph = function(element, socket, options) {
 
   this.scale = 50;
   this.element = element;
-  this.socket = socket
+  this.socket = socket;
   this.graph = this.element.find('div.graph');
   this.trafficLog = [];
 

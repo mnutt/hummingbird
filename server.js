@@ -3,7 +3,7 @@ var http = require('http'),
   config = require('./config/config'),
   dgram = require('dgram'),
   static = require('node-static'),
-  io = require('socket.io'),
+  sio = require('socket.io'),
   mongo = require('mongodb'),
   Hummingbird = require('./lib/hummingbird').Hummingbird;
 
@@ -25,15 +25,11 @@ db.open(function(p_db) {
     });
     server.listen(config.tracking_port, "0.0.0.0");
 
-    socket = io.listen(server);
+    io = sio.listen(server);
+    io.set('log level', 2);
 
-    socket.on('connection', function(client){
-      // new client is here!
-      client.on('disconnect', function(){ console.log("Lost ws client"); })
-    });
-
-    hummingbird.socket = socket;
-    hummingbird.addAllMetrics(socket, db);
+    hummingbird.io = io;
+    hummingbird.addAllMetrics(io, db);
 
     console.log('Web Socket server running at ws://*:' + config.tracking_port);
 

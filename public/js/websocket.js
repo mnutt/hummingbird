@@ -26,17 +26,6 @@ Hummingbird.WebSocket.prototype = {
     console.log("socket started");
   },
 
-  onMessage: function(message) {
-    message = JSON.parse(message);
-    var i = this.handlers[message.type].length;
-    while(i--) {
-      var handler = this.handlers[message.type][i][0];
-      var scope = this.handlers[message.type][i][1];
-
-      handler.apply(scope, [message.data]);
-    }
-  },
-
   // Hummingbird WebSocket functions
   getState: function() {
     return this.state;
@@ -50,12 +39,10 @@ Hummingbird.WebSocket.prototype = {
     // Functions that extract data and update UI elements
     this.handlers = [];
 
-    this.socket = new io.Socket(this.webSocketURI(), {port: this.webSocketPort()});
-    this.socket.connect();
+    this.socket = io.connect(this.webSocketURI(), {port: this.webSocketPort()});
 
     var self = this;
 
-    this.socket.on('message', function(message) { self.onMessage(message); });
     this.socket.on('disconnect', function() { self.onClose(); });
     this.socket.on('connect', function() { self.onOpen(); });
   },
@@ -77,22 +64,6 @@ Hummingbird.WebSocket.prototype = {
       var wsServer = document.location.hostname;
     }
     return wsServer;
-  },
-
-  registerHandler: function(handler, scope, type) {
-    if(!this.handlers[type]) { this.handlers[type] = []; }
-    this.handlers[type].push([handler, scope]);
-  },
-
-  unregisterHandler: function(handler) {
-    for(var type in this.handlers) {
-      for(var i = 0; i < this.handlers[type].length; i++) {
-        if(this.handlers[type][i] === val) {
-          this.handlers[type].splice(i, 1);
-          break;
-        }
-      }
-    }
   },
 
   webSocketPort: function() {

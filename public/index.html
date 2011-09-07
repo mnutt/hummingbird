@@ -70,33 +70,29 @@
       hummingbirdSocket = new Hummingbird.WebSocket();
       hummingbirdSocket.start();
 
-      $("#total").hummingbirdGraph(hummingbirdSocket,
+      $("#total").hummingbirdGraph(hummingbirdSocket.socket,
                                  {
-                                   from: "view_totals",
-                                   filter: "total"
+                                   from: "view_totals"
                                  });
 
-      $("#cart_adds").hummingbirdGraph(hummingbirdSocket,
+      $("#cart_adds").hummingbirdGraph(hummingbirdSocket.socket,
                                        {
-                                         from: "view_totals",
-                                         filter: "cartAdds",
+                                         from: "cart_adds",
                                          graphHeight: 100
                                        });
 
-      $("#total h2.graph_title span.value").hummingbirdCount(hummingbirdSocket,
+      $("#total h2.graph_title span.value").hummingbirdCount(hummingbirdSocket.socket,
                                                              {
                                                                from: "view_totals",
-                                                               filter: "total",
                                                                every: 10
                                                              });
 
-      $("#map_container").hummingbirdMap(hummingbirdSocket, { from: "hits", filter: "location" });
+      $("#map_container").hummingbirdMap(hummingbirdSocket.socket, { from: "location" });
 
       new Hummingbird.Logger(window,
-                             hummingbirdSocket,
+                             hummingbirdSocket.socket,
                              {
-                               from: "view_totals",
-                               filter: "cartAdds",
+                               from: "cart_adds",
                                every: 20
                              });
 

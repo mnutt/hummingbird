@@ -1,14 +1,11 @@
-require.paths.unshift(__dirname + '/lib');
-require.paths.unshift(__dirname);
-
 var http = require('http'),
-  weekly = require('weekly'),
+  weekly = require('./lib/weekly'),
   config = require('./config/config'),
   dgram = require('dgram'),
   static = require('node-static'),
   io = require('socket.io'),
   mongo = require('mongodb'),
-  Hummingbird = require('hummingbird').Hummingbird;
+  Hummingbird = require('./lib/hummingbird').Hummingbird;
 
 db = new mongo.Db('hummingbird', new mongo.Server(config.mongo_host, config.mongo_port, {}), {});
 

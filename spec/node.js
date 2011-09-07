@@ -1,13 +1,9 @@
-require.paths.unshift('spec', './spec/lib', 'lib')
-require.paths.unshift(__dirname + '/../lib');
-require.paths.unshift(__dirname + '/..');
-
 require('jspec')
-require('unit/spec.helper')
-hb = require('hummingbird')
+require('./unit/spec.helper')
+hb = require('../lib/hummingbird')
 http = require('http');
-v = require('view');
-m = require('metric');
+v = require('../lib/view');
+m = require('../lib/metric');
 sys = require('sys');
 mongo = require('mongodb');
 db = new mongo.Db('hummingbird_test', new mongo.Server('localhost', 27017, {}), {});

@@ -1,7 +1,5 @@
-require.paths.unshift(__dirname + "/..");
-
 var sys = require('sys'),
-  arrays = require('deps/arrays'),
+  arrays = require('../lib/arrays'),
   mongo = require('mongodb');
 
 var db = new mongo.Db('hummingbird', new mongo.Server('localhost', 27017, {}), {});

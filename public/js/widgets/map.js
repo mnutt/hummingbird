@@ -18,9 +18,9 @@ Hummingbird.Map = function(element, socket, options) {
 
   this.map = this.po.map()
     .container(this.element.get(0).appendChild(this.po.svg("svg")))
-    .center({lat: 39, lon: 10})
+    .center({lat: 31, lon: 10})
     .zoom(2)
-    .zoomRange([2, 9])
+    .zoomRange([2, 8])
     .add(this.po.interact());
 
   this.map.add(this.po.image()
@@ -41,6 +41,9 @@ Hummingbird.Map = function(element, socket, options) {
     decimalPlaces: 0
   };
 
+  this.colors = {
+  };
+
   this.options = $.extend(defaults, options);
   this.initialize();
 };
@@ -56,12 +59,13 @@ $.extend(Hummingbird.Map.prototype, {
         var geo = value[i];
         if(typeof(geo.latitude) == "undefined") { continue; }
 
-        this.addMarker(parseFloat(geo.longitude), parseFloat(geo.latitude), 10, geo.city);
+        var color = this.colors[geo.type] || "#3BA496";
+        this.addMarker(parseFloat(geo.longitude), parseFloat(geo.latitude), 5, geo.city, color);
       }
     }
   },
 
-  addMarker: function(lon, lat, radius, text) {
+  addMarker: function(lon, lat, radius, text, color) {
     var id = ("mark_" + lon + "_" + lat).replace(/[^0-9a-z_]/g, '');
 
     var existing = $("#" + id);
@@ -72,6 +76,7 @@ $.extend(Hummingbird.Map.prototype, {
         type: "Marker",
         id: id,
         radius: radius,
+        color: color,
         text: text || ""
       };
 
@@ -80,11 +85,24 @@ $.extend(Hummingbird.Map.prototype, {
     } else {
       // Stop the current animation queue and set opacity back to 1
       existing.stop(true).stopDelay().css({ opacity: 1 });
+      var radius = existing.find("circle").attr('r');
+      var radiusValue = radius.baseVal.value;
+      radius.baseVal.value = radiusValue + 0.02 * ((30 - radiusValue) * Math.cos((radiusValue)/30 * (Math.PI/2)));
     }
 
     // After 4 seconds, fade marker out then remove the whole layer
-    existing.delay(4000).animate({ opacity: 0 }, 1000, function() {
-      $(this).parent().parent().parent().remove();
-    });
+    existing.delay(4000).animate({ opacity: 0 },
+                                 {
+                                   duration: 1000,
+                                   step: function(now, fx) {
+                                     var radius = $(this).find("circle").attr('r');
+                                     if(!radius.originalValue) { radius.originalValue = radius.baseVal.value; }
+                                     radius.baseVal.value = radius.originalValue * now;
+                                   },
+                                   easing: "linear",
+                                   complete: function() {
+                                     $(this).parent().parent().parent().remove();
+                                   }
+                                 });
   }
 });

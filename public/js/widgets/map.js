@@ -42,6 +42,7 @@ Hummingbird.Map = function(element, socket, options) {
   };
 
   this.colors = {
+    cart_add: "#d84136"
   };
 
   this.options = $.extend(defaults, options);
@@ -85,7 +86,9 @@ $.extend(Hummingbird.Map.prototype, {
     } else {
       // Stop the current animation queue and set opacity back to 1
       existing.stop(true).stopDelay().css({ opacity: 1 });
-      var radius = existing.find("circle").attr('r');
+      var circle = existing.find("circle")
+      var radius = circle.attr('r');
+      circle.css({fill: color});
       var radiusValue = radius.baseVal.value;
       radius.baseVal.value = radiusValue + 0.02 * ((30 - radiusValue) * Math.cos((radiusValue)/30 * (Math.PI/2)));
     }

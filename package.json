@@ -1,12 +1,12 @@
 {
   "name": "hummingbird",
   "description": "A node.js statistics server",
-  "version": "0.0.1",
+  "version": "0.0.1-1",
   "dependencies": {
     "mongodb": "0.9.6-14",
     "socket.io": "0.8.7",
     "node-static": "0.5.9",
-    "geoip": "0.4.3"
+    "geoip": "0.3.4-1"
   },
   "repository": {
     "type": "git",

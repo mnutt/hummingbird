@@ -25,7 +25,25 @@ db.open(function(p_db) {
     });
     server.listen(config.tracking_port, "0.0.0.0");
 
-    io = sio.listen(server);
+
+    if(config.enable_dashboard) {
+      var file = new(static.Server)('./public');
+
+      var dashboardServer = http.createServer(function (request, response) {
+        request.addListener('end', function () {
+          file.serve(request, response);
+        });
+      });
+
+      dashboardServer.listen(config.dashboard_port);
+
+      io = sio.listen(dashboardServer);
+
+      console.log('Dashboard server running at http://*:' + config.dashboard_port);
+    } else {
+      io = sio.listen(server);
+    }
+
     io.set('log level', 2);
 
     hummingbird.io = io;
@@ -51,15 +69,3 @@ db.open(function(p_db) {
 
   console.log('Tracking server running at http://*:' + config.tracking_port + '/tracking_pixel.gif');
 });
-
-if(config.enable_dashboard) {
-  var file = new(static.Server)('./public');
-
-  http.createServer(function (request, response) {
-    request.addListener('end', function () {
-      file.serve(request, response);
-    });
-  }).listen(config.dashboard_port);
-
-  console.log('Dashboard server running at http://*:' + config.dashboard_port);
-}

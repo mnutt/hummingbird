@@ -101,14 +101,14 @@
         e.preventDefault();
 
         var img = document.createElement('img');
-        img.src = "http://localhost:8000/tracking_pixel.gif?f=" + Math.ceil(Math.random() * 1000000)
+        img.src = "/tracking_pixel.gif?f=" + Math.ceil(Math.random() * 1000000)
       });
 
       $("#test_cart").click(function(e) {
         e.preventDefault();
 
         var img = document.createElement('img');
-        img.src = "http://localhost:8000/tracking_pixel.gif?events=scAdd&f=" + Math.ceil(Math.random() * 1000000)
+        img.src = "/tracking_pixel.gif?events=scAdd&f=" + Math.ceil(Math.random() * 1000000)
       });
     });
   </script>

@@ -20,14 +20,12 @@ Hummingbird.Map = function(element, socket, options) {
     .container(this.element.get(0).appendChild(this.po.svg("svg")))
     .center({lat: 31, lon: 10})
     .zoom(2)
-    .zoomRange([2, 8])
+    .zoomRange([1, 8])
     .add(this.po.interact());
 
   this.map.add(this.po.image()
-          .url(this.po.url("http://{S}tile.cloudmade.com"
-                      + "/e5db7ff94b054de799146f983c9c4a70"
-                      + "/26332/256/{Z}/{X}/{Y}.png")
-               .hosts(["a.", "b.", "c.", ""])));
+          .url(this.po.url("https://movableink-hummingbird-tiles.s3.amazonaws.com/hummingbird-dark/{Z}/{X}/{Y}.png"))
+          .zoom(function(z) { return z + Math.log(window.devicePixelRatio || 1) / Math.LN2; return 2; }));
 
   this.map.add(this.po.fullscreen());
 

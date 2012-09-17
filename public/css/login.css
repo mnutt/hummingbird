@@ -1,0 +1,42 @@
+#login div.logo {
+  background: url(/images/logo.png) top left no-repeat;
+  width: 300px;
+  height: 324px;
+  margin: auto;
+  padding-right: 50px;
+}
+
+#login h1 {
+  margin: 0;
+}
+
+#login form {
+  margin: auto;
+}
+
+#login form label,
+#login form input {
+  display: block;
+  width: 150px;
+  margin: auto;
+}
+
+#login form label {
+  color: #FFF;
+  text-transform: uppercase;
+  font-size: 0.7em;
+  margin-bottom: 2px;
+}
+
+#login form div {
+  margin-top: 10px;
+}
+
+#login form #submit {
+  margin-top: 15px;
+}
+
+#login {
+  margin: auto;
+  text-align: center;
+}

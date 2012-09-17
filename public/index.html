@@ -33,38 +33,29 @@
 
 <body>
 
-  <h1>Hummingbird</h1>
+  <div class="topbar">
+    <div class="header">
+      <h1>Hummingbird</h1>
 
-  <div class="hummingbird_graph" id="total">
+      <div class="tagline">Real time web stats</div>
 
-    <h2 class="graph_title">All Traffic: <span class="value">0</span> Pageviews / Second</h2>
+      <button id="test_it">Send test traffic</button>
+      <button id="test_cart">Send test traffic to cart</button>
+    </div>
 
-    <div class="axis_left"></div>
-    <div class="graph"></div>
-    <div class="axis_right"></div>
-
+    <div class="hummingbird_graph" id="total">
+      <div class="graph"></div>
+      <div class="axis_left"></div>
+      <div class="axis_right"></div>
+    </div>
   </div>
 
   <div style="clear: both;"></div>
 
-  <div class="hummingbird_graph" id="cart_adds">
-
-    <h2 class="graph_title">Cart Traffic:</h2>
-
-    <div class="axis_left"></div>
-    <div class="graph"></div>
-    <div class="axis_right"></div>
-
-  </div>
 
   <div style="clear: both;"></div>
 
-  <button id="test_it" style="margin-left: 60px;">Send test traffic</button>
-  <button id="test_cart" style="margin-left: 60px;">Send test traffic to cart</button>
-
-  <div style="clear: both;"></div>
-
-  <div id="map_container" style="margin: 40px; width: 800px; height: 450px; position: relative;"></div>
+  <div id="map_container"></div>
 
   <script>
     $(document).ready(function() {
@@ -73,14 +64,11 @@
 
       $("#total").hummingbirdGraph(hummingbirdSocket.socket,
                                  {
-                                   from: "view_totals"
+                                   from: "view_totals",
+                                   bgLineColor: "#514e57",
+                                   graphHeight: 80
                                  });
 
-      $("#cart_adds").hummingbirdGraph(hummingbirdSocket.socket,
-                                       {
-                                         from: "cart_adds",
-                                         graphHeight: 100
-                                       });
 
       $("#total h2.graph_title span.value").hummingbirdCount(hummingbirdSocket.socket,
                                                              {

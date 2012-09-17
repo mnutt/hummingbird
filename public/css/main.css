@@ -1,15 +1,55 @@
 @charset "utf-8";
 
 body {
-  background-color: #2F2C2B;
+  background-color: #211d29;
   font-family: "Lucida Grande", Helvetica, sans-serif;
 }
 
-h1 {
+div.topbar {
+  position: relative;
+  height: 100px;
+}
+
+div.topbar div.header h1 {
   color: #FFF;
   text-transform: uppercase;
+  text-shadow: 0 2px 0 #000;
+  margin: 0;
   font-family: 'TitilliumText14L800wt', sans-serif;
-  margin-left: 58px;
+}
+
+div.topbar div.header div.tagline {
+  color: #918e97;
+  font-style: italic;
+  font-family: Georgia, sans-serif;
+  font-size: 12px;
+  margin: 0 0 13px 3px;
+}
+
+div.topbar #total {
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  left: 265px;
+}
+
+div.topbar #total div.graph {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 40px;
+  float: none;
+  width: auto;
+}
+
+div.topbar #total div.axis_left { display: none; }
+div.topbar #total div.axis_right {
+  float: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 25px;
 }
 
 h2.graph_title {
@@ -65,106 +105,6 @@ div.graph div.line {
   border-top: 99px solid #00F;
   margin: 0 0 100px 3px;
   background-color: #F00;
-}
-
-#sales {
-  margin-left: 60px;
-}
-
-#sales div.sale {
-  float: left;
-  width: 180px;
-  height: 100px;
-  overflow: hidden;
-  padding: 10px 0;
-  position: relative;
-}
-
-#sales div.sale div.hummingbird_graph {
-  position: absolute;
-  top: -6px;
-  left: 10px;
-  width: 180px;
-}
-
-#sales div.sale div.hummingbird_graph div.req_s {
-  position: absolute;
-  top: 15px;
-  left: -10px;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: #FFF;
-  font-weight: bold;
-  padding: 5px;
-  font-size: 0.6em;
-  -moz-border-radius-bottomright: 5px;
-  -webkit-border-bottom-right-radius: 5px;
-}
-
-#sales div.sale img {
-  opacity: 0.5;
-}
-
-#sales div.sale div.axis_right {
-  float: left;
-}
-
-#sales div.sale div.axis_left {
-  display: none;
-}
-
-#sales div.sale h2 {
-  color: #CCC;
-  font-size: 0.7em;
-  height: 2.4em;
-  overflow: hidden;
-}
-
-#sales div.sale img.editorial {
-  width: 180px;
-}
-
-
-#login div.logo {
-  background: url(/images/logo.png) top left no-repeat;
-  width: 300px;
-  height: 324px;
-  margin: auto;
-  padding-right: 50px;
-}
-
-#login h1 {
-  margin: 0;
-}
-
-#login form {
-  margin: auto;
-}
-
-#login form label,
-#login form input {
-  display: block;
-  width: 150px;
-  margin: auto;
-}
-
-#login form label {
-  color: #FFF;
-  text-transform: uppercase;
-  font-size: 0.7em;
-  margin-bottom: 2px;
-}
-
-#login form div {
-  margin-top: 10px;
-}
-
-#login form #submit {
-  margin-top: 15px;
-}
-
-#login {
-  margin: auto;
-  text-align: center;
 }
 
 /* Fonts */

@@ -2,12 +2,16 @@
 
 body {
   background-color: #211d29;
+  background: url(/images/header-bg.png);
   font-family: "Lucida Grande", Helvetica, sans-serif;
+  margin: 0;
 }
 
 div.topbar {
   position: relative;
-  height: 100px;
+  height: 89px;
+  padding: 10px;
+  border-bottom: 1px solid #515d69;
 }
 
 div.topbar div.header h1 {
@@ -28,9 +32,9 @@ div.topbar div.header div.tagline {
 
 div.topbar #total {
   position: absolute;
-  top: -10px;
-  right: 10px;
-  left: 265px;
+  top: 0px;
+  right: 0px;
+  left: 275px;
 }
 
 div.topbar #total div.graph {
@@ -50,6 +54,7 @@ div.topbar #total div.axis_right {
   top: 0;
   right: 0;
   width: 25px;
+  font-size: 10px;
 }
 
 h2.graph_title {

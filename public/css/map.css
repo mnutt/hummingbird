@@ -8,52 +8,7 @@
 }
 
 #map_container svg.map {
-  background-color: #2F2C2B;
-}
-
-.compass .back {
-  fill: #eee;
-  fill-opacity: .8;
-}
-
-.compass .fore {
-  stroke: #999;
-  stroke-width: 1.5px;
-}
-
-.compass rect.back.fore {
-  fill: #999;
-  fill-opacity: .3;
-  stroke: #eee;
-  stroke-width: 1px;
-  shape-rendering: crispEdges;
-}
-
-.compass .direction {
-  fill: none;
-}
-
-.compass .chevron {
-  fill: none;
-  stroke: #999;
-  stroke-width: 5px;
-}
-
-.compass .zoom .chevron {
-  stroke-width: 4px;
-}
-
-.compass .active .chevron, .compass .chevron.active {
-  stroke: #fff;
-}
-
-.compass.active .active .direction {
-  fill: #999;
-}
-
-circle.point {
-  fill-opacity: 1;
-  fill: #70AFC4;
+  background-color: #0d0022;
 }
 
 text.label {
@@ -68,5 +23,86 @@ path.label {
 }
 
 g.point:hover circle.point {
+  fill: #C90134;
+}
+
+
+div.hummingbird_map .compass .back {
+  fill: #eee;
+  fill-opacity: .8;
+  opacity: 0;
+}
+
+div.hummingbird_map .compass .fore {
+  stroke: #999;
+  stroke-width: 1.5px;
+  opacity: 0;
+}
+
+div.hummingbird_map .compass rect.back.fore {
+  fill: #999;
+  fill-opacity: .3;
+  stroke: #eee;
+  stroke-width: 1px;
+  shape-rendering: crispEdges;
+}
+
+div.hummingbird_map .compass .direction {
+  fill: none;
+}
+
+div.hummingbird_map .compass .chevron {
+  fill: none;
+  stroke: #FFF;
+  stroke-width: 5px;
+}
+
+div.hummingbird_map .compass .shadow {
+  stroke: #000;
+  stroke-width: 4px;
+}
+
+div.hummingbird_map .compass .zoom .chevron {
+  stroke-width: 4px;
+}
+
+div.hummingbird_map .compass .active .chevron, .compass .chevron.active {
+  stroke: #fff;
+}
+
+div.hummingbird_map .compass.active .active .direction {
+  fill: #999;
+}
+
+div.hummingbird_map circle.point {
+  fill-opacity: 1;
+  fill: #FE4365;
+  stroke: #000;
+  stroke-width: 1px;
+}
+
+div.hummingbird_map circle.radius {
+  fill-opacity: 0.5;
+  fill: #0395FE;
+}
+
+div.hummingbird_map g.open circle {
+  fill: #0395FE;
+}
+
+div.hummingbird_map text.label {
+  font-size: 10px;
+  fill: #FFF;
+  font-weight: bold;
+  text-anchor: middle;
+}
+
+div.hummingbird_map path.label {
+  fill: rgba(40, 40, 40, 0.9);
+  stroke: rgb(0,0,0);
+  stroke-width: 0.5px;
+}
+
+div.hummingbird_map g.point:hover circle.point {
   fill: #C90134;
 }

@@ -80,7 +80,7 @@ $.extend(Hummingbird.Map.prototype, {
     if(value && value.length > 0) {
       for(var i in value) {
         var geo = value[i];
-        if(typeof(geo.latitude) == "undefined" || geo.city == "") { continue; }
+        if(typeof(geo.latitude) == "undefined" || ! geo.city || geo.city == "") { continue; }
         geo.label = [geo.city, (geo.country == 'US') ? geo.region : geo.country].join(', ');
 
         // Remove duplicates

@@ -12,6 +12,8 @@ module.exports = config = {
 
   "enable_dashboard" : true,
 
+  "demo_mode": true,
+
   "capistrano" : {
     "repository" :       "git://github.com/mnutt/hummingbird.git",
     "hummingbird_host" : "hummingbird.your-host.com"

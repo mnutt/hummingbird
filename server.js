@@ -2,6 +2,7 @@ config = require('./config/config');
 
 var dashboard = require('./lib/dashboard');
 var tracker = require('./lib/tracker');
+var demo = require('./lib/demo');
 
 
 dashboard.listen(config.dashboard_port, config.dashboard_address);
@@ -22,3 +23,7 @@ console.log("Tracker listening on http://" + (config.dashboard_address || '*') +
 // UDP tracking
 //
 // tracker.listenUdp(8000, "0.0.0.0");
+
+if(config.demo_mode) {
+  demo.run(tracker);
+}

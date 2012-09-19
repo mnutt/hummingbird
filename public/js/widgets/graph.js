@@ -17,6 +17,7 @@ Hummingbird.Graph = function(element, socket, options) {
   }
 
   var defaults = {
+    ratePerSecond: 20,
     showLogDate: false,
     showMarkers: true,
     showBackgroundBars: true,
@@ -24,33 +25,9 @@ Hummingbird.Graph = function(element, socket, options) {
     bgLineColor: '#555',
     barColor: null,
     graphHeight: 216,
-    averageOver: 0.5
-  }
-
-  this.options = $.extend(defaults, options);
-
-  this.scale = 50;
-  this.element = element;
-  this.socket = socket;
-  this.graph = this.element.find('div.graph');
-  this.trafficLog = [];
-
-  this.createGraph();
-  this.initialize();
-};
-
-Hummingbird.Graph.prototype = new Hummingbird.Base();
-
-$.extend(Hummingbird.Graph.prototype, {
-
-  name: "Graph",
-
-  onMessage: function(message, average) {
-    this.drawLogPath(average * this.options.averageOver);
-  },
-
-  createGraph: function() {
-    this.lineColors = {
+    averageOver: 0.5,
+    startingScale: 50,
+    lineColors: {
       6400: "#FFFFFF",
       3200: "#BBBBBB",
       1600: "#999999",
@@ -64,8 +41,53 @@ $.extend(Hummingbird.Graph.prototype, {
       6.25: "#1B8476",
       3.125: "#006456",
       def: "#7BF4D6"
-    };
+    }
+  }
 
+  this.options = $.extend(defaults, options);
+
+  this.scale = this.options.startingScale;
+  this.element = element;
+  this.socket = socket;
+  this.graph = this.element.find('div.graph');
+  this.trafficLog = [];
+  this.buffer = [];
+
+  this.createGraph();
+  this.initialize(options);
+};
+
+Hummingbird.Graph.prototype = new Hummingbird.Base();
+
+$.extend(Hummingbird.Graph.prototype, {
+
+  name: "Graph",
+
+  onMessage: function(message, average) {
+    var value = average * this.options.averageOver;
+
+    if(this.pageIsVisible()) {
+      this.processBuffer();
+      this.drawLogPath(value);
+    } else {
+      this.sendToBuffer(value);
+    }
+  },
+
+  processBuffer: function() {
+    while(this.buffer.length > 0) {
+      this.drawLogPath(this.buffer.shift());
+    }
+  },
+
+  sendToBuffer: function(value) {
+    this.buffer.push(value);
+    if(this.buffer.length > this.numPoints) {
+      this.buffer.shift();
+    }
+  },
+
+  createGraph: function() {
     this.lineWidth = 3;
 
     this.graphHeight = this.options.graphHeight; // this.graph.height();
@@ -74,7 +96,7 @@ $.extend(Hummingbird.Graph.prototype, {
 
     this.numPoints = Math.ceil(this.graphWidth / (this.lineWidth * 2));
 
-    this.numMarkers = Math.floor(this.graphHeight / 23);
+    this.numMarkers = Math.floor(this.graphHeight / 20);
     this.resetMarkers();
 
     this.drawEmptyGraph();
@@ -85,8 +107,6 @@ $.extend(Hummingbird.Graph.prototype, {
     var leftMarkerContainer = this.element.find('div.axis_left');
     var rightMarkerContainer = this.element.find('div.axis_right');
 
-    if(leftMarkerContainer.length == 0) { return; }
-
     var resetMarkerContainer = function(container, numMarkers, scale) {
       container.css({opacity: 1});
       var incr = scale / numMarkers;
@@ -94,31 +114,35 @@ $.extend(Hummingbird.Graph.prototype, {
         var markerValue = Math.floor(scale - (i * incr));
         container.append('<p>' + markerValue + '</p>');
       }
-      container.animate({opacity: 0.3});
+      container.animate({opacity: 0.6});
     };
 
     var numMarkers = this.numMarkers;
     var scale = this.scale;
 
-    rightMarkerContainer.html('');
-    resetMarkerContainer(rightMarkerContainer, numMarkers, scale);
-
     var millisecsBeforeUpdating = 0;
-    if (this.lineWidth != null && this.messageRate != null) {
-      var millisecsPerTick = 1000 / this.messageRate;
+    if (this.lineWidth != null && this.options.ratePerSecond != null) {
+      var millisecsPerTick = 1000 / this.options.ratePerSecond;
       var ticksPerFrame = this.graphWidth / (this.lineWidth * 2.0);
       millisecsBeforeUpdating = millisecsPerTick * ticksPerFrame;
     }
 
-    if(leftMarkerContainer.html().length == 0) {
-      // Update immediately if it's empty
-      resetMarkerContainer(leftMarkerContainer, numMarkers, scale);
-    } else {
-      // Otherwise wait until the scale change reaches it
-      setTimeout(function() {
-        leftMarkerContainer.html('');
+    if(rightMarkerContainer.length > 0) {
+      rightMarkerContainer.html('');
+      resetMarkerContainer(rightMarkerContainer, numMarkers, scale);
+    }
+
+    if(leftMarkerContainer.length > 0) {
+      if(leftMarkerContainer.html().length == 0) {
+        // Update immediately if it's empty
         resetMarkerContainer(leftMarkerContainer, numMarkers, scale);
-      }, millisecsBeforeUpdating);
+      } else {
+        // Otherwise wait until the scale change reaches it
+        setTimeout(function() {
+          leftMarkerContainer.html('');
+          resetMarkerContainer(leftMarkerContainer, numMarkers, scale);
+        }, millisecsBeforeUpdating);
+      }
     }
   },
 
@@ -163,6 +187,10 @@ $.extend(Hummingbird.Graph.prototype, {
     var lineHeight = Math.abs(oldHeight - newHeight);
     var borderBottom = Math.min(oldHeight, newHeight);
     var borderTop = this.graphHeight - lineHeight - borderBottom;
+    if(borderTop < 0) {
+      borderTop = 0;
+      lineHeight = this.graphHeight - borderBottom;
+    }
 
     var line = $("<div style='border-bottom: " + borderBottom + "px solid #333; height: " + lineHeight + "px; border-top: " + borderTop + "px solid #333; background-color: #FFF' class='line'></div>");
     line.prependTo(this.graph);
@@ -175,10 +203,10 @@ $.extend(Hummingbird.Graph.prototype, {
     var average = Math.round(value);
     var percent = average / this.scale;
     var height = Math.min(Math.floor(percent * this.graphHeight), this.graphHeight);
-    var color = this.options.barColor || this.lineColors[this.scale] || this.lineColors.def;
+    var color = this.options.barColor || this.options.lineColors[this.scale] || this.options.lineColors.def;
     var lineHeight = this.graphHeight - height;
 
-    if(this.tick % (this.messageRate * 2) == 0) { // Every 2 seconds
+    if(this.tick % (this.options.ratePerSecond * 2) == 0) { // Every 2 seconds
       this.element.attr('data-average', average);
 
       this.rescale(percent);
@@ -189,7 +217,7 @@ $.extend(Hummingbird.Graph.prototype, {
     }
 
     var backgroundColor;
-    if(this.tick % this.messageRate == 0) {
+    if(this.tick % this.options.ratePerSecond == 0) {
       backgroundColor = this.options.tickLineColor;
     } else {
       backgroundColor = this.options.bgLineColor;

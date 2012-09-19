@@ -25,12 +25,12 @@ Hummingbird.Map = function(element, socket, options) {
 
   this.po = org.polymaps;
 
-  this.defaultZoom = $(window).height() > 860 ? 3 : 2;
+  this.defaultZoom = $(window).height() > 760 ? 3 : 2;
 
   this.map = this.po.map()
     .container(this.element.get(0).appendChild(this.po.svg("svg")))
     .center({lat: 31, lon: 10})
-    .zoom(2)
+    .zoom(this.defaultZoom)
     .zoomRange([1, 7])
     .add(this.po.interact());
 

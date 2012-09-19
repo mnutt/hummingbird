@@ -41,7 +41,7 @@
       <div class="tagline">Real time web stats</div>
 
       <button id="test_it">Send test traffic</button>
-      <button id="test_cart">Send test traffic to cart</button>
+      <button id="test_cart">Send "cart_add" event</button>
     </div>
 
     <div class="hummingbird_graph" id="total">
@@ -71,6 +71,10 @@
                                  {
                                    from: "view_totals",
                                    bgLineColor: "#514e57",
+                                   tickLineColor: "#64616a",
+                                   lineColors: {
+                                     def: "#ac84ed"
+                                   },
                                    graphHeight: 80
                                  });
 
@@ -86,22 +90,22 @@
       new Hummingbird.Logger(window,
                              socket,
                              {
-                               from: "cart_adds",
-                               every: 20
+                               from: "view_totals",
+                               every: 500
                              });
 
       $("#test_it").click(function(e) {
         e.preventDefault();
 
         var img = document.createElement('img');
-        img.src = "/tracking_pixel.gif?f=" + Math.ceil(Math.random() * 1000000)
+        img.src = "/tracking_pixel.gif";
       });
 
       $("#test_cart").click(function(e) {
         e.preventDefault();
 
         var img = document.createElement('img');
-        img.src = "/tracking_pixel.gif?event=cart_add&f=" + Math.ceil(Math.random() * 1000000)
+        img.src = "/tracking_pixel.gif?event=cart_add";
       });
     });
   </script>

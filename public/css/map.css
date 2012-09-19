@@ -5,6 +5,7 @@
   right: 0;
   bottom: 0;
   border-top: 1px solid #000;
+  box-shadow: 0 -1px 15px #000;
 }
 
 #map_container svg.map {
@@ -88,6 +89,10 @@ div.hummingbird_map circle.radius {
 
 div.hummingbird_map g.open circle {
   fill: #0395FE;
+}
+
+div.hummingbird_map g.cart_add circle {
+  fill: #41c241;
 }
 
 div.hummingbird_map text.label {

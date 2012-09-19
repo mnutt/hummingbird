@@ -13,6 +13,7 @@
   <script src="/js/helpers.js"></script>
 
   <script src="/js/websocket.js"></script>
+  <script src="/js/d3.v2.js"></script>
   <script src="/js/polymaps.js"></script>
   <script src="/js/polymaps-extras.js"></script>
 
@@ -55,14 +56,18 @@
 
   <div style="clear: both;"></div>
 
-  <div id="map_container"></div>
+  <div id="map_container" class="hummingbird_map"></div>
 
   <script>
     $(document).ready(function() {
-      hummingbirdSocket = new Hummingbird.WebSocket();
-      hummingbirdSocket.start();
+      // change this to your host if the websocket server is on
+      // a different host
+      var WS_SERVER = "http://" + document.location.host.toString();
 
-      $("#total").hummingbirdGraph(hummingbirdSocket.socket,
+      var socket = new Hummingbird.WebSocket(WS_SERVER);
+      socket.connect();
+
+      $("#total").hummingbirdGraph(socket,
                                  {
                                    from: "view_totals",
                                    bgLineColor: "#514e57",
@@ -70,16 +75,16 @@
                                  });
 
 
-      $("#total h2.graph_title span.value").hummingbirdCount(hummingbirdSocket.socket,
+      $("#total h2.graph_title span.value").hummingbirdCount(socket,
                                                              {
                                                                from: "view_totals",
                                                                every: 10
                                                              });
 
-      $("#map_container").hummingbirdMap(hummingbirdSocket.socket, { from: "locations" });
+      $("#map_container").hummingbirdMap(socket, { from: "locations" });
 
       new Hummingbird.Logger(window,
-                             hummingbirdSocket.socket,
+                             socket,
                              {
                                from: "cart_adds",
                                every: 20

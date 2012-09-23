@@ -27,22 +27,23 @@ Hummingbird.Map = function(element, socket, options) {
 
   this.defaultZoom = $(window).height() > 760 ? 3 : 2;
 
-  this.map = this.po.map()
-    .container(this.element.get(0).appendChild(this.po.svg("svg")))
-    .center({lat: 31, lon: 10})
-    .zoom(this.defaultZoom)
-    .zoomRange([1, 7])
-    .add(this.po.interact());
-
-  if(window.devicePixelRatio >= 2) {
+  var zoomFactor = Math.log(window.devicePixelRatio || 1) / Math.LN2;
+  if(zoomFactor > 0) {
     var doubleSize = "-2x";
   } else {
     var doubleSize = "";
   }
 
+  this.map = this.po.map()
+    .container(this.element.get(0).appendChild(this.po.svg("svg")))
+    .center({lat: 31, lon: 10})
+    .zoom(this.defaultZoom)
+    .zoomRange([1, 7 - zoomFactor])
+    .add(this.po.interact());
+
   this.map.add(this.po.image()
           .url(this.po.url("https://movableink-hummingbird-tiles.s3.amazonaws.com/hummingbird-dark" + doubleSize + "/{Z}/{X}/{Y}.png"))
-          .zoom(function(z) { return z + Math.log(window.devicePixelRatio || 1) / Math.LN2; return 2; }));
+          .zoom(function(z) { return z + zoomFactor; return 2; }));
 
   this.map.add(this.po.compass()
           .pan("none"));

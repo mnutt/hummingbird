@@ -113,3 +113,38 @@ div.hummingbird_map path.label {
 div.hummingbird_map g.point:hover circle.point {
   fill: #C90134;
 }
+
+div.hummingbird_map div.legend {
+  position: absolute;
+  left: 10px;
+  bottom: 7px;
+  font-weight: bold;
+  font-size: 12px;
+  color: #FFF;
+  z-index: 60;
+  text-shadow: 2px 2px 0 #000;
+}
+
+div.hummingbird_map div.legend div {
+  position: relative;
+  display: inline-block;
+  margin-right: 1em;
+}
+
+div.hummingbird_map div.legend div span {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 12px;
+  position: relative;
+  top: 1px;
+  margin-right: 3px;
+}
+
+div.hummingbird_map div.legend div.open span {
+  background-color: #0395FE;
+}
+
+div.hummingbird_map div.legend div.cart_add span {
+  background-color: #16de16;
+}

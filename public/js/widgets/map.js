@@ -18,7 +18,8 @@ Hummingbird.Map = function(element, socket, options) {
     averageOver: 1, // second
     ratePerSecond: 2,
     decimalPlaces: 0,
-    maxPlaces: 100
+    maxPlaces: 100,
+    defaultEvent: "open"
   };
 
   this.options = $.extend(defaults, options);
@@ -53,6 +54,7 @@ Hummingbird.Map = function(element, socket, options) {
 
   this.key = function(d) { return [d.latitude, d.longitude, d.type].join(','); };
   this.data = [];
+  this.eventTypes = {};
 
   this.layer = d3.select("svg.map").insert("svg:g", ".compass");
   this.transform = function(d) {
@@ -68,6 +70,9 @@ Hummingbird.Map = function(element, socket, options) {
     this.layer.selectAll("g").attr("transform", this.transform.bind(this));
   }).bind(this));
 
+  this.legend = $("<div class='legend'></div>");
+  this.element.append(this.legend);
+
   this.initialize(options);
 };
 
@@ -79,6 +84,8 @@ $.extend(Hummingbird.Map.prototype, {
 
   onMessage: function(value, average) {
     if(value && value.length > 0) {
+      var self = this;
+
       for(var i in value) {
         var geo = value[i];
         if(typeof(geo.latitude) == "undefined" || ! geo.city || geo.city == "") { continue; }
@@ -100,7 +107,6 @@ $.extend(Hummingbird.Map.prototype, {
 
         if(!this.pageIsVisible()) {
           // Don't render anything, but remove the object from this.data after 5s
-          var self = this;
           setTimeout(function() {
             if(!self.pageIsVisible()) {
               for(var i = 0, len = self.data.length; i < len; i++) {
@@ -117,7 +123,11 @@ $.extend(Hummingbird.Map.prototype, {
         var elements = this.layer.selectAll("g").data(this.data, this.key);
         elements.enter()
           .append("svg:g")
-          .attr("class", function(d) { return d.event || "open"; })
+          .attr("class", function(d) {
+            var event = d.event || self.options.defaultEvent;
+            self.addToLegend(event);
+            return event;
+          })
           .attr("transform", this.transform.bind(this))
           .call(
             function(newElement) {
@@ -170,6 +180,14 @@ $.extend(Hummingbird.Map.prototype, {
       }
     }
   },
+
+  addToLegend: function(type) {
+    if(!this.eventTypes[type]) {
+      this.eventTypes[type] = true;
+
+      $("<div><span></span></div>").addClass(type).append(type).appendTo(this.legend);
+    }
+  }
 
 });
 

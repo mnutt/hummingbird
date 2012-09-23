@@ -1,8 +1,7 @@
 @charset "utf-8";
 
 body {
-  background-color: #211d29;
-  background: url(/images/header-bg.png);
+  background: #211d29 url(/images/header-bg.png);
   font-family: "Lucida Grande", Helvetica, sans-serif;
   margin: 0;
 }

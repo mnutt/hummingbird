@@ -1,5 +1,5 @@
 #login div.logo {
-  background: url(/images/logo.png) top left no-repeat;
+  background: url(../images/logo.png) top left no-repeat;
   width: 300px;
   height: 324px;
   margin: auto;

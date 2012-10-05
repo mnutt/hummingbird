@@ -43,7 +43,7 @@ Hummingbird.Map = function(element, socket, options) {
     .add(this.po.interact());
 
   this.map.add(this.po.image()
-          .url(this.po.url("https://movableink-hummingbird-tiles.s3.amazonaws.com/hummingbird-dark" + doubleSize + "/{Z}/{X}/{Y}.png"))
+          .url(this.po.url("//movableink-hummingbird-tiles.s3.amazonaws.com/hummingbird-dark" + doubleSize + "/{Z}/{X}/{Y}.png"))
           .zoom(function(z) { return z + zoomFactor; return 2; }));
 
   this.map.add(this.po.compass()

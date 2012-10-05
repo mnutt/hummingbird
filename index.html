@@ -130,10 +130,6 @@
 
     <h1>Hummingbird</h1>
 
-    <p class="notice">
-      Note: Hummingbird is pre-alpha software.  While it shouldn't screw up your production environment, it's definitely not yet production ready. In fact, we're still in the process of extracting it from the original app.  So check it out, but don’t expect it to fulfill your greatest desires yet.
-    </p>
-
     <div class="screenshot">
       <a href="http://vimeo.com/11613517"><img src="images/screenshot_small.png" /></a>
     </div>
@@ -143,7 +139,7 @@
 
       <p>And by <span>&ldquo;</span>real time<span>&rdquo;</span> we don’t mean it refreshes every 5 minutes<span>&mdash;</span>WebSockets enable Hummingbird to update 20 times per second.</p>
 
-      <p>Hummingbird is built on top of <a href="http://www.nodejs.org">Node.js</a>, a new javascript web toolkit that can handle large amounts of traffic and many concurrent users.</p>
+      <p>Hummingbird is built on top of <a href="http://www.nodejs.org">Node.js</a>, a set of event-driven javascript web libraries built on top of the V8 javascript engine.</p>
 
       <a href="http://github.com/mnutt/hummingbird" class="github-button awesome">
         Go to the GitHub page
@@ -167,34 +163,24 @@
     </p>
 
     <h2>Installation</h2>
-    <p>First check out the submodules:
-      <pre>$ git submodule update --init
-$ cd deps/express
-$ git submodule update --init</pre>
-    </p>
-
-    <p>If you have an older version of git, you may need to run the following instead:
-      <pre>$ git submodule init . && git submodule update .</pre>
-    </p>
-
-
     <p>Copy the default configuration file:
       <pre>$ cp config/app.json.sample config/app.json</pre>
     </p>
 
-    <p>Start MongoDB if it isn't already started:
-      <pre>$ mongod &> log/mongodb.log &</pre>
+    <p>Retrieve the package dependencies using node's npm package manager:
+      <pre>$ npm install</pre>
     </p>
 
     <p>Start the server and the monitor app:
-      <pre>$ node server.js &> log/hummingbird.log &
-$ node monitor.js &> log/hummingbird_monitor.log &</pre>
+      <pre>$ node server.js</pre>
     </p>
 
     <h2>Deployment</h2>
     <p>
-      We run Hummingbird on Amazon EC2.  Capistrano recipes and Ubuntu upstart
-      scripts are included in config/ubuntu/upstart.
+      Hummingbird will deploy pretty much anywhere that supports node.js and websockets.  <a href="http://jit.su">NodeJitsu</a>
+      has a particularly easy deployment process:
+      <pre>$ npm install -g jitsu
+$ jitsu deploy</pre>
     </p>
 
     <h2>Presentations</h2>

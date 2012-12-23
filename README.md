@@ -53,6 +53,24 @@ interfaces.  You should then run the tracking pixel on a different port so that 
 to the outside world.
 
 
+Setting Up Tracking
+-------------------
+
+The file `client/hummingbird.js` contains a small script to trigger a hummingbird event.  You
+can either paste the contents of the file into the body of your webpage or you can upload it
+to your server as a .js file and reference it with a `<script>` tag.  Once you have done so,
+in the footer of your page you can call
+
+    HummingbirdTracker.track();
+
+Called with no arguments, it will send over some standard parameters such as the page URL.  You
+can also pass arbitrary data with the event:
+
+    HummingbirdTracker.track({logged_in: true});
+
+The data can be used within Hummingbird's metrics to filter events on the backend.
+
+
 Architecture Overview
 ---------------------
 
@@ -62,7 +80,7 @@ activity.  The server broadcasts all activity to the clients using Websockets if
 falls back to Flash sockets or long polling if necessary.
 
 The Hummingbird.WebSocket object receives websocket events from the server in the form of JSON
-objects.  Individual widgets subscribe to a metric and register handler functions to be called 
+objects.  Individual widgets subscribe to a metric and register handler functions to be called
 whenever that metric is present.
 
 
@@ -83,13 +101,6 @@ Hummingbird comes with some stock widgets (Counter, Logger, Graph) that demonstr
 the data provided by the node.js server.  For the minimum amount required to create a widget, see
 public/js/widgets/logger.js.  A widget is an object whose prototype extends Hummingbird.Base and
 implements onMessage.
-
-
-Specs
---------
-
-    sudo gem install jspec
-    jspec run --node
 
 
 Tips

@@ -97,14 +97,14 @@
         e.preventDefault();
 
         var img = document.createElement('img');
-        img.src = "/tracking_pixel.gif";
+        img.src = "/tracking_pixel.gif?_=" + Math.random();
       });
 
       $("#test_cart").click(function(e) {
         e.preventDefault();
 
         var img = document.createElement('img');
-        img.src = "/tracking_pixel.gif?event=cart_add";
+        img.src = "/tracking_pixel.gif?event=cart_add&_=" + Math.random();
       });
     });
   </script>

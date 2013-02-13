@@ -19,7 +19,7 @@ HummingbirdTracker = {
     var params = [];
     for(var key in env) {
       if(env.hasOwnProperty(key)) {
-        params.push(encodeURIComponent(i) + "=" + encodeURIComponent(env[i]));
+        params.push(encodeURIComponent(key) + "=" + encodeURIComponent(env[key]));
       }
     }
 

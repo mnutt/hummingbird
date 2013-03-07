@@ -6,7 +6,6 @@ Hummingbird.Logger = function(element, socket, options) {
 
   var defaults = {
     averageOver: 60, // seconds
-    ratePerSecond: 1,
     decimalPlaces: 1
   };
 
@@ -19,6 +18,8 @@ Hummingbird.Logger.prototype = new Hummingbird.Base();
 $.extend(Hummingbird.Logger.prototype, {
   name: "Logger",
   onMessage: function(message, average) {
-    console.log("Minute Average: " + average.toFixed(this.options.decimalPlaces));
+    var value = average * this.updatesPerSecond() * this.options.timeUnit;
+    var displayValue = value.toFixed(this.options.decimalPlaces);
+    console.log("Average: " + displayValue + " per " + this.options.timeUnit + "s");
   }
 });

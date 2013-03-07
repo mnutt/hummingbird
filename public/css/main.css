@@ -36,70 +36,48 @@ div.topbar #total {
   left: 275px;
 }
 
-div.topbar #total div.graph {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 40px;
-  float: none;
-  width: auto;
-}
-
-div.topbar #total div.axis_left { display: none; }
-div.topbar #total div.axis_right {
-  float: none;
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 25px;
-  font-size: 10px;
-}
-
-h2.graph_title {
-  color: #CCC;
-  text-transform: uppercase;
-  font-size: 0.9em;
-  margin-bottom: 0.2em;
-  margin-left: 58px;
+div.hummingbird_graph {
+  position: relative;
 }
 
 div.hummingbird_graph div.graph {
-  float: left;
+  margin-right: 40px;
+  float: none;
+  width: auto;
+
   padding: 14px 0 20px 0;
   color: #F00;
   font-weight: bold;
-  position: relative;
   overflow: hidden;
-  width: 760px;
   display: block;
 }
 
-div.hummingbird_graph div.axis_left,
 div.hummingbird_graph div.axis_right {
-  float: left;
+  position: absolute;
+  top: 0;
+  right: 0;
+
   line-height: 1em;
   color: #FFF;
-  opacity: 0.3;
+  opacity: 0.5;
   font-weight: bold;
-  font-size: 0.8em;
+  font-size: 10px;
   width: 30px;
-  position: relative;
-  top: -5px;
 }
 
-div.hummingbird_graph div.axis_left {
-  padding: 0 5px 0 25px;
-  text-align: right;
+div.hummingbird_graph div.axis_time {
+   margin: -14px 40px 0 0;
+   height: 14px;
 }
 
-div.hummingbird_graph div.axis_right {
-  padding: 0 10px;
-}
-
-#hummingbird_cart_adds div.axis_left,
-#hummingbird_cart_adds div.axis_right {
-  line-height: 0.3em;
+div.hummingbird_graph div.axis_time div.tick {
+   position: absolute;
+   right: 0px;
+   margin-right: 17px;
+   width: 50px;
+   text-align: center;
+   color: #FFF;
+   font-size: 9px;
 }
 
 div.graph div.line {

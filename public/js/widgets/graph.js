@@ -17,7 +17,6 @@ Hummingbird.Graph = function(element, socket, options) {
   }
 
   var defaults = {
-    ratePerSecond: 20,
     showLogDate: false,
     showMarkers: true,
     showBackgroundBars: true,
@@ -25,8 +24,9 @@ Hummingbird.Graph = function(element, socket, options) {
     bgLineColor: '#555',
     barColor: null,
     graphHeight: 216,
-    averageOver: 0.5,
-    startingScale: 50,
+    averageOver: 1, // smooth over 1-second intervals
+    timeUnit: 1,    // per second
+    startingScale: 10,
     lineColors: {
       6400: "#FFFFFF",
       3200: "#BBBBBB",
@@ -64,14 +64,18 @@ $.extend(Hummingbird.Graph.prototype, {
   name: "Graph",
 
   onMessage: function(message, average) {
-    var value = average * this.options.averageOver;
+    var value = average * this.updatesPerSecond() * this.options.timeUnit;
 
-    if(this.pageIsVisible()) {
+    if(this.updatesPerSecond() < 1 || this.pageIsVisible()) {
       this.processBuffer();
       this.drawLogPath(value);
     } else {
       this.sendToBuffer(value);
     }
+  },
+
+  configure: function(config) {
+    this.drawTimeAxis();
   },
 
   processBuffer: function() {
@@ -121,10 +125,9 @@ $.extend(Hummingbird.Graph.prototype, {
     var scale = this.scale;
 
     var millisecsBeforeUpdating = 0;
-    if (this.lineWidth != null && this.options.ratePerSecond != null) {
-      var millisecsPerTick = 1000 / this.options.ratePerSecond;
+    if (this.lineWidth != null && this.options.interval != null) {
       var ticksPerFrame = this.graphWidth / (this.lineWidth * 2.0);
-      millisecsBeforeUpdating = millisecsPerTick * ticksPerFrame;
+      millisecsBeforeUpdating = this.options.interval * ticksPerFrame;
     }
 
     if(rightMarkerContainer.length > 0) {
@@ -143,6 +146,35 @@ $.extend(Hummingbird.Graph.prototype, {
           resetMarkerContainer(leftMarkerContainer, numMarkers, scale);
         }, millisecsBeforeUpdating);
       }
+    }
+  },
+
+  drawTimeAxis: function() {
+    var timeAxis = this.element.find('div.axis_time');
+    if(!timeAxis.length) { return; }
+
+    var numTimeMarkers = this.graphWidth / 100;
+    var msPerPixel = 1 / (this.lineWidth * 2.0) * this.options.interval;
+    console.log(this.options.interval);
+
+    for(var i = 0; i < numTimeMarkers; i++) {
+      var offset = 100 * i;
+      var timeOffset = msPerPixel * offset / 1000;
+      console.log(timeOffset);
+      var timeLabel;
+      if(timeOffset == 0) {
+        timeLabel = "now";
+      } else if(timeOffset < 60) {
+        timeLabel = parseInt(timeOffset) + "s ago";
+      } else if(timeOffset < 60 * 60 * 3) {
+        timeLabel = parseInt(timeOffset / 60) + "m ago";
+      } else if(timeOffset < 60 * 60 * 24 * 2) {
+        timeLabel = parseInt(timeOffset / 60 / 60) + "h ago";
+      } else {
+        timeLabel = parseInt(timeOffset / 60 / 60 / 24) + "d ago";
+      }
+
+      $("<div>" + timeLabel + "</div>").css({right: offset}).addClass('tick').appendTo(timeAxis);
     }
   },
 
@@ -206,7 +238,7 @@ $.extend(Hummingbird.Graph.prototype, {
     var color = this.options.barColor || this.options.lineColors[this.scale] || this.options.lineColors.def;
     var lineHeight = this.graphHeight - height;
 
-    if(this.tick % (this.options.ratePerSecond * 2) == 0) { // Every 2 seconds
+    if(this.tick % 40 == 0) { // Every 40 updates
       this.element.attr('data-average', average);
 
       this.rescale(percent);
@@ -217,7 +249,7 @@ $.extend(Hummingbird.Graph.prototype, {
     }
 
     var backgroundColor;
-    if(this.tick % this.options.ratePerSecond == 0) {
+    if(this.tick % 20 == 0) {
       backgroundColor = this.options.tickLineColor;
     } else {
       backgroundColor = this.options.bgLineColor;

@@ -40,6 +40,14 @@ Hummingbird.Base.prototype = {
 
   registerHandler: function() {
     var self = this;
+
+    this.socket.on('config', function(data) {
+      if(data.name == self.options.from) {
+        self.configureBase(data.config);
+        self.configure(data.config);
+      }
+    });
+
     this.socket.on(this.options.from, function(data) {
       self.onData.apply(self, [data]);
     });
@@ -49,21 +57,33 @@ Hummingbird.Base.prototype = {
     console.log("Base class says: " + JSON.stringify(message));
   },
 
-  onData: function(message) {
-    var average;
-
-    this.messageCount += 1;
-
-    // Calculate the average over N seconds if the averageOver option is set
-    if(this.options.averageOver && typeof(message) == "number") { average = this.addToAverage(message); }
-
-    if((!this.options.every) || (this.messageCount % this.options.every == 0)) {
-      this.onMessage(message, this.average());
+  configureBase: function(config) {
+    if(config.interval) {
+      this.options.interval = config.interval;
     }
   },
 
+  configure: function(config) {
+    // Override this for your own configuration
+  },
+
+  onData: function(message) {
+    this.messageCount += 1;
+
+    // Calculate the average over N seconds if the averageOver option is set
+    if(this.options.averageOver && typeof(message) == "number") { this.addToAverage(message); }
+
+    if((!this.options.every) || (this.messageCount % this.options.every == 0)) {
+      this.onMessage(message, this.average(message));
+    }
+  },
+
+  updatesPerSecond: function() {
+    return 1 / (this.options.interval / 1000);
+  },
+
   addToAverage: function(newValue) {
-    var averageCount = this.options.averageOver * this.options.ratePerSecond;
+    var averageCount = this.options.averageOver * this.updatesPerSecond();
 
     this.averageLog.push(newValue);
     if(this.averageLog.length > averageCount) {
@@ -71,10 +91,10 @@ Hummingbird.Base.prototype = {
     }
   },
 
-  average: function() {
-    if(this.averageLog.length == 0) { return 0; }
+  average: function(message) {
+    if(this.averageLog.length == 0) { return message; }
 
-    return this.averageLog.sum() * 1.0 / this.averageLog.length * this.options.ratePerSecond;
+    return this.averageLog.sum() * 1.0 / this.averageLog.length;
   },
 
   pageIsVisible: function() {

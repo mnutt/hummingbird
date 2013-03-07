@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Hummingbird</title>
+
+  <meta name="description" content="Hummingbird is an open source real time analytics app.">
+
+  <link rel="stylesheet" media="all" href="css/main.css" />
+  <link rel="stylesheet" media="all" href="css/map.css" />
+  <link rel="stylesheet" media="all" href="css/weekly.css" />
+  <link rel="stylesheet" media="all" href="css/totals.css" />
+
+  <script src="js/jquery-1.7.min.js"></script>
+
+  <script src="socket.io/socket.io.js"></script>
+
+  <script src="js/helpers.js"></script>
+  <script src="js/websocket.js"></script>
+  <script src="js/d3.v2.js"></script>
+
+  <script src="js/widgets/base.js"></script>
+  <script src="js/widgets/graph.js"></script>
+  <script src="js/widgets/logger.js"></script>
+  <script src="js/widgets/count.js"></script>
+
+  <link rel="shortcut icon" type="image/png" href="images/favicon.png" />
+</head>
+
+<body>
+
+  <div class="topbar">
+    <div class="header">
+      <h1>Hummingbird</h1>
+
+      <div class="tagline">Real time web stats</div>
+
+      <button id="test_it">Send test traffic</button>
+      <button id="test_cart">Send "cart_add" event</button>
+    </div>
+
+    <div class="hummingbird_graph" id="total">
+      <div class="graph"></div>
+      <div class="axis_right"></div>
+    </div>
+  </div>
+
+  <div style="clear: both;"></div>
+
+  <div id="totals_container">
+    <h2>Per 10 seconds</h2>
+    <div class="hummingbird_graph" id="ten_second_total">
+      <div class="graph"></div>
+      <div class="axis_right"></div>
+      <div class="axis_time"></div>
+    </div>
+
+    <h2>Per minute</h2>
+    <div class="hummingbird_graph" id="minute_total">
+      <div class="graph"></div>
+      <div class="axis_right"></div>
+      <div class="axis_time"></div>
+    </div>
+
+    <h2>Per 10 minutes</h2>
+    <div class="hummingbird_graph" id="ten_minute_total">
+      <div class="graph"></div>
+      <div class="axis_right"></div>
+      <div class="axis_time"></div>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      // change this to your host if the websocket server is on
+      // a different host
+      var WS_SERVER = "http://" + document.location.host.toString();
+
+      var socket = new Hummingbird.WebSocket(WS_SERVER);
+      socket.connect();
+
+      $("#total").hummingbirdGraph(socket,
+                                 {
+                                   from: "view_totals",
+                                   bgLineColor: "#514e57",
+                                   tickLineColor: "#64616a",
+                                   timeUnit: 1, // per second
+                                   lineColors: {
+                                     def: "#ac84ed"
+                                   },
+                                   graphHeight: 80
+                                 });
+
+      $("#ten_second_total").hummingbirdGraph(socket,
+                                 {
+                                   from: "totals_by_10sec",
+                                   bgLineColor: "#514e57",
+                                   tickLineColor: "#64616a",
+                                   timeUnit: 1, // per second
+                                   lineColors: {
+                                     def: "#ac84ed"
+                                   },
+                                   graphHeight: 80
+                                 });
+
+      $("#minute_total").hummingbirdGraph(socket,
+                                 {
+                                   from: "totals_by_minute",
+                                   bgLineColor: "#514e57",
+                                   tickLineColor: "#64616a",
+                                   timeUnit: 1, // per second
+                                   lineColors: {
+                                     def: "#ac84ed"
+                                   },
+                                   graphHeight: 80
+                                 });
+
+      $("#ten_minute_total").hummingbirdGraph(socket,
+                                 {
+                                   from: "totals_by_10min",
+                                   bgLineColor: "#514e57",
+                                   tickLineColor: "#64616a",
+                                   timeUnit: 1, // per second
+                                   lineColors: {
+                                     def: "#ac84ed"
+                                   },
+                                   graphHeight: 80
+                                 });
+
+
+      new Hummingbird.Logger(window,
+                             socket,
+                             {
+                               timeUnit: 60, // per minute
+                               averageOver: 10,
+                               from: "totals_by_10sec"
+                             });
+
+
+      $("#test_it").click(function(e) {
+        e.preventDefault();
+
+        var img = document.createElement('img');
+        img.src = "/tracking_pixel.gif";
+      });
+
+      $("#test_cart").click(function(e) {
+        e.preventDefault();
+
+        var img = document.createElement('img');
+        img.src = "/tracking_pixel.gif?event=cart_add";
+      });
+    });
+  </script>
+
+</body>
+</html>

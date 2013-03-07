@@ -1,0 +1,16 @@
+#totals_container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 110px;
+  bottom: 0;
+  padding: 10px 0 10px 10px;
+  background-color: rgba(0,0,0,0.5);
+}
+
+#totals_container h2 {
+  margin-left: 5px;
+  color: #FFF;
+  font-size: 14px;
+  margin-bottom: 0;
+}

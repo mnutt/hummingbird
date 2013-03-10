@@ -5,7 +5,7 @@
   "dependencies": {
     "socket.io": "0.9.6",
     "node-static": "0.5.9",
-    "geoip": "0.4.8"
+    "geoip-no-city-leak": "0.4.9-1"
   },
   "domains": [
     "demo.hummingbirdstats.com"

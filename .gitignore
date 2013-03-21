@@ -3,3 +3,4 @@
 /config/app.json
 /node_modules
 /GeoLiteCity.dat
+/data/*.json

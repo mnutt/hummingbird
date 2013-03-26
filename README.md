@@ -123,6 +123,7 @@ Contributors
  * thinkroth
  * markwillis82
  * ochronus
+ * dannyakakong
 
 
 License

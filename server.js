@@ -1,4 +1,4 @@
-config = require('./config/config');
+config = require('./lib/config');
 
 var dashboard = require('./lib/dashboard');
 var tracker = require('./lib/tracker');

@@ -28,7 +28,7 @@ Hummingbird.Map = function(element, socket, options) {
 
   this.defaultZoom = $(window).height() > 760 ? 3 : 2;
 
-  var zoomFactor = Math.log(window.devicePixelRatio || 1) / Math.LN2;
+  var zoomFactor = Math.round(Math.log(window.devicePixelRatio || 1) / Math.LN2);
   if(zoomFactor > 0) {
     var doubleSize = "-2x";
   } else {

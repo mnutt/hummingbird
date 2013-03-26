@@ -114,6 +114,15 @@ Contributors
 
  * Michael Nutt <michael@nuttnet.net>
  * Benny Wong <benny@bwong.net>
+ * mikecampo
+ * caphrim007
+ * brianjriddle
+ * lbosque
+ * robertjwhitney
+ * Dan Thurman
+ * thinkroth
+ * markwillis82
+ * ochronus
 
 
 License

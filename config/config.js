@@ -1,21 +1,28 @@
 module.exports = config = {
-  "name" : "Hummingbird",
+    "name" : "Hummingbird",
 
-  "tracking_port" : 8000,
-  "dashboard_port" : 8080,
+    // Replay some existing traffic logs to get an idea of what Hummingbird
+    // looks like.  Change this to false when you're ready to actually use
+    // Hummingbird in production.
+    "demo_mode": true,
 
-  "mongo_host" : "localhost",
-  "mongo_port" : 27017,
+    // Port where the dashboard will be shown.  Change it to false to disable
+    // the dashboard. (you might do this if you were integrating
+    // Hummingbird into an existing admin interface)
+    "dashboard_port" : 8080,
 
-  "udp_address" : "127.0.0.1",
-  "udp_port" : 8000,
+    // If you want to have the tracking pixel listen on a different port
+    // (for instance in order to password-protect your dashboard) you can
+    // specify the port to listen on (change from false to port number)
+    "tracking_port" : 8000,
 
-  "enable_dashboard" : true,
+    // Allow stats to be sent over UDP instead of HTTP.  This works best for
+    // sending stats from backend servers within the same datacenter as
+    // Hummingbird.  Change to false to disable.
+    "udp_tracking_port" : 8000,
 
-  "demo_mode": true,
-
-  "capistrano" : {
-    "repository" :       "git://github.com/mnutt/hummingbird.git",
-    "hummingbird_host" : "hummingbird.your-host.com"
-  }
+    // Interface to bind the UDP listener to. Use 127.0.0.1 to only allow
+    // other apps on your machine to connect, or 0.0.0.0 to bind to all
+    // interfaces and allow any machine to connect.
+    "udp_trackin_address" : "127.0.0.1"
 }

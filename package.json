@@ -19,6 +19,6 @@
   },
   "subdomain": "hummingbird",
   "scripts": {
-    "start": "server.js"
+    "start": "node server.js"
   }
 }

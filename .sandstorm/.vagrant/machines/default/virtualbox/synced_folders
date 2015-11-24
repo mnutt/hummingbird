@@ -1,0 +1,1 @@
+{"virtualbox":{"/opt/app":{"guestpath":"/opt/app","hostpath":"/Users/michael/p/personal/hummingbird","disabled":false},"/host-dot-sandstorm":{"guestpath":"/host-dot-sandstorm","hostpath":"/Users/michael/.sandstorm","disabled":false},"/vagrant":{"guestpath":"/vagrant","hostpath":"/Users/michael/p/personal/hummingbird","disabled":false}}}

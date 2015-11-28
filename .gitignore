@@ -4,3 +4,6 @@
 /node_modules
 /GeoLiteCity.dat
 /data/*.json
+/builds
+/public/images/tiles
+/public/images/tiles-2x

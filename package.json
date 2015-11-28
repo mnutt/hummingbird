@@ -1,9 +1,9 @@
 {
   "name": "hummingbird",
   "description": "A node.js statistics server",
-  "version": "0.2.0-17",
+  "version": "0.3.0",
   "dependencies": {
-    "socket.io": "0.9.6",
+    "socket.io": "0.9.17",
     "node-static": "0.5.9",
     "geoip": "0.6.1"
   },

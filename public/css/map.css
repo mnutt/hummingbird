@@ -93,7 +93,7 @@ div.hummingbird_map g.open circle {
   fill: #0395FE;
 }
 
-div.hummingbird_map g.cart_add circle {
+div.hummingbird_map g.view circle {
   fill: #16de16;
 }
 
@@ -145,6 +145,6 @@ div.hummingbird_map div.legend div.open span {
   background-color: #0395FE;
 }
 
-div.hummingbird_map div.legend div.cart_add span {
+div.hummingbird_map div.legend div.view span {
   background-color: #16de16;
 }

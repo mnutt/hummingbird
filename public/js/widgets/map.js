@@ -39,11 +39,11 @@ Hummingbird.Map = function(element, socket, options) {
     .container(this.element.get(0).appendChild(this.po.svg("svg")))
     .center({lat: 31, lon: 10})
     .zoom(this.defaultZoom)
-    .zoomRange([1, 7 - zoomFactor])
+    .zoomRange([1, 5 - zoomFactor])
     .add(this.po.interact());
 
   this.map.add(this.po.image()
-          .url(this.po.url("//movableink-hummingbird-tiles.s3.amazonaws.com/hummingbird-dark" + doubleSize + "/{Z}/{X}/{Y}.png"))
+          .url(this.po.url("/images/tiles" + doubleSize + "/{Z}/{X}/{Y}.png"))
           .zoom(function(z) { return z + zoomFactor; return 2; }));
 
   this.map.add(this.po.compass()

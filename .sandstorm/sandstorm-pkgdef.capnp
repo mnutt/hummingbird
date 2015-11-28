@@ -19,9 +19,9 @@ const pkgdef :Spk.PackageDefinition = (
 
     appTitle = (defaultText = "Hummingbird"),
 
-    appVersion = 0,  # Increment this for every release.
+    appVersion = 300,  # Increment this for every release.
 
-    appMarketingVersion = (defaultText = "0.0.0"),
+    appMarketingVersion = (defaultText = "0.3.0"),
     # Human-readable representation of appVersion. Should match the way you
     # identify versions of your app in documentation and marketing.
 
@@ -47,11 +47,13 @@ const pkgdef :Spk.PackageDefinition = (
       # and (in deeper detail) in the sandstorm source code, in the Metadata section of
       # https://github.com/sandstorm-io/sandstorm/blob/master/src/sandstorm/package.capnp
       icons = (
-        # Various icons to represent the app in various contexts.
-        #appGrid = (svg = embed "path/to/appgrid-128x128.svg"),
-        #grain = (svg = embed "path/to/grain-24x24.svg"),
-        #market = (svg = embed "path/to/market-150x150.svg"),
-        #marketBig = (svg = embed "path/to/market-big-300x300.svg"),
+        appGrid =   (png = (dpi1x = embed "metadata/icon-appGrid.png",
+                            dpi2x = embed "metadata/icon-appGrid2x.png")),
+        grain =     (png = (dpi1x = embed "metadata/icon-grain1x.png",
+                            dpi2x = embed "metadata/icon-grain2x.png")),
+        market =    (png = (dpi1x = embed "metadata/icon-market.png",
+                            dpi2x = embed "metadata/icon-marketBig.png")),
+        marketBig = (png = (dpi1x = embed "metadata/icon-marketBig.png")),
       ),
 
       website = "http://github.com/mnutt/hummingbird",
@@ -78,7 +80,7 @@ const pkgdef :Spk.PackageDefinition = (
         # requests as well as app store administrator requests, so it is very important that this be a
         # valid address with someone paying attention to it.
 
-        #pgpSignature = embed "path/to/pgp-signature",
+        pgpSignature = embed "pgp-signature",
         # PGP signature attesting responsibility for the app ID. This is a binary-format detached
         # signature of the following ASCII message (not including the quotes, no newlines, and
         # replacing <app-id> with the standard base-32 text format of the app's ID):
@@ -99,7 +101,7 @@ const pkgdef :Spk.PackageDefinition = (
         # Remove this line if you consider yourself as the author of the app.
       ),
 
-      #pgpKeyring = embed "path/to/pgp-keyring",
+      pgpKeyring = embed "pgp-keyring",
       # A keyring in GPG keyring format containing all public keys needed to verify PGP signatures in
       # this manifest (as of this writing, there is only one: `author.pgpSignature`).
       #
@@ -109,7 +111,7 @@ const pkgdef :Spk.PackageDefinition = (
       #
       # Where `<key-id>` is a PGP key ID or email address associated with the key.
 
-      #description = (defaultText = embed "path/to/description.md"),
+      description = (defaultText = embed "description.md"),
       # The app's description description in Github-flavored Markdown format, to be displayed e.g.
       # in an app store. Note that the Markdown is not permitted to contain HTML nor image tags (but
       # you can include a list of screenshots separately).
@@ -124,8 +126,7 @@ const pkgdef :Spk.PackageDefinition = (
         # Sizes are given in device-independent pixels, so if you took these
         # screenshots on a Retina-style high DPI screen, divide each dimension by two.
 
-        #(width = 746, height = 795, jpeg = embed "path/to/screenshot-1.jpeg"),
-        #(width = 640, height = 480, png = embed "path/to/screenshot-2.png"),
+        (width = 1278, height = 856, png = embed "metadata/screenshot-1.png"),
       ],
       #changeLog = (defaultText = embed "path/to/sandstorm-specific/changelog.md"),
       # Documents the history of changes in Github-flavored markdown format (with the same restrictions
@@ -156,7 +157,7 @@ const pkgdef :Spk.PackageDefinition = (
   # `spk dev` will write a list of all the files your app uses to this file.
   # You should review it later, before shipping your app.
 
-  alwaysInclude = [],
+  alwaysInclude = ["opt/app/public", "opt/app/node_modules", "opt/app/data", "opt/app/lib"],
   # Fill this list with more names of files or directories that should be
   # included in your package, even if not listed in sandstorm-files.list.
   # Use this to force-include stuff that you know you need but which may
@@ -202,22 +203,6 @@ const pkgdef :Spk.PackageDefinition = (
        # Roles are logical collections of permissions.  For instance, your app may have
        # a "viewer" role and an "editor" role
        (
-         title = (defaultText = "editor"),
-         # Name of the role.  Shown in the Sandstorm UI to indicate which users have which roles.
-
-         permissions  = [true],
-         # An array indicating which permissions this role carries.
-         # It should be the same length as the permissions array in
-         # viewInfo, and the order of the lists must match.
-
-         verbPhrase = (defaultText = "can make changes to the document"),
-         # Brief explanatory text to show in the sharing UI indicating
-         # what a user assigned this role will be able to do with the grain.
-
-         description = (defaultText = "editors may view all site data and change settings."),
-         # Prose describing what this role means, suitable for a tool tip or similar help text.
-       ),
-       (
          title = (defaultText = "tracker"),
          permissions  = [true],
          verbPhrase = (defaultText = "can submit events"),
@@ -225,7 +210,7 @@ const pkgdef :Spk.PackageDefinition = (
        ),
      ],
    ),
-   apiPath = "/api",
+   apiPath = "/tracking_pixel/",
    # Apps can export an API to the world.  The API is to be used primarily by Javascript
    # code and native apps, so it can't serve out regular HTML to browsers.  If a request
    # comes in to your app's API, sandstorm-http-bridge will prefix the request's path with

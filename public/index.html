@@ -39,8 +39,9 @@
 
       <div class="tagline">Real time web stats</div>
 
-      <button id="test_it">Send test traffic</button>
-      <button id="test_cart">Send "cart_add" event</button>
+      <button id="tracker">Tracker</button>
+      <button id="demo">Demo Mode</button>
+      <button id="about_button">About</button>
     </div>
 
     <div class="hummingbird_graph" id="total">
@@ -52,8 +53,57 @@
 
   <div style="clear: both;"></div>
 
+  <div id="about">
+    <h2>About Hummingbird</h2>
 
-  <div style="clear: both;"></div>
+    <p>Hummingbird is open source software; fork it on Github <a target="_blank" href="https://github.com/mnutt/hummingbird">here</a>.</p>
+
+    <p>This product includes GeoLite data created by MaxMind, available from
+      <a href="http://www.maxmind.com">http://www.maxmind.com</a>. The geolocation data is only current as of its Sandstorm packaging date, so make sure you're on the latest version.</p>
+
+    <p><button id="about_close">Close</button></p>
+  </div>
+
+  <div id="tracker_instructions">
+    <h2>Tracker Setup</h2>
+
+    <p>Paste this code at the bottom of the page you'd like to track:</p>
+
+    <div id="tracking_template">
+  var xhr = new XMLHttpRequest();
+  if ("withCredentials" in xhr) {
+    xhr.open('POST', '$API_PROTO//$API_HOST/t', true);
+    xhr.setRequestHeader('Authorization',
+                         'Bearer $API_TOKEN');
+    xhr.setRequestHeader('X-Sandstorm-Passthrough', 'address');
+    xhr.send(null);
+  }
+</div>
+
+    <iframe id="offer-iframe"></iframe>
+
+    <script>
+      var messageListener = function(event) {
+        if (event.data.rpcId === "0") {
+          if (event.data.error) {
+            console.log("ERROR: " + event.data.error);
+          } else {
+            var el = document.getElementById("offer-iframe");
+            el.setAttribute("src", event.data.uri);
+          }
+        }
+      };
+
+      $(document).ready(function() {
+        var template = "<script>" + $("#tracking_template").html() + "</scr" + "ipt>\n";
+        template = template.replace('$API_PROTO', document.location.protocol);
+        window.addEventListener("message", messageListener);
+        window.parent.postMessage({renderTemplate: {rpcId: "0", template: template}}, "*");
+      });
+    </script>
+
+    <p><button id="tracker_close">Close</button></p>
+  </div>
 
   <div id="map_container" class="hummingbird_map"></div>
 
@@ -61,7 +111,7 @@
     $(document).ready(function() {
       // change this to your host if the websocket server is on
       // a different host
-      var WS_SERVER = "http://" + document.location.host.toString();
+      var WS_SERVER = document.location.origin;
 
       var socket = new Hummingbird.WebSocket(WS_SERVER);
       socket.connect();
@@ -93,18 +143,31 @@
                                every: 500
                              });
 
-      $("#test_it").click(function(e) {
+      $("#demo").click(function(e) {
         e.preventDefault();
-
-        var img = document.createElement('img');
-        img.src = "/tracking_pixel.gif?_=" + Math.random();
+        $.ajax({url: '/demo', method: 'post'});
       });
 
-      $("#test_cart").click(function(e) {
+      $("#tracker").click(function(e) {
         e.preventDefault();
 
-        var img = document.createElement('img');
-        img.src = "/tracking_pixel.gif?event=cart_add&_=" + Math.random();
+        $("#tracker_instructions").show();
+      });
+
+      $("#tracker_close").click(function(e) {
+        e.preventDefault();
+
+        $("#tracker_instructions").hide();
+      });
+
+      $("#about_button").click(function(e) {
+        e.preventDefault();
+        $("#about").show();
+      });
+
+      $("#about_close").click(function(e) {
+        e.preventDefault();
+        $("#about").hide();
       });
     });
   </script>

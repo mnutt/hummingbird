@@ -16,6 +16,3 @@ console.log("Dashboard listening on http://*:" + config.dashboard_port + ".");
 tracker.listen(dashboard);
 
 console.log("Tracker listening on http://*:" + config.tracker_port + "/tracking_pixel/t.gif.");
-
-// Run in demo mode
-demo.run(tracker);

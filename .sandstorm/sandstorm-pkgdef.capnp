@@ -19,9 +19,9 @@ const pkgdef :Spk.PackageDefinition = (
 
     appTitle = (defaultText = "Hummingbird"),
 
-    appVersion = 300,  # Increment this for every release.
+    appVersion = 310,  # Increment this for every release.
 
-    appMarketingVersion = (defaultText = "0.3.0"),
+    appMarketingVersion = (defaultText = "0.3.1"),
     # Human-readable representation of appVersion. Should match the way you
     # identify versions of your app in documentation and marketing.
 
@@ -56,10 +56,10 @@ const pkgdef :Spk.PackageDefinition = (
         marketBig = (png = (dpi1x = embed "metadata/icon-marketBig.png")),
       ),
 
-      website = "http://github.com/mnutt/hummingbird",
+      website = "https://github.com/mnutt/hummingbird",
       # This should be the app's main website url.
 
-      codeUrl = "http://github.com/mnutt/hummingbird",
+      codeUrl = "https://github.com/mnutt/hummingbird",
       # URL of the app's source code repository, e.g. a GitHub URL.
       # Required if you specify a license requiring redistributing code, but optional otherwise.
 

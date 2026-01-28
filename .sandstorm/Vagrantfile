@@ -11,7 +11,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # We base ourselves off Debian Jessie
-  config.vm.box = "debian/jessie64"
+  config.vm.box = "debian/contrib-jessie64"
 
   if Vagrant.has_plugin?("vagrant-vbguest") then
     # vagrant-vbguest is a Vagrant plugin that upgrades
@@ -22,10 +22,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.guest = "debian"
   end
 
-  # We forward port 6080, the Sandstorm web port, so that developers can
-  # visit their sandstorm app from their browser as local.sandstorm.io:6080
-  # (aka 127.0.0.1:6080).
-  config.vm.network :forwarded_port, guest: 6080, host: 6080
+  # We forward port 6090, the Sandstorm web port, so that developers can
+  # visit their sandstorm app from their browser as local.sandstorm.io:6090
+  # (aka 127.0.0.1:6090).
+  config.vm.network :forwarded_port, guest: 6090, host: 6090
 
   # Use a shell script to "provision" the box. This installs Sandstorm using
   # the bundled installer.

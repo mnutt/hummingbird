@@ -3,9 +3,9 @@
   "description": "A node.js statistics server",
   "version": "0.3.0",
   "dependencies": {
-    "socket.io": "0.9.17",
-    "node-static": "0.5.9",
-    "geoip": "0.6.1"
+    "geoip-lite": "1.4.10",
+    "node-static": "0.7.11",
+    "socket.io": "4.8.3"
   },
   "domains": [
     "demo.hummingbirdstats.com"
@@ -20,5 +20,8 @@
   "subdomain": "hummingbird",
   "scripts": {
     "start": "node server.js"
+  },
+  "volta": {
+    "node": "20.20.0"
   }
 }

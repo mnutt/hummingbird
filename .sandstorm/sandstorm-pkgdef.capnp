@@ -19,9 +19,9 @@ const pkgdef :Spk.PackageDefinition = (
 
     appTitle = (defaultText = "Hummingbird"),
 
-    appVersion = 400,  # Increment this for every release.
+    appVersion = 410,  # Increment this for every release.
 
-    appMarketingVersion = (defaultText = "0.4.0"),
+    appMarketingVersion = (defaultText = "0.4.1"),
     # Human-readable representation of appVersion. Should match the way you
     # identify versions of your app in documentation and marketing.
 
@@ -191,22 +191,33 @@ const pkgdef :Spk.PackageDefinition = (
          # Name of the permission, used as an identifier for the permission in cases where string
          # names are preferred.  Used in sandstorm-http-bridge's X-Sandstorm-Permissions HTTP header.
 
-         title = (defaultText = "Website Tracker"),
+         title = (defaultText = "Website Tracking Script"),
          # Display name of the permission, e.g. to display in a checklist of permissions
          # that may be assigned when sharing.
 
          description = (defaultText = "Publicly accessible tracking endpoint"),
          # Prose describing what this role means, suitable for a tool tip or similar help text.
        ),
-     ],
+       (
+         name = "view-data",
+
+         title = (defaultText = "View Data"),
+         description = (defaultText = "Ability to view hummingbird dashboard and aggregate data"),
+       )
+     ], 
      roles = [
        # Roles are logical collections of permissions.  For instance, your app may have
        # a "viewer" role and an "editor" role
        (
          title = (defaultText = "tracker"),
-         permissions  = [true],
+         permissions  = [true, false],
          verbPhrase = (defaultText = "can submit events"),
          description = (defaultText = "tracking script can submit new tracking events."),
+       ),
+       (
+         title = (defaultText = "manager"),
+         permissions = [false, true],
+         verbPhrase = (defaultText = "can view the Hummingbird dashboard and associated data"),
        ),
      ],
    ),

@@ -16,6 +16,7 @@ opt/app/GeoLiteCity.dat
 opt/app/README.md
 opt/app/config/config.example.js
 opt/app/data/sample_traffic.log
+opt/app/lib/auth.js
 opt/app/lib/config.js
 opt/app/lib/dashboard.js
 opt/app/lib/demo.js
@@ -226,6 +227,7 @@ opt/app/public/images/tiles-2x/4/0/0.png
 opt/app/public/images/tiles-2x/4/0/1.png
 opt/app/public/images/tiles-2x/4/0/10.png
 opt/app/public/images/tiles-2x/4/0/11.png
+opt/app/public/images/tiles-2x/4/0/12.png
 opt/app/public/images/tiles-2x/4/0/2.png
 opt/app/public/images/tiles-2x/4/0/3.png
 opt/app/public/images/tiles-2x/4/0/4.png
@@ -238,6 +240,7 @@ opt/app/public/images/tiles-2x/4/1/0.png
 opt/app/public/images/tiles-2x/4/1/1.png
 opt/app/public/images/tiles-2x/4/1/10.png
 opt/app/public/images/tiles-2x/4/1/11.png
+opt/app/public/images/tiles-2x/4/1/12.png
 opt/app/public/images/tiles-2x/4/1/2.png
 opt/app/public/images/tiles-2x/4/1/3.png
 opt/app/public/images/tiles-2x/4/1/4.png
@@ -250,6 +253,7 @@ opt/app/public/images/tiles-2x/4/10/0.png
 opt/app/public/images/tiles-2x/4/10/1.png
 opt/app/public/images/tiles-2x/4/10/10.png
 opt/app/public/images/tiles-2x/4/10/11.png
+opt/app/public/images/tiles-2x/4/10/12.png
 opt/app/public/images/tiles-2x/4/10/2.png
 opt/app/public/images/tiles-2x/4/10/3.png
 opt/app/public/images/tiles-2x/4/10/4.png
@@ -262,6 +266,7 @@ opt/app/public/images/tiles-2x/4/11/0.png
 opt/app/public/images/tiles-2x/4/11/1.png
 opt/app/public/images/tiles-2x/4/11/10.png
 opt/app/public/images/tiles-2x/4/11/11.png
+opt/app/public/images/tiles-2x/4/11/12.png
 opt/app/public/images/tiles-2x/4/11/2.png
 opt/app/public/images/tiles-2x/4/11/3.png
 opt/app/public/images/tiles-2x/4/11/4.png
@@ -274,6 +279,7 @@ opt/app/public/images/tiles-2x/4/12/0.png
 opt/app/public/images/tiles-2x/4/12/1.png
 opt/app/public/images/tiles-2x/4/12/10.png
 opt/app/public/images/tiles-2x/4/12/11.png
+opt/app/public/images/tiles-2x/4/12/12.png
 opt/app/public/images/tiles-2x/4/12/2.png
 opt/app/public/images/tiles-2x/4/12/3.png
 opt/app/public/images/tiles-2x/4/12/4.png
@@ -286,6 +292,7 @@ opt/app/public/images/tiles-2x/4/13/0.png
 opt/app/public/images/tiles-2x/4/13/1.png
 opt/app/public/images/tiles-2x/4/13/10.png
 opt/app/public/images/tiles-2x/4/13/11.png
+opt/app/public/images/tiles-2x/4/13/12.png
 opt/app/public/images/tiles-2x/4/13/2.png
 opt/app/public/images/tiles-2x/4/13/3.png
 opt/app/public/images/tiles-2x/4/13/4.png
@@ -298,6 +305,7 @@ opt/app/public/images/tiles-2x/4/14/0.png
 opt/app/public/images/tiles-2x/4/14/1.png
 opt/app/public/images/tiles-2x/4/14/10.png
 opt/app/public/images/tiles-2x/4/14/11.png
+opt/app/public/images/tiles-2x/4/14/12.png
 opt/app/public/images/tiles-2x/4/14/2.png
 opt/app/public/images/tiles-2x/4/14/3.png
 opt/app/public/images/tiles-2x/4/14/4.png
@@ -309,6 +317,7 @@ opt/app/public/images/tiles-2x/4/14/9.png
 opt/app/public/images/tiles-2x/4/15/1.png
 opt/app/public/images/tiles-2x/4/15/10.png
 opt/app/public/images/tiles-2x/4/15/11.png
+opt/app/public/images/tiles-2x/4/15/12.png
 opt/app/public/images/tiles-2x/4/15/2.png
 opt/app/public/images/tiles-2x/4/15/3.png
 opt/app/public/images/tiles-2x/4/15/4.png
@@ -321,6 +330,7 @@ opt/app/public/images/tiles-2x/4/2/0.png
 opt/app/public/images/tiles-2x/4/2/1.png
 opt/app/public/images/tiles-2x/4/2/10.png
 opt/app/public/images/tiles-2x/4/2/11.png
+opt/app/public/images/tiles-2x/4/2/12.png
 opt/app/public/images/tiles-2x/4/2/2.png
 opt/app/public/images/tiles-2x/4/2/3.png
 opt/app/public/images/tiles-2x/4/2/4.png
@@ -333,6 +343,7 @@ opt/app/public/images/tiles-2x/4/3/0.png
 opt/app/public/images/tiles-2x/4/3/1.png
 opt/app/public/images/tiles-2x/4/3/10.png
 opt/app/public/images/tiles-2x/4/3/11.png
+opt/app/public/images/tiles-2x/4/3/12.png
 opt/app/public/images/tiles-2x/4/3/2.png
 opt/app/public/images/tiles-2x/4/3/3.png
 opt/app/public/images/tiles-2x/4/3/4.png
@@ -345,6 +356,7 @@ opt/app/public/images/tiles-2x/4/4/0.png
 opt/app/public/images/tiles-2x/4/4/1.png
 opt/app/public/images/tiles-2x/4/4/10.png
 opt/app/public/images/tiles-2x/4/4/11.png
+opt/app/public/images/tiles-2x/4/4/12.png
 opt/app/public/images/tiles-2x/4/4/2.png
 opt/app/public/images/tiles-2x/4/4/3.png
 opt/app/public/images/tiles-2x/4/4/4.png
@@ -357,6 +369,7 @@ opt/app/public/images/tiles-2x/4/5/0.png
 opt/app/public/images/tiles-2x/4/5/1.png
 opt/app/public/images/tiles-2x/4/5/10.png
 opt/app/public/images/tiles-2x/4/5/11.png
+opt/app/public/images/tiles-2x/4/5/12.png
 opt/app/public/images/tiles-2x/4/5/2.png
 opt/app/public/images/tiles-2x/4/5/3.png
 opt/app/public/images/tiles-2x/4/5/4.png
@@ -369,6 +382,7 @@ opt/app/public/images/tiles-2x/4/6/0.png
 opt/app/public/images/tiles-2x/4/6/1.png
 opt/app/public/images/tiles-2x/4/6/10.png
 opt/app/public/images/tiles-2x/4/6/11.png
+opt/app/public/images/tiles-2x/4/6/12.png
 opt/app/public/images/tiles-2x/4/6/2.png
 opt/app/public/images/tiles-2x/4/6/3.png
 opt/app/public/images/tiles-2x/4/6/4.png
@@ -381,6 +395,7 @@ opt/app/public/images/tiles-2x/4/7/0.png
 opt/app/public/images/tiles-2x/4/7/1.png
 opt/app/public/images/tiles-2x/4/7/10.png
 opt/app/public/images/tiles-2x/4/7/11.png
+opt/app/public/images/tiles-2x/4/7/12.png
 opt/app/public/images/tiles-2x/4/7/2.png
 opt/app/public/images/tiles-2x/4/7/3.png
 opt/app/public/images/tiles-2x/4/7/4.png
@@ -393,6 +408,7 @@ opt/app/public/images/tiles-2x/4/8/0.png
 opt/app/public/images/tiles-2x/4/8/1.png
 opt/app/public/images/tiles-2x/4/8/10.png
 opt/app/public/images/tiles-2x/4/8/11.png
+opt/app/public/images/tiles-2x/4/8/12.png
 opt/app/public/images/tiles-2x/4/8/2.png
 opt/app/public/images/tiles-2x/4/8/3.png
 opt/app/public/images/tiles-2x/4/8/4.png

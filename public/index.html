@@ -98,7 +98,7 @@
         var template = "<script>" + $("#tracking_template").html() + "</scr" + "ipt>\n";
         template = template.replace('$API_PROTO', document.location.protocol);
         window.addEventListener("message", messageListener);
-        window.parent.postMessage({renderTemplate: {rpcId: "0", template: template}}, "*");
+        window.parent.postMessage({renderTemplate: {rpcId: "0", roleAssignment: { roleId: 0 }, forSharing: true, template: template}}, "*");
       });
     </script>
 

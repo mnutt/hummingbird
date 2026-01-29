@@ -6,6 +6,25 @@ body {
   margin: 0;
 }
 
+#security-banner {
+  position: absolute;
+  top: 110px;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: #d9534f;
+  color: white;
+  padding: 12px 20px;
+  text-align: center;
+  font-size: 14px;
+}
+
+#security-banner a {
+  color: white;
+  margin-left: 15px;
+  text-decoration: underline;
+}
+
 div.topbar {
   position: relative;
   height: 89px;
